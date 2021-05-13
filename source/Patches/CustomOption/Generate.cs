@@ -42,6 +42,7 @@ namespace TownOfUs.CustomOption
         public static CustomNumberOption CamouflagerOn;
         public static CustomNumberOption MinerOn;
         public static CustomNumberOption SwooperOn;
+		public static CustomNumberOption AssassinOn;
 
 
         /*
@@ -132,8 +133,10 @@ namespace TownOfUs.CustomOption
         public static CustomNumberOption InitialGlitchKillCooldownOption;
         public static CustomStringOption GlitchHackDistanceOption;
 
-        
-        public static CustomHeaderOption Morphling ;
+		public static CustomHeaderOption Assassin ;
+		public static CustomNumberOption AssassinMaxKills;
+
+		public static CustomHeaderOption Morphling ;
         public static CustomNumberOption MorphlingCooldown ;
         public static CustomNumberOption MorphlingDuration ;
 
@@ -203,6 +206,7 @@ namespace TownOfUs.CustomOption
 
 			ImpostorRoles =
 				new CustomHeaderOption(num++, "Impostor Roles");
+			AssassinOn = new CustomNumberOption(true, num++, "<color=#FF0000FF>Assassin</color>", 0f, 0f, 100f, 10f, PercentFormat);
 			JanitorOn = new CustomNumberOption(true, num++, "<color=#FF0000FF>Janitor</color>", 0f, 0f, 100f, 10f, PercentFormat);
 			MorphlingOn = new CustomNumberOption(true, num++, "<color=#FF0000FF>Morphling</color>", 0f, 0f, 100f, 10f, PercentFormat);
 			CamouflagerOn = new CustomNumberOption(true, num++, "<color=#FF0000FF>Camouflager</color>", 0f, 0f, 100f, 10f, PercentFormat);
@@ -375,7 +379,11 @@ namespace TownOfUs.CustomOption
 
 			ArsonistGameEnd = new CustomToggleOption(num++, "Game keeps going so long as Arsonist is alive", false);
 			
-			
+			Assassin =
+				new CustomHeaderOption(num++, "<color=#FF0000FF>Assassin</color>");
+			AssassinMaxKills =
+				new CustomNumberOption(num++, "Max role guess kills", 2, 1, 9, 1);
+
 			Morphling =
 				new CustomHeaderOption(num++, "<color=#FF0000FF>Morphling</color>");
 			MorphlingCooldown =

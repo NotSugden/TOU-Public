@@ -313,17 +313,30 @@ namespace TownOfUs
             return Vector2.Distance(truePosition, truePosition2);
         }
 
-        public static void RpcMurderPlayer(PlayerControl killer, PlayerControl target)
+        public static void RpcSetDeadInMeeting(PlayerControl player)
         {
-            MurderPlayer(killer, target);
+            var voteArea = MeetingHud.Instance.playerStates.FirstOrDefault(
+                v => v.TargetPlayerId == player.PlayerId
+            );
+            voteArea.SetDead(player.PlayerId == PlayerControl.LocalPlayer.PlayerId, voteArea.didReport, true);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
+                (byte)CustomRPC.SetMeetingDead, Hazel.SendOption.Reliable, -1);
+            writer.Write(player.PlayerId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+        }
+
+        public static void RpcMurderPlayer(PlayerControl killer, PlayerControl target, bool showBody = true)
+        {
+            MurderPlayer(killer, target, showBody);
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
                 (byte) CustomRPC.BypassKill, Hazel.SendOption.Reliable, -1);
             writer.Write(killer.PlayerId);
             writer.Write(target.PlayerId);
+            writer.Write(showBody);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
         }
 
-        public static void MurderPlayer(PlayerControl killer, PlayerControl target)
+        public static void MurderPlayer(PlayerControl killer, PlayerControl target, bool showBody = true)
         {
             GameData.PlayerInfo data = target.Data;
             if (data != null && !data.IsDead)

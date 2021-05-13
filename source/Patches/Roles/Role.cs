@@ -242,6 +242,40 @@ namespace TownOfUs.Roles
             RoleDictionary.Add(player.PlayerId, this);
         }
 
+        public static string getRoleName(RoleEnum roleId)
+        {
+            return roleId switch
+            {
+                RoleEnum.Sheriff => "Sheriff",
+                RoleEnum.Jester => "Jester",
+                RoleEnum.Engineer => "Engineer",
+                RoleEnum.LoverImpostor => "Loving Impostor",
+                RoleEnum.Lover => "Lover",
+                RoleEnum.Mayor => "Mayor",
+                RoleEnum.Swapper => "Swapper",
+                RoleEnum.Investigator => "Investigator",
+                RoleEnum.TimeLord => "Time Lord",
+                RoleEnum.Shifter => "Shifter",
+                RoleEnum.Medic => "Medic",
+                RoleEnum.Seer => "Seer",
+                RoleEnum.Executioner => "Executioner",
+                RoleEnum.Child => "Child",
+                RoleEnum.Spy => "Spy",
+                RoleEnum.Snitch => "Snitch",
+                RoleEnum.Arsonist => "Arsonist",
+                RoleEnum.Altruist => "Altruist",
+                RoleEnum.Assassin => "Assassin",
+                RoleEnum.Miner => "Miner",
+                RoleEnum.Swooper => "Swooper",
+                RoleEnum.Morphling => "Morhpling",
+                RoleEnum.Camouflager => "Camoflauger",
+                RoleEnum.Janitor => "Janitor",
+                RoleEnum.Glitch => "Glitch",
+                RoleEnum.Impostor => "Impostor",
+                _ => "Crewmate",
+            };
+        }
+
 
         public static Role GetRole(PlayerControl player)
         {

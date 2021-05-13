@@ -21,6 +21,7 @@ namespace TownOfUs
         Arsonist,
         Altruist,
 
+        Assassin,
         Miner,
         Swooper,
         Morphling,

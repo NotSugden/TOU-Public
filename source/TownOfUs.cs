@@ -18,7 +18,7 @@ using UnityEngine;
 
 namespace TownOfUs
 {
-	[BepInPlugin("com.slushiegoose.townofus", "Town Of Us", "2.0.0")]
+	[BepInPlugin("com.slushiegoose.townofus", "Town Of Us", "3.0.0")]
 	[BepInDependency(ReactorPlugin.Id)]
 	public class TownOfUs : BasePlugin
 	{
@@ -54,7 +54,8 @@ namespace TownOfUs
         public static Sprite ReviveSprite;
         public static Sprite ButtonSprite;
         public static Sprite PolusSprite;
-
+		public static Sprite CycleSprite;
+		public static Sprite GuessSprite;
 
         public override void Load()
 		{
@@ -91,6 +92,8 @@ namespace TownOfUs
 			ReviveSprite = CreateSprite("TownOfUs.Resources.Revive.png");
 			ButtonSprite = CreateSprite("TownOfUs.Resources.Button.png");
 			PolusSprite = CreateSprite("TownOfUs.Resources.polus.gg.png");
+			CycleSprite = CreateSprite("TownOfUs.Resources.Cycle.png");
+			GuessSprite = CreateSprite("TownOfUs.Resources.Guess.png");
 
 			PalettePatch.Load();
 			ClassInjector.RegisterTypeInIl2Cpp<RainbowBehaviour>();

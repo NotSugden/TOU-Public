@@ -4,7 +4,6 @@ namespace TownOfUs.Roles.Modifiers
 {
     public class ButtonBarry : Modifier
     {
-
         public bool ButtonUsed;
         public KillButtonManager ButtonButton;
         

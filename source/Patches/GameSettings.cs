@@ -14,7 +14,7 @@ namespace TownOfUs {
     public static class GameSettings
     {
 
-        public static bool AllOptions = false;
+        public static bool AllOptions = false ;
         
         /*public static string StringBuild()
         {

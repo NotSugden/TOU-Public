@@ -23,6 +23,7 @@ namespace TownOfUs
         SetMiner,
         SetSwooper,
         SetJanitor,
+        SetAssassin,
         SetArsonist,
         SetAltruist,
         SetButtonBarry,
@@ -74,6 +75,7 @@ namespace TownOfUs
         SetMimic,
         RpcResetAnim,
         SetHacked,
+        SetMeetingDead,
         
         ExecutionerToJester,
 

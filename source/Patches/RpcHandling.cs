@@ -107,6 +107,11 @@ namespace TownOfUs
                         new Roles.Morphling(Utils.PlayerById(readByte));
                         break;
 
+                    case CustomRPC.SetAssassin:
+                        readByte = reader.ReadByte();
+                        new Roles.Assassin(Utils.PlayerById(readByte));
+                        break;
+
                     case CustomRPC.LoveWin:
                         var winnerlover = Utils.PlayerById(reader.ReadByte());
                         Role.GetRole<Lover>(winnerlover).Win();
@@ -277,8 +282,17 @@ namespace TownOfUs
                     case CustomRPC.BypassKill:
                         PlayerControl killer = Utils.PlayerById(reader.ReadByte());
                         PlayerControl target = Utils.PlayerById(reader.ReadByte());
-
-                        Utils.MurderPlayer(killer, target);
+                        bool showBody = reader.ReadBoolean();
+                        Utils.MurderPlayer(killer, target, showBody);
+                        if (MeetingHud.Instance.isActiveAndEnabled)
+                        {
+                            foreach (PlayerVoteArea _voteArea in MeetingHud.Instance.playerStates)
+                            {
+                                PlayerControl _player = Utils.PlayerById((byte) _voteArea.TargetPlayerId);
+                                if (_player == null || _player.Data.IsDead) continue;
+                                MeetingHud.Instance.HandleDisconnect(_player, InnerNet.DisconnectReasons.Custom);
+                            }
+                        }
                         break;
                     case CustomRPC.SetMimic:
                         PlayerControl glitchPlayer = Utils.PlayerById(reader.ReadByte());
@@ -472,8 +486,17 @@ namespace TownOfUs
                         }
 
                         break;
-                        
-                        
+                    case CustomRPC.SetMeetingDead:
+                        //var deadPlayerId = reader.ReadByte();
+                        //var voteArea = MeetingHud.Instance.playerStates.FirstOrDefault(
+                        //    v => v.TargetPlayerId == deadPlayerId
+                        //);
+                        //voteArea.SetDead(deadPlayerId == PlayerControl.LocalPlayer.PlayerId, voteArea.didReport, true);
+                        //voteArea.SetDisabled();
+                        //MeetingHud.Instance.Update();
+                        //MeetingHud.Instance.UpdateButtons();
+                        PluginSingleton<TownOfUs>.Instance.Log.LogMessage("RPC SetMeetingDead");
+                        break;
                 }
             }
         }
@@ -549,6 +572,8 @@ namespace TownOfUs
 
                 if (Check(CustomGameOptions.MorphlingOn))
                     ImpostorRoles.Add((typeof(Morphling), CustomRPC.SetMorphling));
+                if (Check(CustomGameOptions.AssassinOn))
+                    ImpostorRoles.Add((typeof(Assassin), CustomRPC.SetAssassin));
                 
                 if (Check(CustomGameOptions.ChildOn)) CrewmateRoles.Add((typeof(Child), CustomRPC.SetChild));
 

@@ -25,6 +25,7 @@ namespace TownOfUs
         public static int SnitchOn => (int) Generate.SnitchOn.Get();
         public static int MinerOn => (int) Generate.MinerOn.Get();
         public static int SwooperOn => (int) Generate.SwooperOn.Get();
+        public static int AssassinOn => (int) Generate.AssassinOn.Get();
         public static int ArsonistOn => (int) Generate.ArsonistOn.Get();
         public static int AltruistOn => (int) Generate.AltruistOn.Get();
         public static int ButtonBarryOn => (int) Generate.ButtonBarryOn.Get();
@@ -91,6 +92,7 @@ namespace TownOfUs
         
         public static float CamouflagerCd => Generate.CamouflagerCooldown.Get();
         public static float CamouflagerDuration => Generate.CamouflagerDuration.Get();
+        public static int AssassinMaxKills => (int) Generate.AssassinMaxKills.Get();
         public static bool ColourblindComms => Generate.ColourblindComms.Get();
         public static bool MeetingColourblind => Generate.MeetingColourblind.Get();
 
