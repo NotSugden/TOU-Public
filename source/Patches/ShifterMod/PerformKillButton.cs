@@ -224,6 +224,7 @@ namespace TownOfUs.ShifterMod
                 case RoleEnum.Glitch:
                 case RoleEnum.Shifter:
                 case RoleEnum.Child:
+                case RoleEnum.Assassin:
                     shifter.Data.IsImpostor = true;
                     shifter.MurderPlayer(shifter);
                     shifter.Data.IsImpostor = false;
