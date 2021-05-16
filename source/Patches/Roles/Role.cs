@@ -58,7 +58,7 @@ namespace TownOfUs.Roles
         protected Func<string> ImpostorText;
         protected Func<string> TaskText;
         protected float Scale { get; set; } = 1f;
-        protected internal Color Color { get; set; }
+        protected internal Color Color { get => GetRoleColor(RoleType); }
         protected internal RoleEnum RoleType { get; set; }
 
         protected internal bool Hidden { get; set; } = false;
@@ -242,9 +242,43 @@ namespace TownOfUs.Roles
             RoleDictionary.Add(player.PlayerId, this);
         }
 
-        public static string getRoleName(RoleEnum roleId)
+        public static Color GetRoleColor(RoleEnum roleId)
         {
             return roleId switch
+            {
+                RoleEnum.Sheriff => Color.yellow,
+                RoleEnum.Jester => new Color(1f, 0.75f, 0.8f, 1f),
+                RoleEnum.Engineer => new Color(1f, 0.65f, 0.04f, 1f),
+                RoleEnum.LoverImpostor => new Color(1f, 0.4f, 0.8f, 1f),
+                RoleEnum.Lover => new Color(1f, 0.4f, 0.8f, 1f),
+                RoleEnum.Mayor => new Color(0.44f, 0.31f, 0.66f, 1f),
+                RoleEnum.Swapper => new Color(0.4f, 0.9f, 0.4f, 1f),
+                RoleEnum.Investigator => new Color(0f, 0.7f, 0.7f, 1f),
+                RoleEnum.TimeLord => new Color(0f, 0f, 1f, 1f),
+                RoleEnum.Shifter => new Color(0.6f, 0.6f, 0.6f, 1f),
+                RoleEnum.Medic => new Color(0f, 0.4f, 0f, 1f),
+                RoleEnum.Seer => new Color(1f, 0.8f, 0.5f, 1f),
+                RoleEnum.Executioner => new Color(0.55f, 0.25f, 0.02f, 1f),
+                RoleEnum.Child => Color.white,
+                RoleEnum.Spy => new Color(0.8f, 0.64f, 0.8f, 1f),
+                RoleEnum.Snitch => new Color(0.83f, 0.69f, 0.22f, 1f),
+                RoleEnum.Arsonist => new Color(1f, 0.3f, 0f),
+                RoleEnum.Altruist => new Color(0.4f, 0f, 0f, 1f),
+                RoleEnum.Assassin => Palette.ImpostorRed,
+                RoleEnum.Miner => Palette.ImpostorRed,
+                RoleEnum.Swooper => Palette.ImpostorRed,
+                RoleEnum.Morphling => Palette.ImpostorRed,
+                RoleEnum.Camouflager => Palette.ImpostorRed,
+                RoleEnum.Janitor => Palette.ImpostorRed,
+                RoleEnum.Glitch => Color.green,
+                RoleEnum.Impostor => Palette.ImpostorRed,
+                _ => Color.white,
+            };
+        }
+
+        public static string GetRoleName(RoleEnum roleId, bool includeColor = false)
+        {
+            var roleName = roleId switch
             {
                 RoleEnum.Sheriff => "Sheriff",
                 RoleEnum.Jester => "Jester",
@@ -267,13 +301,17 @@ namespace TownOfUs.Roles
                 RoleEnum.Assassin => "Assassin",
                 RoleEnum.Miner => "Miner",
                 RoleEnum.Swooper => "Swooper",
-                RoleEnum.Morphling => "Morhpling",
-                RoleEnum.Camouflager => "Camoflauger",
+                RoleEnum.Morphling => "Morphling",
+                RoleEnum.Camouflager => "Camouflager",
                 RoleEnum.Janitor => "Janitor",
                 RoleEnum.Glitch => "Glitch",
                 RoleEnum.Impostor => "Impostor",
                 _ => "Crewmate",
             };
+
+            return includeColor
+                ? $"<color=#{GetRoleColor(roleId).ToHtmlStringRGBA()}>{roleName}</color>"
+                : roleName;
         }
 
 

@@ -84,8 +84,7 @@ namespace TownOfUs.AssassinMod
                         v => v.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId
                     );
                 }
-                Utils.RpcMurderPlayer(player, player, false);
-                Utils.RpcSetDeadInMeeting(player);
+                Utils.RpcKillDuringMeeting(player);
                 assassin.timesKilled++;
                 ShowHideButtons.Confirm.Prefix(MeetingHud.Instance);
             }
@@ -115,8 +114,10 @@ namespace TownOfUs.AssassinMod
                         break;
                 }
                 guesses[index] = currentGuess;
-                var name = Role.getRoleName(currentGuess);
+                var name = Role.GetRoleName(currentGuess);
+                var color = Role.GetRoleColor(currentGuess);
                 guessText.text = name;
+                guessText.color = color;
             }
 
             return Listener;

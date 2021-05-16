@@ -18,7 +18,7 @@ using UnityEngine;
 
 namespace TownOfUs
 {
-	[BepInPlugin("com.slushiegoose.townofus", "Town Of Us", "3.0.0")]
+	[BepInPlugin("com.slushiegoose.townofus", "Town Of Us", "3.0.1")]
 	[BepInDependency(ReactorPlugin.Id)]
 	public class TownOfUs : BasePlugin
 	{

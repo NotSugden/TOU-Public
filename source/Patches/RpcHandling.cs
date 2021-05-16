@@ -486,16 +486,9 @@ namespace TownOfUs
                         }
 
                         break;
-                    case CustomRPC.SetMeetingDead:
-                        //var deadPlayerId = reader.ReadByte();
-                        //var voteArea = MeetingHud.Instance.playerStates.FirstOrDefault(
-                        //    v => v.TargetPlayerId == deadPlayerId
-                        //);
-                        //voteArea.SetDead(deadPlayerId == PlayerControl.LocalPlayer.PlayerId, voteArea.didReport, true);
-                        //voteArea.SetDisabled();
-                        //MeetingHud.Instance.Update();
-                        //MeetingHud.Instance.UpdateButtons();
-                        PluginSingleton<TownOfUs>.Instance.Log.LogMessage("RPC SetMeetingDead");
+                    case CustomRPC.KillDuringMeeting:
+                        var deadPlayerId = reader.ReadByte();
+                        Utils.KillDuringMeeting(Utils.PlayerById(deadPlayerId));
                         break;
                 }
             }

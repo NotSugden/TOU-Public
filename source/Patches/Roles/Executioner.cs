@@ -41,7 +41,6 @@ namespace TownOfUs.Roles
             Name = "Executioner";
             ImpostorText = () => $"Vote {target.name} out";
             TaskText = () => $"Vote {target.name} out\nFake Tasks:";
-            Color = new Color(0.55f, 0.25f, 0.02f, 1f);
             RoleType = RoleEnum.Executioner;
             Faction = Faction.Neutral;
             Scale = 1.4f;

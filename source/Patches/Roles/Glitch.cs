@@ -46,7 +46,6 @@ namespace TownOfUs.Roles
         public Glitch(PlayerControl owner) : base(owner)
         {
             this.Name = "The Glitch";
-            this.Color = Color.green;
             this.LastHack = DateTime.UtcNow;
             this.LastMimic = DateTime.UtcNow;
             this.LastKill = DateTime.UtcNow;

@@ -13,7 +13,6 @@ namespace TownOfUs.Roles
             Name = "Assassin";
             ImpostorText = () => "Kill during meetings";
             TaskText = () => "Sneakily kill the crewmates by guessing their roles";
-            Color = Palette.ImpostorRed;
             RoleType = RoleEnum.Assassin;
             Faction = Faction.Impostors;
         }

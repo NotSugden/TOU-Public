@@ -15,7 +15,6 @@ namespace TownOfUs.Roles
             Name = "Medic";
             ImpostorText = () => "Create a shield to protect a crewmate";
             TaskText = () => "Protect a crewmate with a shield";
-            Color = new Color(0f, 0.4f, 0f, 1f);
             RoleType = RoleEnum.Medic;
             ShieldedPlayer = null;
         }

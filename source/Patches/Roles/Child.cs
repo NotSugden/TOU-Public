@@ -11,7 +11,6 @@ namespace TownOfUs.Roles
             Name = "Child";
             ImpostorText = () => "No one will harm you";
             TaskText = () => "You won't be harmed";
-            Color = UnityEngine.Color.white;
             RoleType = RoleEnum.Child;
         }
 

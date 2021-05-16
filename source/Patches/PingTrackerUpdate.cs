@@ -30,7 +30,7 @@ namespace TownOfUs {
             position.AdjustPosition();
             
             __instance.text.text = 
-                $"<color=#00FF00FF>TownOfUs v3.0.0</color>\n" +
+                $"<color=#00FF00FF>TownOfUs v3.0.1</color>\n" +
                 "Sugden ;)\n" +
                 $"Moving to <color=#BEA4FFFF>Polus.gg</color>\n" +
                 $"Ping: {AmongUsClient.Instance.Ping}ms";

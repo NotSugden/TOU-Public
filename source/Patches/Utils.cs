@@ -313,16 +313,80 @@ namespace TownOfUs
             return Vector2.Distance(truePosition, truePosition2);
         }
 
-        public static void RpcSetDeadInMeeting(PlayerControl player)
+        public static void RpcKillDuringMeeting(PlayerControl player)
         {
-            var voteArea = MeetingHud.Instance.playerStates.FirstOrDefault(
-                v => v.TargetPlayerId == player.PlayerId
-            );
-            voteArea.SetDead(player.PlayerId == PlayerControl.LocalPlayer.PlayerId, voteArea.didReport, true);
+            KillDuringMeeting(player);
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                (byte)CustomRPC.SetMeetingDead, Hazel.SendOption.Reliable, -1);
+                (byte)CustomRPC.KillDuringMeeting, Hazel.SendOption.Reliable, -1);
             writer.Write(player.PlayerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
+        }
+
+        public static void KillDuringMeeting(PlayerControl player)
+        {
+            SoundManager.Instance.PlaySound(player.KillSfx, false, 0.8f);
+            var hudManager = DestroyableSingleton<HudManager>.Instance;
+            hudManager.KillOverlay.ShowOne(player.Data, player.Data);
+            if (player.AmOwner)
+            {
+                hudManager.ShadowQuad.gameObject.SetActive(false);
+                player.nameText.GetComponent<MeshRenderer>().material.SetInt("_Mask", 0);
+                player.RpcSetScanner(false);
+                ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
+                importantTextTask.transform.SetParent(AmongUsClient.Instance.transform, false);
+                if (!PlayerControl.GameOptions.GhostsDoTasks)
+                {
+                    for (int i = 0; i < player.myTasks.Count; i++)
+                    {
+                        PlayerTask playerTask = player.myTasks.ToArray()[i];
+                        playerTask.OnRemove();
+                        UnityEngine.Object.Destroy(playerTask.gameObject);
+                    }
+
+                    player.myTasks.Clear();
+                    importantTextTask.Text = DestroyableSingleton<TranslationController>.Instance.GetString(
+                        StringNames.GhostIgnoreTasks,
+                        new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Object>(0)
+                    );
+                }
+                else
+                {
+                    importantTextTask.Text = DestroyableSingleton<TranslationController>.Instance.GetString(
+                        StringNames.GhostDoTasks,
+                        new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Object>(0));
+                }
+
+                player.myTasks.Insert(0, importantTextTask);
+            }
+            player.Die(DeathReason.Kill);
+
+            var animator = PlayerControl.LocalPlayer.GetComponent<PowerTools.SpriteAnim>();
+            var animation = player.KillAnimations.Random();
+            new PowerTools.WaitForAnimationFinish(animator, animation.BlurAnim);
+            animator.Play(player.MyPhysics.IdleAnim, 1f);
+            var deadBody = new DeadPlayer
+            {
+                PlayerId = player.PlayerId,
+                KillerId = player.PlayerId,
+                KillTime = DateTime.UtcNow,
+            };
+
+            Murder.KilledPlayers.Add(deadBody);
+            if (!player.Is(RoleEnum.Glitch) && !player.Is(RoleEnum.Arsonist))
+            {
+                ChildMod.Murder.CheckChild(player);
+            }
+
+            var voteArea = MeetingHud.Instance.playerStates.First(x => x.TargetPlayerId == player.PlayerId);
+            if (voteArea != null)
+            {
+                if (voteArea.didVote) voteArea.UnsetVote();
+                voteArea.SetDead(player.AmOwner, voteArea.didReport, true);
+                voteArea.Overlay.gameObject.SetActive(true);
+                var xMark = voteArea.transform.GetChild(0);
+                voteArea.Overlay.color = Color.white;
+                xMark.transform.localScale = Vector3.one;
+            }
         }
 
         public static void RpcMurderPlayer(PlayerControl killer, PlayerControl target, bool showBody = true)
@@ -397,8 +461,15 @@ namespace TownOfUs
                     target.myTasks.Insert(0, importantTextTask);
                 }
 
-                killer.MyPhysics.StartCoroutine(killer.KillAnimations.Random<KillAnimation>()
-                    .CoPerformKill(killer, target));
+                if (showBody)
+                {
+                    killer.MyPhysics.StartCoroutine(killer.KillAnimations.Random<KillAnimation>()
+                        .CoPerformKill(killer, target));
+                } else
+                {
+                    target.Die(DeathReason.Kill);
+                    target.PlayAnimation((byte) KillAnimType.Stab);
+                }
                 var deadBody = new DeadPlayer
                 {
                     PlayerId = target.PlayerId,

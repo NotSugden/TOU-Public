@@ -13,7 +13,6 @@ namespace TownOfUs.Roles
             Name = "Sheriff";
             ImpostorText = () => "Shoot the <color=#FF0000FF>Impostor</color>";
             TaskText = () => "Kill off the impostor but don't kill crewmates.";
-            Color = UnityEngine.Color.yellow;
             RoleType = RoleEnum.Sheriff;
         }
         

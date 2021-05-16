@@ -75,7 +75,7 @@ namespace TownOfUs
         SetMimic,
         RpcResetAnim,
         SetHacked,
-        SetMeetingDead,
+        KillDuringMeeting,
         
         ExecutionerToJester,
 
