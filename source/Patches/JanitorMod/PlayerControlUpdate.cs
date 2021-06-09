@@ -1,8 +1,8 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using UnityEngine;
 
 namespace TownOfUs.JanitorMod
-{ 
+{
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public class PlayerControlUpdate
     {
@@ -25,20 +25,20 @@ namespace TownOfUs.JanitorMod
                 __instance.ReportButton.transform.localPosition.y, position.z);
 
             role.CleanButton.renderer.sprite = TownOfUs.JanitorClean;
-            
-            
+
+
             var data = PlayerControl.LocalPlayer.Data;
             var isDead = data.IsDead;
             var truePosition = PlayerControl.LocalPlayer.GetTruePosition();
             var maxDistance = GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance];
             var flag = (PlayerControl.GameOptions.GhostsDoTasks || !data.IsDead) &&
                        (!AmongUsClient.Instance || !AmongUsClient.Instance.IsGameOver) && PlayerControl.LocalPlayer.CanMove;
-            var allocs = Physics2D.OverlapCircleAll(truePosition, maxDistance, 
-                LayerMask.GetMask(new [] {"Players", "Ghost"}));
+            var allocs = Physics2D.OverlapCircleAll(truePosition, maxDistance,
+                LayerMask.GetMask(new[] { "Players", "Ghost" }));
             var killButton = role.CleanButton;
             DeadBody closestBody = null;
             var closestDistance = float.MaxValue;
-            
+
             foreach (var collider2D in allocs)
             {
                 if (!flag || isDead || collider2D.tag != "DeadBody") continue;
@@ -53,7 +53,7 @@ namespace TownOfUs.JanitorMod
 
             }
 
-            
+
             KillButtonTarget.SetTarget(killButton, closestBody, role);
             role.CleanButton.SetCoolDown(PlayerControl.LocalPlayer.killTimer, PlayerControl.GameOptions.KillCooldown);
         }

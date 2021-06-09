@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using HarmonyLib;
 
@@ -9,7 +9,7 @@ namespace TownOfUs.MorphlingMod
     {
 
         public static void Postfix(UnityEngine.Object obj)
-        { 
+        {
             if (ExileController.Instance == null || obj != ExileController.Instance.gameObject) return;
             if (PlayerControl.LocalPlayer.Is(RoleEnum.Morphling))
             {
@@ -17,7 +17,7 @@ namespace TownOfUs.MorphlingMod
                 role.MorphButton.renderer.sprite = TownOfUs.SampleSprite;
                 role.SampledPlayer = null;
                 role.LastMorphed = DateTime.UtcNow;
-                
+
             }
 
         }

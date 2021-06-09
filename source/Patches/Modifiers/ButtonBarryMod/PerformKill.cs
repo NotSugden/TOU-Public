@@ -17,11 +17,11 @@ namespace TownOfUs.Modifiers.ButtonBarryMod
             if (role.ButtonUsed) return false;
             if (PlayerControl.LocalPlayer.RemainingEmergencies <= 0) return false;
             if (!__instance.enabled) return false;
-            
+
 
             role.ButtonUsed = true;
             var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                (byte) CustomRPC.BarryButton, SendOption.Reliable, -1);
+                (byte)CustomRPC.BarryButton, SendOption.Reliable, -1);
             writer.Write(PlayerControl.LocalPlayer.PlayerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             if (AmongUsClient.Instance.AmHost)

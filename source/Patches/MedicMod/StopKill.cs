@@ -33,10 +33,10 @@ namespace TownOfUs.MedicMod
             var player = Utils.PlayerById(playerId);
             foreach (var role in Roles.Role.GetRoles(RoleEnum.Medic))
             {
-                if (((Roles.Medic) role).ShieldedPlayer.PlayerId == playerId)
+                if (((Roles.Medic)role).ShieldedPlayer.PlayerId == playerId)
                 {
-                    ((Roles.Medic) role).ShieldedPlayer = null;
-                    ((Roles.Medic) role).exShielded = player;
+                    ((Roles.Medic)role).ShieldedPlayer = null;
+                    ((Roles.Medic)role).exShielded = player;
                 }
             }
 
@@ -58,7 +58,7 @@ namespace TownOfUs.MedicMod
                 if (__instance.isActiveAndEnabled && !__instance.isCoolingDown)
                 {
                     var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                        (byte) CustomRPC.AttemptSound, Hazel.SendOption.Reliable, -1);
+                        (byte)CustomRPC.AttemptSound, Hazel.SendOption.Reliable, -1);
                     writer.Write(target.getMedic().Player.PlayerId);
                     writer.Write(target.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);

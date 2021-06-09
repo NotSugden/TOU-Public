@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using Hazel;
 using UnityEngine;
 
@@ -7,7 +7,7 @@ namespace TownOfUs.CamouflageMod
     [HarmonyPatch(typeof(KillButtonManager), nameof(KillButtonManager.PerformKill))]
     public class PerformKill
     {
-        
+
         public static bool Prefix(KillButtonManager __instance)
         {
             var flag = PlayerControl.LocalPlayer.Is(RoleEnum.Camouflager);
@@ -21,8 +21,8 @@ namespace TownOfUs.CamouflageMod
                 if (__instance.isCoolingDown) return false;
                 if (!__instance.isActiveAndEnabled) return false;
                 if (role.CamouflageTimer() != 0) return false;
-                
-                var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte) CustomRPC.Camouflage,
+
+                var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.Camouflage,
                     SendOption.Reliable, -1);
                 writer.Write(PlayerControl.LocalPlayer.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);

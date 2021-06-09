@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace TownOfUs.Roles
 {
@@ -15,7 +15,7 @@ namespace TownOfUs.Roles
 
     public class Crewmate : Role
     {
-       
+
         public Crewmate(PlayerControl player) : base(player)
         {
             Name = "Crewmate";

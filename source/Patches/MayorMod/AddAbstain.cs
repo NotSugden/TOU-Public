@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using TownOfUs.Roles;
 using UnityEngine;
 
@@ -15,14 +15,14 @@ namespace TownOfUs.MayorMod
             role.Abstain.voteComplete = skip.voteComplete;
             role.Abstain.GetComponent<SpriteRenderer>().enabled = skip.GetComponent<SpriteRenderer>().enabled;
             role.Abstain.GetComponent<SpriteRenderer>().sprite = Abstain;
-            
+
         }
-        
-        
+
+
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
         public class MeetingHudStart
         {
-            
+
 
             public static void GenButton(Mayor role, MeetingHud __instance)
             {
@@ -43,7 +43,7 @@ namespace TownOfUs.MayorMod
                 var mayorRole = Role.GetRole<Mayor>(PlayerControl.LocalPlayer);
                 GenButton(mayorRole, __instance);
             }
-            
+
         }
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.ClearVote))]
@@ -56,7 +56,7 @@ namespace TownOfUs.MayorMod
                 UpdateButton(mayorRole, __instance);
             }
         }
-        
+
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Confirm))]
         public class MeetingHudConfirm
         {
@@ -68,7 +68,7 @@ namespace TownOfUs.MayorMod
                 UpdateButton(mayorRole, __instance);
             }
         }
-        
+
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Select))]
         public class MeetingHudSelect
         {
@@ -84,7 +84,7 @@ namespace TownOfUs.MayorMod
                 UpdateButton(mayorRole, __instance);
             }
         }
-        
+
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.VotingComplete))]
         public class MeetingHudBBFDNCCEJHI
         {
@@ -95,7 +95,7 @@ namespace TownOfUs.MayorMod
                 UpdateButton(mayorRole, __instance);
             }
         }
-        
+
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
         public class MeetingHudUpdate
         {
@@ -106,22 +106,22 @@ namespace TownOfUs.MayorMod
                 switch (__instance.state)
                 {
                     case MeetingHud.VoteStates.Discussion:
-                        if (__instance.discussionTimer < (float) PlayerControl.GameOptions.DiscussionTime)
+                        if (__instance.discussionTimer < (float)PlayerControl.GameOptions.DiscussionTime)
                         {
                             mayorRole.Abstain.SetDisabled();
                             break;
                         }
 
-                        
+
                         mayorRole.Abstain.SetEnabled();
                         break;
                 }
                 UpdateButton(mayorRole, __instance);
             }
         }
-        
-        
-        
-        
+
+
+
+
     }
 }

@@ -16,10 +16,10 @@ namespace TownOfUs
         private static Sprite Revive => TownOfUs.ReviveSprite;
 
 
-        
+
         public static void Postfix(HudManager __instance)
         {
-    
+
             if (__instance.KillButton == null) return;
             var flag = false;
             if (PlayerControl.LocalPlayer.Is(RoleEnum.Shifter))
@@ -31,7 +31,7 @@ namespace TownOfUs
             {
                 __instance.KillButton.renderer.sprite = Rewind;
                 flag = true;
-            } 
+            }
             else if (PlayerControl.LocalPlayer.Is(RoleEnum.Seer))
             {
                 __instance.KillButton.renderer.sprite = Seer;

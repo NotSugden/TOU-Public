@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using HarmonyLib;
 using Hazel;
 using UnityEngine;
@@ -23,14 +23,14 @@ namespace TownOfUs.SeerMod
                 PlayerControl.LocalPlayer.GetTruePosition()) > maxDistance) return false;
             if (role.ClosestPlayer == null) return false;
             var playerId = role.ClosestPlayer.PlayerId;
-            
-            
+
+
             var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                (byte) CustomRPC.Investigate, SendOption.Reliable, -1);
+                (byte)CustomRPC.Investigate, SendOption.Reliable, -1);
             writer.Write(PlayerControl.LocalPlayer.PlayerId);
             writer.Write(playerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            
+
             role.Investigated.Add(role.ClosestPlayer.PlayerId);
             role.LastInvestigated = DateTime.UtcNow;
             return false;

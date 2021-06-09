@@ -1,4 +1,4 @@
-namespace TownOfUs.SeerMod
+﻿namespace TownOfUs.SeerMod
 {
     public enum SeerInfo
     {

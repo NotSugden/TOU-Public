@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,10 +12,10 @@ namespace TownOfUs.Roles
         public readonly List<Vent> Vents = new List<Vent>();
         public bool CanPlace { get; set; }
         public Vector2 VentSize { get; set; }
-        
+
         public KillButtonManager MineButton
         {
-            get { return _mineButton;}
+            get { return _mineButton; }
             set
             {
                 _mineButton = value;
@@ -40,9 +40,9 @@ namespace TownOfUs.Roles
             var utcNow = DateTime.UtcNow;
             var timeSpan = utcNow - LastMined;
             var num = CustomGameOptions.MineCd * 1000f;
-            var flag2 = num - (float) timeSpan.TotalMilliseconds < 0f;
+            var flag2 = num - (float)timeSpan.TotalMilliseconds < 0f;
             if (flag2) return 0;
-            return (num - (float) timeSpan.TotalMilliseconds) / 1000f;
+            return (num - (float)timeSpan.TotalMilliseconds) / 1000f;
         }
     }
 }

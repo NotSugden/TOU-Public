@@ -36,7 +36,7 @@ namespace TownOfUs.EngineerMod
                     if (oxygen1.IsActive) return FixOxygen();
                     var lights1 = ShipStatus.Instance.Systems[SystemTypes.Electrical].Cast<SwitchSystem>();
                     if (lights1.IsActive) return FixLights(lights1);
-                    
+
                     break;
                 case 1:
                     var comms2 = ShipStatus.Instance.Systems[SystemTypes.Comms].Cast<HqHudSystemType>();
@@ -48,7 +48,7 @@ namespace TownOfUs.EngineerMod
                     var lights2 = ShipStatus.Instance.Systems[SystemTypes.Electrical].Cast<SwitchSystem>();
                     if (lights2.IsActive) return FixLights(lights2);
                     break;
-                    
+
                 case 2:
                     var comms3 = ShipStatus.Instance.Systems[SystemTypes.Comms].Cast<HudOverrideSystemType>();
                     if (comms3.IsActive) return FixComms();
@@ -69,10 +69,10 @@ namespace TownOfUs.EngineerMod
             }
 
             var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                (byte) CustomRPC.EngineerFix, SendOption.Reliable, -1);
+                (byte)CustomRPC.EngineerFix, SendOption.Reliable, -1);
             writer.Write(PlayerControl.LocalPlayer.NetId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            
+
             return false;
         }
 
@@ -101,7 +101,7 @@ namespace TownOfUs.EngineerMod
             ShipStatus.Instance.RpcRepairSystem(system, 16);
             return false;
         }
-        
+
         private static bool FixOxygen()
         {
             ShipStatus.Instance.RpcRepairSystem(SystemTypes.LifeSupp, 16);
@@ -111,14 +111,14 @@ namespace TownOfUs.EngineerMod
         private static bool FixLights(SwitchSystem lights)
         {
             var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                (byte) CustomRPC.FixLights, SendOption.Reliable, -1);
+                (byte)CustomRPC.FixLights, SendOption.Reliable, -1);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
 
             lights.ActualSwitches = lights.ExpectedSwitches;
-            
+
             return false;
         }
-        
+
 
 
 

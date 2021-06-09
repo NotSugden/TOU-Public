@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using TownOfUs.Roles;
 using TownOfUs.Roles.Modifiers;
 using UnityEngine;
@@ -25,7 +25,7 @@ namespace TownOfUs.Modifiers.ButtonBarryMod
 
 
             var role = Roles.Modifiers.Modifier.GetModifier<ButtonBarry>(PlayerControl.LocalPlayer);
-            
+
             if (role.ButtonButton == null)
             {
                 role.ButtonButton = Object.Instantiate(__instance.KillButton, HudManager.Instance.transform);
@@ -34,18 +34,18 @@ namespace TownOfUs.Modifiers.ButtonBarryMod
             }
 
             role.ButtonButton.renderer.sprite = Button;
-            
+
 
             role.ButtonButton.gameObject.SetActive(!PlayerControl.LocalPlayer.Data.IsDead && !MeetingHud.Instance);
 
             role.ButtonButton.SetCoolDown(0f, 1f);
             var renderer = role.ButtonButton.renderer;
-            
+
             var position1 = __instance.UseButton.transform.position;
             role.ButtonButton.transform.position = new Vector3(
                 Camera.main.ScreenToWorldPoint(new Vector3(0, 0)).x + 0.75f, position1.y,
                 position1.z);
-            
+
             if (!role.ButtonUsed && PlayerControl.LocalPlayer.RemainingEmergencies > 0)
             {
                 renderer.color = Palette.EnabledColor;

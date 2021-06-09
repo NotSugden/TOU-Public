@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using Hazel;
 
 namespace TownOfUs.TimeLordMod
@@ -21,7 +21,7 @@ namespace TownOfUs.TimeLordMod
             if (!__instance.enabled) return false;
             StartStop.StartRewind(role);
             var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                (byte) CustomRPC.Rewind, SendOption.Reliable, -1);
+                (byte)CustomRPC.Rewind, SendOption.Reliable, -1);
             writer.Write(PlayerControl.LocalPlayer.PlayerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             return false;

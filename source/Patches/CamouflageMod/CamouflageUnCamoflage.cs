@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 
 namespace TownOfUs.CamouflageMod
 {
@@ -9,26 +9,27 @@ namespace TownOfUs.CamouflageMod
         public static bool CamouflagerEnabled = false;
 
         public static bool IsCamoed => CommsEnabled | CamouflagerEnabled;
-        
+
         public static void Postfix(HudManager __instance)
         {
             CamouflagerEnabled = false;
             foreach (var role in Roles.Role.GetRoles(RoleEnum.Camouflager))
             {
-                
-                var camouflager = (Roles.Camouflager) role;
+
+                var camouflager = (Roles.Camouflager)role;
                 if (camouflager.Camouflaged)
                 {
                     CamouflagerEnabled = true;
                     camouflager.Camouflage();
-                } else if (camouflager.Enabled)
+                }
+                else if (camouflager.Enabled)
                 {
                     CamouflagerEnabled = false;
                     camouflager.UnCamouflage();
                 }
-                
+
             }
-            
+
             if (CustomGameOptions.ColourblindComms)
             {
                 if (ShipStatus.Instance != null)

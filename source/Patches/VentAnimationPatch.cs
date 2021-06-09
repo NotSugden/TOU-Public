@@ -5,7 +5,8 @@ using HarmonyLib;
 
 namespace TownOfUs.Patches
 {
-    public static class VentAnimationsPatch {
+    public static class VentAnimationsPatch
+    {
         public static bool Patch(Vent vent, PlayerControl player)
         {
             if (CustomGameOptions.VentAnimations) return true;

@@ -34,7 +34,7 @@ namespace TownOfUs
 
                 byte readByte, readByte1, readByte2;
                 sbyte readSByte, readSByte2;
-                switch ((CustomRPC) callId)
+                switch ((CustomRPC)callId)
                 {
                     case CustomRPC.SetMayor:
                         readByte = reader.ReadByte();
@@ -120,7 +120,7 @@ namespace TownOfUs
                         {
                             if (role.RoleType == RoleEnum.Jester)
                             {
-                                ((Jester) role).Loses();
+                                ((Jester)role).Loses();
                             }
                         }
 
@@ -131,7 +131,7 @@ namespace TownOfUs
                         {
                             if (role.RoleType == RoleEnum.Glitch)
                             {
-                                ((Glitch) role).Loses();
+                                ((Glitch)role).Loses();
                             }
                         }
 
@@ -142,7 +142,7 @@ namespace TownOfUs
                         {
                             if (role.RoleType == RoleEnum.Shifter)
                             {
-                                ((Shifter) role).Loses();
+                                ((Shifter)role).Loses();
                             }
                         }
 
@@ -153,7 +153,7 @@ namespace TownOfUs
                         {
                             if (role.RoleType == RoleEnum.Executioner)
                             {
-                                ((Executioner) role).Loses();
+                                ((Executioner)role).Loses();
                             }
                         }
 
@@ -283,7 +283,7 @@ namespace TownOfUs
                         {
                             foreach (PlayerVoteArea _voteArea in MeetingHud.Instance.playerStates)
                             {
-                                PlayerControl _player = Utils.PlayerById((byte) _voteArea.TargetPlayerId);
+                                PlayerControl _player = Utils.PlayerById((byte)_voteArea.TargetPlayerId);
                                 if (_player == null || _player.Data.IsDead) continue;
                                 MeetingHud.Instance.HandleDisconnect(_player, InnerNet.DisconnectReasons.Custom);
                             }
@@ -306,14 +306,14 @@ namespace TownOfUs
                         break;
                     case CustomRPC.GlitchWin:
                         var theGlitch = Role.AllRoles.FirstOrDefault(x => x.RoleType == RoleEnum.Glitch);
-                        ((Roles.Glitch) theGlitch)?.Wins();
+                        ((Roles.Glitch)theGlitch)?.Wins();
                         break;
                     case CustomRPC.SetHacked:
                         PlayerControl hackPlayer = Utils.PlayerById(reader.ReadByte());
                         if (hackPlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
                         {
                             var glitch = Role.AllRoles.FirstOrDefault(x => x.RoleType == RoleEnum.Glitch);
-                            ((Roles.Glitch) glitch)?.SetHacked(hackPlayer);
+                            ((Roles.Glitch)glitch)?.SetHacked(hackPlayer);
                         }
 
                         break;
@@ -413,7 +413,7 @@ namespace TownOfUs
                         var arsonistRole = Roles.Role.GetRole<Roles.Arsonist>(arsonist);
                         arsonistRole.DousedPlayers.Add(douseTarget.PlayerId);
                         arsonistRole.LastDoused = DateTime.UtcNow;
-                        
+
                         break;
                     case CustomRPC.Ignite:
                         var theArsonist = Utils.PlayerById(reader.ReadByte());
@@ -423,14 +423,14 @@ namespace TownOfUs
 
                     case CustomRPC.ArsonistWin:
                         var theArsonistTheRole = Role.AllRoles.FirstOrDefault(x => x.RoleType == RoleEnum.Arsonist);
-                        ((Roles.Arsonist) theArsonistTheRole)?.Wins();
+                        ((Roles.Arsonist)theArsonistTheRole)?.Wins();
                         break;
                     case CustomRPC.ArsonistLose:
                         foreach (var role in Role.AllRoles)
                         {
                             if (role.RoleType == RoleEnum.Arsonist)
                             {
-                                ((Arsonist) role).Loses();
+                                ((Arsonist)role).Loses();
                             }
                         }
 
@@ -444,7 +444,7 @@ namespace TownOfUs
                         {
                             if (role.RoleType == RoleEnum.Phantom)
                             {
-                                ((Phantom) role).Loses();
+                                ((Phantom)role).Loses();
                             }
                         }
 
@@ -521,7 +521,7 @@ namespace TownOfUs
         internal static bool Check(int probability)
         {
             if (probability == 100) return true;
-            var num = UnityEngine.Random.RandomRangeInt(0,  101) + 1;
+            var num = UnityEngine.Random.RandomRangeInt(0, 101) + 1;
             return num <= probability;
         }
 
@@ -543,7 +543,7 @@ namespace TownOfUs
                 AltruistMod.KillButtonTarget.DontRevive = byte.MaxValue;
 
                 var startWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                    (byte) CustomRPC.Start, SendOption.Reliable, -1);
+                    (byte)CustomRPC.Start, SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(startWriter);
 
                 LoversOn = Check(CustomGameOptions.LoversOn);
@@ -623,11 +623,11 @@ namespace TownOfUs
                 {
                     crewmates.Remove(role.Player);
                     var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                        (byte) CustomRPC.SetTarget, SendOption.Reliable, -1);
+                        (byte)CustomRPC.SetTarget, SendOption.Reliable, -1);
                     writer.Write(role.Player.PlayerId);
                     writer.Write(pc.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    ((Executioner) role).target = pc;
+                    ((Executioner)role).target = pc;
                 }
             }
         }
@@ -635,7 +635,7 @@ namespace TownOfUs
         private static void ShuffleAndSort(List<(Type, CustomRPC, int)> list)
         {
             list.Shuffle();
-            list.Sort(delegate(ValueTuple<Type, CustomRPC, int> a, ValueTuple<Type, CustomRPC, int> b)
+            list.Sort(delegate (ValueTuple<Type, CustomRPC, int> a, ValueTuple<Type, CustomRPC, int> b)
             {
                 return (a.Item3 == 100 ? 0 : 100).CompareTo(b.Item3 == 100 ? 0 : 100);
             });
@@ -652,8 +652,8 @@ namespace TownOfUs
             var crewAndNeutRoles = neutralRoles;
             crewAndNeutRoles.AddRange(CrewmateRoles);
             ShuffleAndSort(crewAndNeutRoles);
-            
-            
+
+
             if (Check(CustomGameOptions.VanillaGame))
             {
                 CrewmateRoles.Clear();
@@ -685,7 +685,7 @@ namespace TownOfUs
             {
                 GenExe(infected, crewmates);
             }
-            
+
             foreach (var (role, rpc, _) in impRoles)
             {
                 Role.Gen(role, impostors, rpc);
@@ -712,10 +712,10 @@ namespace TownOfUs
             {
                 var crewmates3 = crewmates2.Where(x => {
                     var role = Role.GetRole(x);
-					return role == null || (
-					    role.Faction == Faction.Crewmates &&
+                    return role == null || (
+                        role.Faction == Faction.Crewmates &&
                         role.RoleType != RoleEnum.Altruist
-					);
+                    );
                 }).ToList();
                 Modifier.Gen(typeof(Snitch), crewmates3, CustomRPC.SetSnitch);
             }
@@ -723,9 +723,9 @@ namespace TownOfUs
             if (phantomOn)
             {
                 var crew = Utils.getCrewmates(infected).Where(x => {
-					var role = Role.GetRole(x);
-					return role == null || role.Faction != Faction.Neutral;
-				}).ToList();
+                    var role = Role.GetRole(x);
+                    return role == null || role.Faction != Faction.Neutral;
+                }).ToList();
                 crew.Shuffle();
                 var player = crew.Random();
                 phantom = (PhantomMod.SetPhantom.WillBePhantom = player).PlayerId;
@@ -737,7 +737,7 @@ namespace TownOfUs
             }
             var writer = AmongUsClient.Instance.StartRpcImmediately(
                 PlayerControl.LocalPlayer.NetId,
-                (byte) CustomRPC.SetPhantom,
+                (byte)CustomRPC.SetPhantom,
                 SendOption.Reliable,
                 -1
             );
@@ -749,21 +749,19 @@ namespace TownOfUs
             {
                 Modifier.Gen(modifier, global, rpc);
             }
-            
+
             if (LoversOn)
             {
                 Lover.Gen(crewmates, impostors);
             }
 
-            while (true)
+            while (crewmates.Count > 0)
             {
-                if (crewmates.Count == 0) break;
                 Role.Gen(typeof(Crewmate), crewmates, CustomRPC.SetCrewmate);
             }
 
-            while (true)
+            while (impostors.Count > 0)
             {
-                if (impostors.Count == 0) break;
                 Role.Gen(typeof(Impostor), impostors, CustomRPC.SetImpostor);
             }
         }

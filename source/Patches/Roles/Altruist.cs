@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace TownOfUs.Roles
 {
@@ -7,7 +7,7 @@ namespace TownOfUs.Roles
         public bool ReviveUsed;
         public bool CurrentlyReviving;
         public DeadBody CurrentTarget;
-        
+
         public Altruist(PlayerControl player) : base(player)
         {
             Name = "Altruist";

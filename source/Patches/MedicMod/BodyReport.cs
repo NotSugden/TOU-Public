@@ -37,16 +37,16 @@ namespace TownOfUs.MedicMod
                 Killer = Utils.PlayerById(killer.KillerId),
                 Reporter = __instance,
                 Body = Utils.PlayerById(killer.PlayerId),
-                KillAge = (float) (DateTime.UtcNow - killer.KillTime).TotalMilliseconds,
+                KillAge = (float)(DateTime.UtcNow - killer.KillTime).TotalMilliseconds,
             };
-            
+
 
             var reportMsg = BodyReport.ParseBodyReport(br);
-            
+
 
             if (string.IsNullOrWhiteSpace(reportMsg))
                 return;
-            
+
 
             if (DestroyableSingleton<HudManager>.Instance)
             {

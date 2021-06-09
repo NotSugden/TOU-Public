@@ -5,7 +5,7 @@ namespace TownOfUs.ShifterMod
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
     public class HUDShift
     {
-        
+
         public static void Postfix(PlayerControl __instance)
         {
             UpdateShiftButton(__instance);
@@ -23,8 +23,8 @@ namespace TownOfUs.ShifterMod
             var shiftButton = DestroyableSingleton<HudManager>.Instance.KillButton;
 
             var role = Roles.Role.GetRole<Roles.Shifter>(PlayerControl.LocalPlayer);
-            
-            
+
+
             if (isDead)
             {
                 shiftButton.gameObject.SetActive(false);

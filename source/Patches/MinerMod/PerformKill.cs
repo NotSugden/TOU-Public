@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using HarmonyLib;
 using Hazel;
@@ -27,7 +27,7 @@ namespace TownOfUs.MinerMod
                 if (role.MineTimer() != 0) return false;
 
                 var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                    (byte) CustomRPC.Mine, SendOption.Reliable, -1);
+                    (byte)CustomRPC.Mine, SendOption.Reliable, -1);
                 var position = PlayerControl.LocalPlayer.transform.position;
                 var id = GetAvailableId();
                 writer.Write(id);
@@ -42,8 +42,8 @@ namespace TownOfUs.MinerMod
 
             return true;
         }
-        
-        
+
+
 
         public static void SpawnVent(int ventId, Miner role, Vector2 position, float zAxis)
         {
@@ -69,13 +69,13 @@ namespace TownOfUs.MinerMod
             var allVents = ShipStatus.Instance.AllVents.ToList();
             allVents.Add(vent);
             ShipStatus.Instance.AllVents = allVents.ToArray();
-            
+
             role.Vents.Add(vent);
             role.LastMined = DateTime.UtcNow;
-            
+
 
         }
-        
+
         public static int GetAvailableId()
         {
             int id = 0;
@@ -89,6 +89,6 @@ namespace TownOfUs.MinerMod
                 id++;
             }
         }
-        
+
     }
 }

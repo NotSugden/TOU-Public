@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using TownOfUs.Roles;
 using TownOfUs.Roles.Modifiers;
 using UnityEngine;
@@ -43,7 +43,7 @@ namespace TownOfUs.MayorMod
                     __result *= 0.5f;
                 }
             }
-            
+
             return false;
 
         }

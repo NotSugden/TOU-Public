@@ -1,16 +1,16 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using Hazel;
 
 
 namespace TownOfUs.LoversMod
-{ 
+{
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Die))]
     public class Die
     {
         public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] DeathReason reason)
         {
             __instance.Data.IsDead = true;
-            
+
 
             var flag3 = __instance.isLover() && CustomGameOptions.BothLoversDie;
             if (!flag3) return true;
@@ -21,7 +21,7 @@ namespace TownOfUs.LoversMod
             {
                 AltruistMod.KillButtonTarget.DontRevive = __instance.PlayerId;
             }
-            
+
             Utils.MurderPlayer(otherLover, otherLover);
             return true;
         }

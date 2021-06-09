@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using Hazel;
 using Reactor;
 using UnityEngine;
@@ -7,7 +7,7 @@ namespace TownOfUs.JanitorMod
 {
     [HarmonyPatch(typeof(KillButtonManager), nameof(KillButtonManager.PerformKill))]
     public class PerformKillButton
-    
+
     {
         public static bool Prefix(KillButtonManager __instance)
         {
@@ -29,7 +29,7 @@ namespace TownOfUs.JanitorMod
                 var playerId = role.CurrentTarget.ParentId;
 
                 var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                    (byte) CustomRPC.JanitorClean, SendOption.Reliable, -1);
+                    (byte)CustomRPC.JanitorClean, SendOption.Reliable, -1);
                 writer.Write(PlayerControl.LocalPlayer.PlayerId);
                 writer.Write(playerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -40,7 +40,7 @@ namespace TownOfUs.JanitorMod
 
             return true;
         }
-        
-        
+
+
     }
 }

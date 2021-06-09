@@ -25,13 +25,13 @@ namespace TownOfUs.Roles
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != typeof(Role)) return false;
-            return Equals((Role) obj);
+            return Equals((Role)obj);
         }
 
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Player, (int) RoleType);
+            return HashCode.Combine(Player, (int)RoleType);
         }
 
         public static readonly Dictionary<byte, Role> RoleDictionary = new Dictionary<byte, Role>();
@@ -84,7 +84,7 @@ namespace TownOfUs.Roles
 
         public List<KillButtonManager> ExtraButtons = new List<KillButtonManager>();
         public static uint NetId => PlayerControl.LocalPlayer.NetId;
-        public string PlayerName { get; set; } 
+        public string PlayerName { get; set; }
 
         public string ColorString => "<color=#" + Color.ToHtmlStringRGBA() + ">";
 
@@ -124,8 +124,8 @@ namespace TownOfUs.Roles
                     var role = GetRole(x);
                     if (role == null) return false;
                     var flag2 = role.Faction == Faction.Neutral && !x.Is(RoleEnum.Glitch) && !x.Is(RoleEnum.Arsonist) && !x.Is(RoleEnum.Phantom);
-                    var flag3 = x.Is(RoleEnum.Arsonist) && ((Arsonist) role).IgniteUsed && alives.Count > 1;
-                    
+                    var flag3 = x.Is(RoleEnum.Arsonist) && ((Arsonist)role).IgniteUsed && alives.Count > 1;
+
                     return flag2 || flag3;
                 });
 
@@ -135,7 +135,7 @@ namespace TownOfUs.Roles
             if (CheckNoImpsNoCrews())
             {
                 var messageWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                    (byte) CustomRPC.NobodyWins, SendOption.Reliable, -1);
+                    (byte)CustomRPC.NobodyWins, SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(messageWriter);
 
                 NobodyWinsFunc();
@@ -157,7 +157,7 @@ namespace TownOfUs.Roles
 
         protected virtual string NameText(PlayerVoteArea player = null)
         {
-            
+
             if (CamouflageMod.CamouflageUnCamouflage.IsCamoed && player == null)
             {
                 return "";
@@ -169,7 +169,7 @@ namespace TownOfUs.Roles
                 MeetingHud.Instance.state == MeetingHud.VoteStates.Results)) return Player.name;
 
             if (!CustomGameOptions.RoleUnderName && player == null) return Player.name;
-            
+
             Player.nameText.transform.localPosition = new Vector3(
                 0f,
                 (Player.Data.HatId == 0U) ? 1.05f :
@@ -178,7 +178,7 @@ namespace TownOfUs.Roles
             );
             return Player.name + "\n" + Name;
         }
-        
+
         public static bool operator ==(Role a, Role b)
         {
             if (a is null && b is null) return true;
@@ -198,11 +198,11 @@ namespace TownOfUs.Roles
             var rand = UnityEngine.Random.RandomRangeInt(0, crewmates.Count); //TODO - change
             var pc = crewmates[rand];
 
-            var role = Activator.CreateInstance(T, new object[] {pc});
+            var role = Activator.CreateInstance(T, new object[] { pc });
             var playerId = pc.PlayerId;
             crewmates.Remove(pc);
 
-            var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte) rpc,
+            var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)rpc,
                 SendOption.Reliable, -1);
             writer.Write(playerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -356,7 +356,7 @@ namespace TownOfUs.Roles
                 var modifier = Modifier.GetModifier(PlayerControl.LocalPlayer);
                 if (modifier != null)
                 {
-					if (modifier.Hidden) return;
+                    if (modifier.Hidden) return;
                     var modifierText = Object.Instantiate(__instance.Title, __instance.Title.transform.parent, false);
                     modifierText.text = $"<size=5>Modifier: {modifier.Name}</size>";
                     modifierText.color = modifier.Color;
@@ -368,14 +368,14 @@ namespace TownOfUs.Roles
 
         public void RemoveCustomTasks()
         {
-			var tasks = Player.myTasks;
-			if (tasks.Count == 0) return;
+            var tasks = Player.myTasks;
+            if (tasks.Count == 0) return;
             var task = tasks[0].TryCast<ImportantTextTask>();
 
             if (task?.Text.Contains("Role:") == true)
             {
                 tasks.RemoveAt(0);
-				if (tasks.Count == 0) return;
+                if (tasks.Count == 0) return;
                 task = tasks[0].TryCast<ImportantTextTask>();
             }
 
@@ -440,10 +440,10 @@ namespace TownOfUs.Roles
 
             }
         }*/
-        
-        
-        
-        
+
+
+
+
         [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CheckEndCriteria))]
         public static class ShipStatus_KMPKPPGPNIH
         {
@@ -483,14 +483,15 @@ namespace TownOfUs.Roles
                 }
 
                 var result = true;
-				var jester = AllRoles.FirstOrDefault(role => role.RoleType == RoleEnum.Jester);
-				bool jesterWins = jester == null ? false : ((Jester) jester).VotedOut;
-				var exec = AllRoles.FirstOrDefault(role => role.RoleType == RoleEnum.Executioner);
-				bool execWins = exec == null ? false : ((Executioner) exec).TargetVotedOut;
-				if (jesterWins || execWins) {
-					Utils.EndGame();
-					return true;
-				}
+                var jester = AllRoles.FirstOrDefault(role => role.RoleType == RoleEnum.Jester);
+                bool jesterWins = jester == null ? false : ((Jester)jester).VotedOut;
+                var exec = AllRoles.FirstOrDefault(role => role.RoleType == RoleEnum.Executioner);
+                bool execWins = exec == null ? false : ((Executioner)exec).TargetVotedOut;
+                if (jesterWins || execWins)
+                {
+                    Utils.EndGame();
+                    return true;
+                }
                 foreach (var role in AllRoles)
                 {
                     var isend = role.CheckEndCriteria(__instance);
@@ -528,11 +529,11 @@ namespace TownOfUs.Roles
                 Modifier.ModifierDictionary.Clear();
             }
         }
-        
-        
+
+
 
         [HarmonyPatch(typeof(TranslationController), nameof(TranslationController.GetString),
-            new[] {typeof(StringNames), typeof(Il2CppReferenceArray<Il2CppSystem.Object>)})]
+            new[] { typeof(StringNames), typeof(Il2CppReferenceArray<Il2CppSystem.Object>) })]
         public static class TranslationController_GetString
         {
             public static void Postfix(ref string __result, [HarmonyArgument(0)] StringNames name)
@@ -545,14 +546,14 @@ namespace TownOfUs.Roles
                     case StringNames.ExileTextSN:
                     case StringNames.ExileTextPP:
                     case StringNames.ExileTextSP:
-                    {
-                        var info = ExileController.Instance.exiled;
-                        var role = Role.GetRole(info.Object);
-                        if (role == null) return;
-                        var roleName = role.RoleType == RoleEnum.Glitch ? role.Name : $"The {role.Name}";
-                        __result = $"{info.PlayerName} was {roleName}.";
-                        return;
-                    }
+                        {
+                            var info = ExileController.Instance.exiled;
+                            var role = Role.GetRole(info.Object);
+                            if (role == null) return;
+                            var roleName = role.RoleType == RoleEnum.Glitch ? role.Name : $"The {role.Name}";
+                            __result = $"{info.PlayerName} was {roleName}.";
+                            return;
+                        }
                 }
             }
         }
@@ -587,8 +588,8 @@ namespace TownOfUs.Roles
                 Hide();
                 var localPlayer = PlayerControl.LocalPlayer;
                 var localRole = GetRole(localPlayer);
-				var localIsSnitch = localPlayer.Is(ModifierEnum.Snitch);
-				var completedTasks = localIsSnitch && Modifier.GetModifier<Snitch>(localPlayer).TasksDone;
+                var localIsSnitch = localPlayer.Is(ModifierEnum.Snitch);
+                var completedTasks = localIsSnitch && Modifier.GetModifier<Snitch>(localPlayer).TasksDone;
                 foreach (var player in __instance.playerStates)
                 {
                     var role = GetRole(player);
@@ -615,7 +616,7 @@ namespace TownOfUs.Roles
                         isSnitch && (isDead || (
                             localRole.Faction == Faction.Impostors
                             || (CustomGameOptions.SnitchCanSeeNeutrals && localRole.Faction == Faction.Neutral)
-                        ) && ((Snitch) modifier).TasksDone)
+                        ) && ((Snitch)modifier).TasksDone)
                     )
                     {
                         player.NameText.text = $"{role.Player.name} {Utils.ColorText(modifier.Color, "(Snitch)")}";

@@ -15,7 +15,7 @@ namespace TownOfUs.PhantomMod
             if (tasks.Count(x => !x.Complete) != 0) return;
             var writer = AmongUsClient.Instance.StartRpcImmediately(
                 PlayerControl.LocalPlayer.NetId,
-                (byte) CustomRPC.PhantomWin,
+                (byte)CustomRPC.PhantomWin,
                 Hazel.SendOption.Reliable,
                 -1
             );

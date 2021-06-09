@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using HarmonyLib;
 
 namespace TownOfUs.JanitorMod
 {
-    
+
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Start))]
     public static class Start
     {
@@ -11,7 +11,7 @@ namespace TownOfUs.JanitorMod
         {
             foreach (var role in Roles.Role.GetRoles(RoleEnum.Janitor))
             {
-                var janitor = (Roles.Janitor) role;
+                var janitor = (Roles.Janitor)role;
                 janitor.LastCleaned = DateTime.UtcNow;
                 janitor.LastCleaned = janitor.LastCleaned.AddSeconds(-20.0);
             }

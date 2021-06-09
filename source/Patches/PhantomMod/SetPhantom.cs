@@ -12,7 +12,7 @@ namespace TownOfUs.PhantomMod
     {
         public static void Postfix(MeetingHud __instance)
         {
-            if (WillBePhantom == null) return; 
+            if (WillBePhantom == null) return;
             var localPlayer = PlayerControl.LocalPlayer;
             var localPlayerId = localPlayer.PlayerId;
             if (
@@ -28,7 +28,7 @@ namespace TownOfUs.PhantomMod
             localPlayer.gameObject.layer = LayerMask.NameToLayer("Players");
             MessageWriter msg = AmongUsClient.Instance.StartRpcImmediately(
                 localPlayer.NetId,
-                (byte) CustomRPC.ForceSetPhantom,
+                (byte)CustomRPC.ForceSetPhantom,
                 SendOption.Reliable,
                 -1
             );

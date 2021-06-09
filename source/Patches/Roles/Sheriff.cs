@@ -7,11 +7,11 @@ namespace TownOfUs.Roles
 {
     public class Sheriff : Role
     {
-        
+
         public PlayerControl ClosestPlayer { get; set; }
-        public DateTime LastKilled { get; set;}
+        public DateTime LastKilled { get; set; }
         public List<byte> Kills = new List<byte>();
-        
+
         public Sheriff(PlayerControl player) : base(player)
         {
             Name = "Sheriff";
@@ -68,8 +68,8 @@ namespace TownOfUs.Roles
         {
             return CustomGameOptions.ShowSheriff || base.Criteria();
         }
-        
-        
-        
+
+
+
     }
 }

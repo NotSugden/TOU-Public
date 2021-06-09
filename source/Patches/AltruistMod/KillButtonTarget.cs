@@ -20,7 +20,7 @@ namespace TownOfUs.AltruistMod
                 role.CurrentTarget.GetComponent<SpriteRenderer>().material.SetFloat("_Outline", 0f);
             }
 
-            
+
             if (target != null && target.ParentId == DontRevive) target = null;
             role.CurrentTarget = target;
             if (role.CurrentTarget && __instance.enabled)

@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 
 namespace TownOfUs.SwooperMod
 {
@@ -11,16 +11,17 @@ namespace TownOfUs.SwooperMod
         {
             foreach (var role in Roles.Role.GetRoles(RoleEnum.Swooper))
             {
-                
-                var swooper = (Roles.Swooper) role;
+
+                var swooper = (Roles.Swooper)role;
                 if (swooper.IsSwooped)
                 {
                     swooper.Swoop();
-                } else if (swooper.Enabled)
+                }
+                else if (swooper.Enabled)
                 {
                     swooper.UnSwoop();
                 }
-                
+
             }
         }
     }

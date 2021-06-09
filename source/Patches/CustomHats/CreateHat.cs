@@ -367,7 +367,7 @@ namespace TownOfUs.CustomHats
                 );
             }
         }
-        
-        
+
+
     }
 }

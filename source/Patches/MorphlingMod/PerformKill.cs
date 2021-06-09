@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using HarmonyLib;
 using Hazel;
 using UnityEngine;
@@ -10,7 +10,7 @@ namespace TownOfUs.MorphlingMod
     {
         public static Sprite SampleSprite => TownOfUs.SampleSprite;
         public static Sprite MorphSprite => TownOfUs.MorphSprite;
-        
+
         public static bool Prefix(KillButtonManager __instance)
         {
             var flag = PlayerControl.LocalPlayer.Is(RoleEnum.Morphling);
@@ -21,7 +21,7 @@ namespace TownOfUs.MorphlingMod
             var target = role.closestPlayer;
             if (__instance == role.MorphButton)
             {
-                
+
                 if (!__instance.isActiveAndEnabled) return false;
                 if (role.MorphButton.renderer.sprite == SampleSprite)
                 {
@@ -39,7 +39,7 @@ namespace TownOfUs.MorphlingMod
                 {
                     if (__instance.isCoolingDown) return false;
                     if (role.MorphTimer() != 0) return false;
-                    var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte) CustomRPC.Morph,
+                    var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.Morph,
                         SendOption.Reliable, -1);
                     writer.Write(PlayerControl.LocalPlayer.PlayerId);
                     writer.Write(role.SampledPlayer.PlayerId);

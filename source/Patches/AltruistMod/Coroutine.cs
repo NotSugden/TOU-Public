@@ -20,15 +20,15 @@ namespace TownOfUs.AltruistMod
             var position = target.TruePosition;
 
             var revived = new List<PlayerControl>();
-            
-            
+
+
             Utils.MurderPlayer(role.Player, role.Player);
 
             if (CustomGameOptions.AltruistTargetBody)
             {
-                if(target != null) Object.Destroy(target.gameObject);
+                if (target != null) Object.Destroy(target.gameObject);
             }
-            
+
             var startTime = DateTime.UtcNow;
             while (true)
             {
@@ -49,19 +49,19 @@ namespace TownOfUs.AltruistMod
             {
                 Object.Destroy(altruistBody.gameObject);
             }
-            
+
             var player = Utils.PlayerById(parentId);
-            
-            
+
+
             player.Revive();
             MedicMod.Murder.KilledPlayers.Remove(
                 MedicMod.Murder.KilledPlayers.FirstOrDefault(x => x.PlayerId == player.PlayerId));
             revived.Add(player);
             player.NetTransform.SnapTo(position);
-            
+
             if (target != null)
             {
-                
+
                 Object.Destroy(target.gameObject);
             }
 
@@ -73,7 +73,7 @@ namespace TownOfUs.AltruistMod
                 MedicMod.Murder.KilledPlayers.Remove(
                     MedicMod.Murder.KilledPlayers.FirstOrDefault(x => x.PlayerId == lover.PlayerId));
                 revived.Add(lover);
-                
+
                 var loverBody = Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == lover.PlayerId);
 
                 if (loverBody != null)

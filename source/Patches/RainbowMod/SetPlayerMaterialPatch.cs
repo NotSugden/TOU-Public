@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using UnityEngine;
 
 namespace TownOfUs.RainbowMod
@@ -13,12 +13,12 @@ namespace TownOfUs.RainbowMod
             {
                 r = rend.gameObject.AddComponent<RainbowBehaviour>();
             }
-           
+
             r.AddRend(rend, colorId);
             return !RainbowUtils.IsRainbow(colorId);
         }
     }
-    
+
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetPlayerMaterialColors), typeof(Color), typeof(Renderer))]
     public class SetPlayerMaterialPatch2
     {
@@ -29,7 +29,7 @@ namespace TownOfUs.RainbowMod
             {
                 r = rend.gameObject.AddComponent<RainbowBehaviour>();
             }
-           
+
             r.AddRend(rend, 0);
             return !RainbowUtils.IsRainbow(0);
         }

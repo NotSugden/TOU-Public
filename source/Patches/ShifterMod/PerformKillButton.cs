@@ -21,7 +21,7 @@ namespace TownOfUs.ShifterMod
         RegularCrewmates,
         Nobody
     }
-    
+
     [HarmonyPatch(typeof(KillButtonManager), nameof(KillButtonManager.PerformKill))]
     [HarmonyPriority(Priority.Last)]
     public class PerformKillButton
@@ -48,22 +48,22 @@ namespace TownOfUs.ShifterMod
             {
                 var medic = role.ClosestPlayer.getMedic().Player.PlayerId;
 
-                    var writer1 = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                        (byte) CustomRPC.AttemptSound, Hazel.SendOption.Reliable, -1);
-                    writer1.Write(medic);
-                    writer1.Write(role.ClosestPlayer.PlayerId);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer1);
-                    if (CustomGameOptions.ShieldBreaks)
-                    {
-                        role.LastShifted = DateTime.UtcNow;
-                    }
-                    MedicMod.StopKill.BreakShield(medic, role.ClosestPlayer.PlayerId, CustomGameOptions.ShieldBreaks);
+                var writer1 = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
+                    (byte)CustomRPC.AttemptSound, Hazel.SendOption.Reliable, -1);
+                writer1.Write(medic);
+                writer1.Write(role.ClosestPlayer.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer1);
+                if (CustomGameOptions.ShieldBreaks)
+                {
+                    role.LastShifted = DateTime.UtcNow;
+                }
+                MedicMod.StopKill.BreakShield(medic, role.ClosestPlayer.PlayerId, CustomGameOptions.ShieldBreaks);
 
-                    return false;
+                return false;
             }
 
             var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                (byte) CustomRPC.Shift, SendOption.Reliable, -1);
+                (byte)CustomRPC.Shift, SendOption.Reliable, -1);
             writer.Write(PlayerControl.LocalPlayer.PlayerId);
             writer.Write(playerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -85,10 +85,10 @@ namespace TownOfUs.ShifterMod
             var background = overlay.background;
             overlay.flameParent.SetActive(true);
             yield return new WaitForLerp(0.16666667f,
-                delegate(float t) { overlay.flameParent.transform.localScale = new Vector3(1f, t, 1f); });
+                delegate (float t) { overlay.flameParent.transform.localScale = new Vector3(1f, t, 1f); });
             yield return new WaitForSeconds(1f);
             yield return new WaitForLerp(0.16666667f,
-                delegate(float t) { overlay.flameParent.transform.localScale = new Vector3(1f, 1f - t, 1f); });
+                delegate (float t) { overlay.flameParent.transform.localScale = new Vector3(1f, 1f - t, 1f); });
             overlay.flameParent.SetActive(false);
             overlay.showAll = null;
             renderer.sprite = TownOfUs.NormalKill;
@@ -139,7 +139,7 @@ namespace TownOfUs.ShifterMod
                         InvestigatorMod.Footprint.DestroyAll(Roles.Role.GetRole<Roles.Investigator>(other));
                     }
 
-                    
+
                     newRole = Roles.Role.GetRole(other);
                     newRole.Player = shifter;
 
@@ -166,7 +166,7 @@ namespace TownOfUs.ShifterMod
                         Modifier.ModifierDictionary.Remove(other.PlayerId);
                         Modifier.ModifierDictionary.Add(shifter.PlayerId, modifier);
                     }
-                    
+
 
                     Roles.Role.RoleDictionary.Remove(shifter.PlayerId);
                     Roles.Role.RoleDictionary.Remove(other.PlayerId);
@@ -176,13 +176,13 @@ namespace TownOfUs.ShifterMod
 
                     foreach (var exeRole in Roles.Role.AllRoles.Where(x => x.RoleType == RoleEnum.Executioner))
                     {
-                        var executioner = (Roles.Executioner) exeRole;
+                        var executioner = (Roles.Executioner)exeRole;
                         var target = executioner.target;
                         if (other == target)
                         {
-                            executioner.target.nameText.color = Color.white;;
+                            executioner.target.nameText.color = Color.white; ;
                             executioner.target = shifter;
-                            
+
                             executioner.RegenTask();
                         }
 
@@ -194,7 +194,7 @@ namespace TownOfUs.ShifterMod
                         resetShifter = true;
                         shifterRole.Player = other;
                         Roles.Role.RoleDictionary.Add(other.PlayerId, shifterRole);
-                        
+
                     }
                     else
                     {
@@ -245,7 +245,7 @@ namespace TownOfUs.ShifterMod
                     var otherLover = lover.OtherLover;
                     otherLover.RegenTask();
                 }
-                
+
                 if (resetShifter)
                 {
                     shifterRole.RegenTask();

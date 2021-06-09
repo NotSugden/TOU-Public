@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using UnityEngine;
 
 namespace TownOfUs.CamouflageMod
@@ -12,7 +12,7 @@ namespace TownOfUs.CamouflageMod
             {
                 foreach (var state in __instance.playerStates)
                 {
-                    if(!PlayerControl.LocalPlayer.Is(RoleEnum.Seer))
+                    if (!PlayerControl.LocalPlayer.Is(RoleEnum.Seer))
                     {
                         state.NameText.text = "";
 

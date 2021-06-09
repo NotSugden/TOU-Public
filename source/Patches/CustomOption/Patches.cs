@@ -39,12 +39,12 @@ namespace TownOfUs.CustomOption
                 var toggle = Object.Instantiate(togglePrefab, togglePrefab.transform.parent).DontDestroy();
                 toggle.transform.GetChild(2).gameObject.SetActive(false);
                 toggle.transform.GetChild(0).localPosition += new Vector3(1f, 0f, 0f);
-                
+
                 ExportButton.Setting = toggle;
                 ExportButton.OptionCreated();
                 options.Add(toggle);
             }
-            
+
             if (ImportButton.Setting != null)
             {
                 ImportButton.Setting.gameObject.SetActive(true);
@@ -55,7 +55,7 @@ namespace TownOfUs.CustomOption
                 var toggle = Object.Instantiate(togglePrefab, togglePrefab.transform.parent).DontDestroy();
                 toggle.transform.GetChild(2).gameObject.SetActive(false);
                 toggle.transform.GetChild(0).localPosition += new Vector3(1f, 0f, 0f);
-                
+
                 ImportButton.Setting = toggle;
                 ImportButton.OptionCreated();
                 options.Add(toggle);
@@ -66,7 +66,7 @@ namespace TownOfUs.CustomOption
             {
                 options.Add(defaultOption);
             }
-            
+
             foreach (var option in CustomOption.AllOptions)
             {
                 if (option.Setting != null)
@@ -131,7 +131,7 @@ namespace TownOfUs.CustomOption
 
             }
         }
-        
+
         [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
         private class GameOptionsMenu_Update
         {
@@ -161,9 +161,9 @@ namespace TownOfUs.CustomOption
 
             }
         }
-        
-        
-        
+
+
+
         private static bool OnEnable(OptionBehaviour opt)
         {
             if (opt == ExportButton.Setting)
@@ -240,15 +240,15 @@ namespace TownOfUs.CustomOption
                     ExportButton.Do();
                     return false;
                 }
-                
+
                 if (__instance == ImportButton.Setting)
                 {
                     if (!AmongUsClient.Instance.AmHost) return false;
                     ImportButton.Do();
                     return false;
                 }
-                
-                
+
+
 
                 if (option is CustomHeaderOption) return false;
 
@@ -259,7 +259,7 @@ namespace TownOfUs.CustomOption
                     button.Do();
                     return false;
                 }
-                
+
                 CustomOption option3 = ImportButton.SlotButtons.FirstOrDefault(option => option.Setting == __instance);
                 if (option3 is CustomButtonOption button2)
                 {
@@ -335,7 +335,7 @@ namespace TownOfUs.CustomOption
                 return true;
             }
         }
-        
+
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcSyncSettings))]
         private class PlayerControlPatch
         {
@@ -346,7 +346,7 @@ namespace TownOfUs.CustomOption
                 Rpc.SendRpc();
             }
         }
-        
+
         [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
         private class HudManagerUpdate
         {
@@ -357,7 +357,7 @@ namespace TownOfUs.CustomOption
             public static void Prefix(HudManager __instance)
             {
                 if (__instance.GameSettings?.transform == null) return;
-                
+
 
                 // Scroller disabled
                 if (!CustomOption.LobbyTextScroller)

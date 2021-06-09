@@ -23,8 +23,8 @@ namespace TownOfUs.SeerMod
             var investigateButton = DestroyableSingleton<HudManager>.Instance.KillButton;
 
             var role = Roles.Role.GetRole<Roles.Seer>(PlayerControl.LocalPlayer);
-            
-            
+
+
             if (isDead)
             {
                 investigateButton.gameObject.SetActive(false);

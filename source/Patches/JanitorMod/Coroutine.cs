@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
 
@@ -17,7 +17,7 @@ namespace TownOfUs.JanitorMod
             var backColor = renderer.material.GetColor(BackColor);
             var bodyColor = renderer.material.GetColor(BodyColor);
             var newColor = new Color(1f, 1f, 1f, 0f);
-            for (var i = 0; i < 60; i++)
+            for (var i = 0;i < 60;i++)
             {
                 if (body == null) yield break;
                 renderer.color = Color.Lerp(backColor, newColor, i / 60f);
@@ -26,7 +26,7 @@ namespace TownOfUs.JanitorMod
 
             }
             UnityEngine.Object.Destroy(body.gameObject);
-            
+
 
         }
     }

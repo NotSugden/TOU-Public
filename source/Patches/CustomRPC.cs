@@ -34,12 +34,12 @@
         SetTiebreaker,
         SetDrunk,
         SetBigBoi,
-        
+
         SetCrewmate,
         SetImpostor,
-        
-       
-        
+
+
+
         LoveWin,
         GlitchWin,
         ArsonistWin,
@@ -51,7 +51,7 @@
         ArsonistLose,
         PhantomLose,
         NobodyWins,
-        
+
         JanitorClean,
         FixLights,
         EngineerFix,
@@ -80,7 +80,7 @@
         RpcResetAnim,
         SetHacked,
         KillDuringMeeting,
-        
+
         ExecutionerToJester,
 
 

@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 
 namespace TownOfUs.Modifiers
 {
@@ -39,7 +39,7 @@ namespace TownOfUs.Modifiers
             return true;
 
         }
-        
+
         [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.FixedUpdate))]
         public static class PlayerPhysics_FixedUpdate
         {

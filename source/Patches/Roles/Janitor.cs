@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 
 namespace TownOfUs.Roles
 {
     public class Janitor : Role
     {
-        public DateTime LastCleaned {get; set;}
-        public DeadBody CurrentTarget {get; set;}
+        public DateTime LastCleaned { get; set; }
+        public DeadBody CurrentTarget { get; set; }
 
         public KillButtonManager _cleanButton;
 
@@ -19,7 +19,7 @@ namespace TownOfUs.Roles
                 ExtraButtons.Add(value);
             }
         }
-        
+
         public Janitor(PlayerControl player) : base(player)
         {
             Name = "Janitor";

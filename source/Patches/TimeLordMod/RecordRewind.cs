@@ -40,8 +40,8 @@ namespace TownOfUs.TimeLordMod
                 position = PlayerControl.LocalPlayer.transform.position;
                 velocity = PlayerControl.LocalPlayer.gameObject.GetComponent<Rigidbody2D>().velocity;
             }
-            
-            
+
+
             points.Insert(0, new PointInTime(
                 position,
                 velocity,
@@ -65,10 +65,13 @@ namespace TownOfUs.TimeLordMod
 
         public static void Rewind()
         {
-            if (Minigame.Instance) {
-                try {
+            if (Minigame.Instance)
+            {
+                try
+                {
                     Minigame.Instance.Close();
-                } catch {}
+                }
+                catch { }
             }
 
             if (points.Count > 2)
@@ -86,14 +89,14 @@ namespace TownOfUs.TimeLordMod
                         PlayerControl.LocalPlayer.moveable = true;
                         PlayerControl.LocalPlayer.NetTransform.enabled = true;
 
-                
+
                         var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                            (byte) CustomRPC.FixAnimation, SendOption.Reliable, -1);
+                            (byte)CustomRPC.FixAnimation, SendOption.Reliable, -1);
                         writer.Write(PlayerControl.LocalPlayer.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                     }
-                    
-                    
+
+
                     var currentPoint = points[0];
 
                     PlayerControl.LocalPlayer.transform.position = currentPoint.position;
@@ -111,14 +114,14 @@ namespace TownOfUs.TimeLordMod
                         isDead = false;
 
                         var write = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                            (byte) CustomRPC.RewindRevive, SendOption.Reliable, -1);
+                            (byte)CustomRPC.RewindRevive, SendOption.Reliable, -1);
                         write.Write(PlayerControl.LocalPlayer.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(write);
                     }
                 }
                 points.RemoveAt(0);
             }
-            
+
             else StartStop.StopRewind(whoIsRewinding);
         }
 
@@ -139,11 +142,12 @@ namespace TownOfUs.TimeLordMod
             if (rewinding)
             {
                 Rewind();
-            } else Record();
+            }
+            else Record();
 
             foreach (var role in Roles.Role.GetRoles(RoleEnum.TimeLord))
             {
-                var TimeLord = (Roles.TimeLord) role;
+                var TimeLord = (Roles.TimeLord)role;
                 if ((DateTime.UtcNow - TimeLord.StartRewind).TotalMilliseconds >
                     CustomGameOptions.RewindDuration * 1000f && TimeLord.FinishRewind < TimeLord.StartRewind)
                 {
@@ -151,6 +155,6 @@ namespace TownOfUs.TimeLordMod
                 }
             }
         }
-    
+
     }
 }

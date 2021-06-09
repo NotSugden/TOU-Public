@@ -2,17 +2,17 @@
 using UnityEngine;
 
 namespace TownOfUs.MorphlingMod
-{ 
+{
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public class HudManagerUpdate
     {
 
         public static Sprite SampleSprite => TownOfUs.SampleSprite;
         public static Sprite MorphSprite => TownOfUs.MorphSprite;
-        
-        
-        
-        
+
+
+
+
         public static void Postfix(HudManager __instance)
         {
             if (PlayerControl.AllPlayerControls.Count <= 1) return;
@@ -67,9 +67,9 @@ namespace TownOfUs.MorphlingMod
                 role.MorphButton.renderer.color = Palette.EnabledColor;
                 role.MorphButton.renderer.material.SetFloat("_Desat", 0f);
             }
-            
-            
-            
+
+
+
         }
 
     }

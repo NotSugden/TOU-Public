@@ -46,7 +46,7 @@ namespace TownOfUs
         {
             Player.MyPhysics.SetSkin(skin);
         }
-        
+
         public static void Morph(PlayerControl Player, PlayerControl MorphedPlayer, bool resetAnim = false)
         {
             if (CamouflageMod.CamouflageUnCamouflage.IsCamoed)
@@ -70,13 +70,13 @@ namespace TownOfUs
             );
 
             if (Player.MyPhysics.Skin.skin.ProdId != DestroyableSingleton<HatManager>.Instance
-                .AllSkins.ToArray()[(int) MorphedPlayer.Data.SkinId].ProdId)
+                .AllSkins.ToArray()[(int)MorphedPlayer.Data.SkinId].ProdId)
             {
                 SetSkin(Player, MorphedPlayer.Data.SkinId);
             }
 
             if (Player.CurrentPet == null || Player.CurrentPet.ProdId !=
-                DestroyableSingleton<HatManager>.Instance.AllPets.ToArray()[(int) MorphedPlayer.Data.PetId].ProdId)
+                DestroyableSingleton<HatManager>.Instance.AllPets.ToArray()[(int)MorphedPlayer.Data.PetId].ProdId)
             {
 
                 if (Player.CurrentPet != null)
@@ -86,7 +86,7 @@ namespace TownOfUs
 
                 Player.CurrentPet =
                     Object.Instantiate(
-                        DestroyableSingleton<HatManager>.Instance.AllPets.ToArray()[(int) MorphedPlayer.Data.PetId]);
+                        DestroyableSingleton<HatManager>.Instance.AllPets.ToArray()[(int)MorphedPlayer.Data.PetId]);
                 Player.CurrentPet.transform.position = Player.transform.position;
                 Player.CurrentPet.Source = Player;
                 Player.CurrentPet.Visible = Player.Visible;
@@ -113,7 +113,7 @@ namespace TownOfUs
             );
 
             if (Player.MyPhysics.Skin.skin.ProdId != DestroyableSingleton<HatManager>.Instance
-                .AllSkins.ToArray()[(int) Player.Data.SkinId].ProdId)
+                .AllSkins.ToArray()[(int)Player.Data.SkinId].ProdId)
             {
                 SetSkin(Player, Player.Data.SkinId);
             }
@@ -126,7 +126,7 @@ namespace TownOfUs
 
             Player.CurrentPet =
                 Object.Instantiate(
-                    DestroyableSingleton<HatManager>.Instance.AllPets.ToArray()[(int) Player.Data.PetId]);
+                    DestroyableSingleton<HatManager>.Instance.AllPets.ToArray()[(int)Player.Data.PetId]);
             Player.CurrentPet.transform.position = Player.transform.position;
             Player.CurrentPet.Source = Player;
             Player.CurrentPet.Visible = Player.Visible;
@@ -194,7 +194,7 @@ namespace TownOfUs
                 self.Add(item);
             }
         }
-        
+
         public static bool isLover(this PlayerControl player)
         {
             return player.Is(new RoleEnum[] { RoleEnum.Lover, RoleEnum.LoverImpostor });
@@ -272,16 +272,16 @@ namespace TownOfUs
         {
             return Role.GetRoles(RoleEnum.Medic).Any(role =>
             {
-                var shieldedPlayer = ((Roles.Medic) role).ShieldedPlayer;
+                var shieldedPlayer = ((Roles.Medic)role).ShieldedPlayer;
                 return shieldedPlayer != null && player.PlayerId == shieldedPlayer.PlayerId;
             });
         }
-        
+
         public static Medic getMedic(this PlayerControl player)
         {
             return Role.GetRoles(RoleEnum.Medic).FirstOrDefault(role =>
             {
-                var shieldedPlayer = ((Roles.Medic) role).ShieldedPlayer;
+                var shieldedPlayer = ((Roles.Medic)role).ShieldedPlayer;
                 return shieldedPlayer != null && player.PlayerId == shieldedPlayer.PlayerId;
             }) as Medic;
         }
@@ -376,7 +376,7 @@ namespace TownOfUs
                 importantTextTask.transform.SetParent(AmongUsClient.Instance.transform, false);
                 if (!PlayerControl.GameOptions.GhostsDoTasks)
                 {
-                    for (int i = 0; i < player.myTasks.Count; i++)
+                    for (int i = 0;i < player.myTasks.Count;i++)
                     {
                         PlayerTask playerTask = player.myTasks.ToArray()[i];
                         playerTask.OnRemove();
@@ -446,7 +446,7 @@ namespace TownOfUs
         {
             MurderPlayer(killer, target, showBody);
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                (byte) CustomRPC.BypassKill, Hazel.SendOption.Reliable, -1);
+                (byte)CustomRPC.BypassKill, Hazel.SendOption.Reliable, -1);
             writer.Write(killer.PlayerId);
             writer.Write(target.PlayerId);
             writer.Write(showBody);
@@ -492,7 +492,7 @@ namespace TownOfUs
                     importantTextTask.transform.SetParent(AmongUsClient.Instance.transform, false);
                     if (!PlayerControl.GameOptions.GhostsDoTasks)
                     {
-                        for (int i = 0; i < target.myTasks.Count; i++)
+                        for (int i = 0;i < target.myTasks.Count;i++)
                         {
                             PlayerTask playerTask = target.myTasks.ToArray()[i];
                             playerTask.OnRemove();
@@ -518,10 +518,11 @@ namespace TownOfUs
                 {
                     killer.MyPhysics.StartCoroutine(killer.KillAnimations.Random<KillAnimation>()
                         .CoPerformKill(killer, target));
-                } else
+                }
+                else
                 {
                     target.Die(DeathReason.Kill);
-                    target.PlayAnimation((byte) KillAnimType.Stab);
+                    target.PlayAnimation((byte)KillAnimType.Stab);
                 }
                 var deadBody = new DeadPlayer
                 {

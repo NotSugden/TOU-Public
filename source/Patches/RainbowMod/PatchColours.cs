@@ -1,10 +1,10 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using UnhollowerBaseLib;
 
 namespace TownOfUs.RainbowMod
 {
     [HarmonyPatch(typeof(TranslationController), nameof(TranslationController.GetString),
-        new[] {typeof(StringNames), typeof(Il2CppReferenceArray<Il2CppSystem.Object>)})]
+        new[] { typeof(StringNames), typeof(Il2CppReferenceArray<Il2CppSystem.Object>) })]
     public class PatchColours
     {
         public static bool Prefix(ref string __result, [HarmonyArgument(0)] StringNames name)
@@ -59,7 +59,7 @@ namespace TownOfUs.RainbowMod
                 case 999999:
                     __result = "LILAC";
                     return false;
-                
+
             }
 
             return true;

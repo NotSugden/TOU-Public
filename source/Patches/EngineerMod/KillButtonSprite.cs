@@ -21,7 +21,7 @@ namespace TownOfUs.EngineerMod
             if (__instance.KillButton == null) return;
 
             var role = Roles.Role.GetRole<Roles.Engineer>(PlayerControl.LocalPlayer);
-            
+
             __instance.KillButton.renderer.sprite = Sprite;
             __instance.KillButton.SetCoolDown(0f, 10f);
             __instance.KillButton.gameObject.SetActive(!PlayerControl.LocalPlayer.Data.IsDead && __instance.UseButton.isActiveAndEnabled && !MeetingHud.Instance);
@@ -44,6 +44,6 @@ namespace TownOfUs.EngineerMod
             renderer.color = Palette.DisabledClear;
             renderer.material.SetFloat("_Desat", 1f);
         }
-        
+
     }
 }

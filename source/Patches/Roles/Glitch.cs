@@ -70,7 +70,7 @@ namespace TownOfUs.Roles
             {
                 var writer = AmongUsClient.Instance.StartRpcImmediately(
                     PlayerControl.LocalPlayer.NetId,
-                    (byte) CustomRPC.GlitchWin,
+                    (byte)CustomRPC.GlitchWin,
                     SendOption.Reliable,
                     -1
                 );
@@ -109,7 +109,7 @@ namespace TownOfUs.Roles
 
             public static IEnumerator Hack(Glitch __instance, PlayerControl hackPlayer)
             {
-                GameObject[] lockImg = {null, null, null, null};
+                GameObject[] lockImg = { null, null, null, null };
                 ImportantTextTask hackText;
 
                 if (tickDictionary.ContainsKey(hackPlayer.PlayerId))
@@ -268,7 +268,7 @@ namespace TownOfUs.Roles
 
 
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                    (byte) CustomRPC.SetMimic, Hazel.SendOption.Reliable, -1);
+                    (byte)CustomRPC.SetMimic, Hazel.SendOption.Reliable, -1);
                 writer.Write(PlayerControl.LocalPlayer.PlayerId);
                 writer.Write(mimicPlayer.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -300,7 +300,7 @@ namespace TownOfUs.Roles
                         Utils.Unmorph(__instance.Player);
 
                         MessageWriter writer2 = AmongUsClient.Instance.StartRpcImmediately(
-                            PlayerControl.LocalPlayer.NetId, (byte) CustomRPC.RpcResetAnim, Hazel.SendOption.Reliable,
+                            PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.RpcResetAnim, Hazel.SendOption.Reliable,
                             -1);
                         writer2.Write(PlayerControl.LocalPlayer.PlayerId);
                         writer2.Write(mimicPlayer.PlayerId);
@@ -417,7 +417,7 @@ namespace TownOfUs.Roles
                                                            !__gInstance.Player.Data.IsDead);
                 __instance.KillButton.SetCoolDown(
                     PlayerControl.GameOptions.KillCooldown -
-                    (float) (DateTime.UtcNow - __gInstance.LastKill).TotalSeconds,
+                    (float)(DateTime.UtcNow - __gInstance.LastKill).TotalSeconds,
                     PlayerControl.GameOptions.KillCooldown);
 
                 __instance.KillButton.SetTarget(null);
@@ -441,7 +441,7 @@ namespace TownOfUs.Roles
                     {
                         var medic = __gInstance.HackTarget.getMedic().Player.PlayerId;
                         var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                            (byte) CustomRPC.AttemptSound, Hazel.SendOption.Reliable, -1);
+                            (byte)CustomRPC.AttemptSound, Hazel.SendOption.Reliable, -1);
                         writer.Write(medic);
                         writer.Write(__gInstance.KillTarget.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -483,7 +483,7 @@ namespace TownOfUs.Roles
                 __gInstance.HackButton.transform.position = new Vector3(__gInstance.MimicButton.transform.position.x,
                     __instance.ReportButton.transform.position.y, __instance.ReportButton.transform.position.z);
                 __gInstance.HackButton.SetCoolDown(
-                    CustomGameOptions.HackCooldown - (float) (DateTime.UtcNow - __gInstance.LastHack).TotalSeconds,
+                    CustomGameOptions.HackCooldown - (float)(DateTime.UtcNow - __gInstance.LastHack).TotalSeconds,
                     CustomGameOptions.HackCooldown);
 
                 __gInstance.HackButton.SetTarget(null);
@@ -507,7 +507,7 @@ namespace TownOfUs.Roles
                     {
                         var medic = __gInstance.HackTarget.getMedic().Player.PlayerId;
                         var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                            (byte) CustomRPC.AttemptSound, Hazel.SendOption.Reliable, -1);
+                            (byte)CustomRPC.AttemptSound, Hazel.SendOption.Reliable, -1);
                         writer.Write(medic);
                         writer.Write(__gInstance.HackTarget.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -548,7 +548,7 @@ namespace TownOfUs.Roles
                     Camera.main.ScreenToWorldPoint(new Vector3(0, 0)).x + 0.75f,
                     __instance.UseButton.transform.position.y, __instance.UseButton.transform.position.z);
                 __gInstance.MimicButton.SetCoolDown(
-                    CustomGameOptions.MimicCooldown - (float) (DateTime.UtcNow - __gInstance.LastMimic).TotalSeconds,
+                    CustomGameOptions.MimicCooldown - (float)(DateTime.UtcNow - __gInstance.LastMimic).TotalSeconds,
                     CustomGameOptions.MimicCooldown);
 
                 if (!__gInstance.MimicButton.isCoolingDown && !__gInstance.IsUsingMimic)
@@ -633,7 +633,7 @@ namespace TownOfUs.Roles
         public void RpcSetHacked(PlayerControl hacked)
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                (byte) CustomRPC.SetHacked, Hazel.SendOption.Reliable, -1);
+                (byte)CustomRPC.SetHacked, Hazel.SendOption.Reliable, -1);
             writer.Write(hacked.PlayerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             SetHacked(hacked);

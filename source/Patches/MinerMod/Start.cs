@@ -1,4 +1,4 @@
-
+﻿
 using System;
 using HarmonyLib;
 using UnityEngine;
@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace TownOfUs.MinerMod
 {
-    
+
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Start))]
     public static class Start
     {
@@ -14,7 +14,7 @@ namespace TownOfUs.MinerMod
         {
             foreach (var role in Roles.Role.GetRoles(RoleEnum.Miner))
             {
-                var miner = (Roles.Miner) role;
+                var miner = (Roles.Miner)role;
                 miner.LastMined = DateTime.UtcNow;
                 miner.LastMined = miner.LastMined.AddSeconds(-10f);
                 var vents = Object.FindObjectsOfType<Vent>();

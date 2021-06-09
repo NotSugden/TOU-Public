@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace TownOfUs.Roles
@@ -11,10 +11,10 @@ namespace TownOfUs.Roles
         public float TimeRemaining = 0f;
         public DateTime LastCamouflaged;
         public bool Enabled;
-        
+
         public KillButtonManager CamouflageButton
         {
-            get { return _camouflageButton;}
+            get { return _camouflageButton; }
             set
             {
                 _camouflageButton = value;
@@ -45,15 +45,15 @@ namespace TownOfUs.Roles
             LastCamouflaged = DateTime.UtcNow;
             Utils.UnCamouflage();
         }
-        
+
         public float CamouflageTimer()
         {
             var utcNow = DateTime.UtcNow;
             var timeSpan = utcNow - LastCamouflaged;
             var num = CustomGameOptions.CamouflagerCd * 1000f;
-            var flag2 = num - (float) timeSpan.TotalMilliseconds < 0f;
+            var flag2 = num - (float)timeSpan.TotalMilliseconds < 0f;
             if (flag2) return 0;
-            return (num - (float) timeSpan.TotalMilliseconds) / 1000f;
+            return (num - (float)timeSpan.TotalMilliseconds) / 1000f;
         }
 
 

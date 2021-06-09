@@ -9,10 +9,10 @@ namespace TownOfUs.Roles
 {
     public class Lover : Role
     {
-        public Lover OtherLover {get; set;} 
-        public bool LoveCoupleWins {get; set;} 
-        public int Num {get; set;} 
-        public bool LoverImpostor {get; set;} 
+        public Lover OtherLover { get; set; }
+        public bool LoveCoupleWins { get; set; }
+        public int Num { get; set; }
+        public bool LoverImpostor { get; set; }
 
         protected override void IntroPrefix(IntroCutscene __instance, ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
         {
@@ -52,11 +52,11 @@ namespace TownOfUs.Roles
                 if (player != null) player.NameText.color = Palette.ImpostorRed;
                 return Player.name + "\n" + "Impostor";
             }
-            
-            
+
+
             return Player.name + "\n" + "Lover";
         }
-        
+
         public static void Gen(List<PlayerControl> crewmates, List<PlayerControl> impostors)
         {
             if (crewmates.Count <= 0) return;
@@ -65,7 +65,7 @@ namespace TownOfUs.Roles
             var b = UnityEngine.Random.RandomRangeInt(0, 3);
 
             if (b == 0 & impostors.Count < 1) b = 1;
-            
+
             if (b != 0 & crewmates.Count <= 1) b = 0;
 
             var flag2 = b == 0;
@@ -87,7 +87,7 @@ namespace TownOfUs.Roles
             }
 
             var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                (byte) CustomRPC.SetCouple, SendOption.Reliable, -1);
+                (byte)CustomRPC.SetCouple, SendOption.Reliable, -1);
             writer.Write(player1.PlayerId);
             writer.Write(player2.PlayerId);
             writer.Write(b);
@@ -110,7 +110,7 @@ namespace TownOfUs.Roles
             if (CheckLoversWin())
             {
                 var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                    (byte) CustomRPC.LoveWin, SendOption.Reliable, -1);
+                    (byte)CustomRPC.LoveWin, SendOption.Reliable, -1);
                 writer.Write(Player.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 Win();
@@ -129,7 +129,7 @@ namespace TownOfUs.Roles
             var lover1 = Player;
             var lover2 = OtherLover.Player;
             {
-                return  !lover1.Data.IsDead && !lover2.Data.IsDead &&
+                return !lover1.Data.IsDead && !lover2.Data.IsDead &&
                        alives.Count() == 4 && LoverImpostor;
             }
         }
@@ -147,7 +147,7 @@ namespace TownOfUs.Roles
 
         public void Win()
         {
-            if (AllRoles.Where(x => x.RoleType == RoleEnum.Jester).Any(x => ((Jester) x).VotedOut)) return;
+            if (AllRoles.Where(x => x.RoleType == RoleEnum.Jester).Any(x => ((Jester)x).VotedOut)) return;
             /*var lover1 = Player;
             var lover2 = OtherLover.Player;
             lover1.Data.IsImpostor = true;
@@ -168,8 +168,8 @@ namespace TownOfUs.Roles
             OtherLover.LoveCoupleWins = true;
         }
 
-        
-        
+
+
         public Lover(PlayerControl player, int num, bool loverImpostor) : base(player)
         {
             var imp = num == 2 && loverImpostor;

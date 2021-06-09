@@ -20,7 +20,7 @@ namespace TownOfUs.CustomOption
         public Func<object, string> Format;
 
         public static bool LobbyTextScroller { get; set; } = true;
-        
+
         protected internal bool Indent { get; set; }
 
 
@@ -51,8 +51,8 @@ namespace TownOfUs.CustomOption
 
         protected internal void Set(object value, bool SendRpc = true)
         {
-            
-            
+
+
             Value = value;
 
             if (Setting != null && AmongUsClient.Instance.AmHost && SendRpc)
@@ -64,20 +64,20 @@ namespace TownOfUs.CustomOption
             {
                 if (Setting is ToggleOption toggle)
                 {
-                    var newValue = (bool) Value;
+                    var newValue = (bool)Value;
                     toggle.oldValue = newValue;
                     if (toggle.CheckMark != null) toggle.CheckMark.enabled = newValue;
                 }
                 else if (Setting is NumberOption number)
                 {
-                    float newValue = (float) Value;
+                    float newValue = (float)Value;
 
                     number.Value = number.oldValue = newValue;
                     number.ValueText.text = ToString();
                 }
                 else if (Setting is StringOption str)
                 {
-                    int newValue = (int) Value;
+                    int newValue = (int)Value;
 
                     str.Value = str.oldValue = newValue;
                     str.ValueText.text = ToString();

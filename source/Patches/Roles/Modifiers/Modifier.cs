@@ -19,18 +19,18 @@ namespace TownOfUs.Roles.Modifiers
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != typeof(Modifier)) return false;
-            return Equals((Modifier) obj);
+            return Equals((Modifier)obj);
         }
 
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Player, (int) ModifierType);
+            return HashCode.Combine(Player, (int)ModifierType);
         }
 
         public static readonly Dictionary<byte, Modifier> ModifierDictionary = new Dictionary<byte, Modifier>();
 
-        
+
         public static bool operator ==(Modifier a, Modifier b)
         {
             if (a is null && b is null) return true;
@@ -57,7 +57,7 @@ namespace TownOfUs.Roles.Modifiers
             var rand = UnityEngine.Random.RandomRangeInt(0, crewmates.Count);
             return crewmates[rand];
         }
-        
+
         public static void Gen(Type T, List<PlayerControl> crewmates, CustomRPC rpc)
         {
             if (crewmates.Count <= 0) return;
@@ -70,11 +70,11 @@ namespace TownOfUs.Roles.Modifiers
                 if (incorcio != null && RpcHandling.Check(80)) pc = incorcio;
             }
 
-            var modifier = Activator.CreateInstance(T, new object[]{pc});
+            var modifier = Activator.CreateInstance(T, new object[] { pc });
             var playerId = pc.PlayerId;
             crewmates.Remove(pc);
-    
-            var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte) rpc,
+
+            var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)rpc,
                 SendOption.Reliable, -1);
             writer.Write(playerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -91,18 +91,18 @@ namespace TownOfUs.Roles.Modifiers
             return (from entry in ModifierDictionary where entry.Key == player.PlayerId select entry.Value)
                 .FirstOrDefault();
         }
-        
+
         public static T GetModifier<T>(PlayerControl player) where T : Modifier
         {
             return GetModifier(player) as T;
         }
-        
+
         public static Modifier GetModifier(PlayerVoteArea area)
         {
             var player = PlayerControl.AllPlayerControls.ToArray()
                 .FirstOrDefault(x => x.PlayerId == area.TargetPlayerId);
             return player == null ? null : GetModifier(player);
         }
-        
+
     }
 }

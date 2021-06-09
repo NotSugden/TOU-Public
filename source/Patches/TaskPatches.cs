@@ -12,7 +12,7 @@ namespace TownOfUs
             {
                 __instance.TotalTasks = 0;
                 __instance.CompletedTasks = 0;
-                for (int i = 0; i < __instance.AllPlayers.Count; i++)
+                for (int i = 0;i < __instance.AllPlayers.Count;i++)
                 {
                     GameData.PlayerInfo playerInfo = __instance.AllPlayers.ToArray()[i];
                     if (
@@ -26,7 +26,7 @@ namespace TownOfUs
                         })
                     )
                     {
-                        for (int j = 0; j < playerInfo.Tasks.Count; j++)
+                        for (int j = 0;j < playerInfo.Tasks.Count;j++)
                         {
                             __instance.TotalTasks++;
                             if (playerInfo.Tasks.ToArray()[j].Complete)
@@ -103,7 +103,7 @@ namespace TownOfUs
 
             public static PlayerTask FindTask(Console __instance, PlayerControl pc)
             {
-                for (int i = 0; i < pc.myTasks.Count; i++)
+                for (int i = 0;i < pc.myTasks.Count;i++)
                 {
                     PlayerTask playerTask = pc.myTasks.ToArray()[i];
                     if (!playerTask.IsComplete && playerTask.ValidConsole(__instance))

@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 using UnityEngine;
 
@@ -20,7 +20,7 @@ namespace TownOfUs.MinerMod
             {
                 role.MineButton = Object.Instantiate(__instance.KillButton, HudManager.Instance.transform);
                 role.MineButton.renderer.enabled = true;
-                
+
             }
             role.MineButton.renderer.sprite = MineSprite;
             role.MineButton.gameObject.SetActive(!PlayerControl.LocalPlayer.Data.IsDead && !MeetingHud.Instance);
@@ -28,7 +28,7 @@ namespace TownOfUs.MinerMod
             role.MineButton.transform.localPosition = new Vector3(position.x,
                 __instance.ReportButton.transform.localPosition.y, position.z);
             role.MineButton.SetCoolDown(role.MineTimer(), CustomGameOptions.MineCd);
-            
+
             var hits = Physics2D.OverlapBoxAll(PlayerControl.LocalPlayer.transform.position, role.VentSize, 0);
             hits = hits.ToArray().Where((c) => (c.name.Contains("Vent") || !c.isTrigger) && c.gameObject.layer != 8 && c.gameObject.layer != 5).ToArray();
             if (hits.Count == 0)
@@ -43,7 +43,7 @@ namespace TownOfUs.MinerMod
                 role.MineButton.renderer.material.SetFloat("_Desat", 1f);
                 role.CanPlace = false;
             }
-           
+
 
         }
     }

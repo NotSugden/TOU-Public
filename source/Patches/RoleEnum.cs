@@ -28,7 +28,7 @@
         Janitor,
 
         Glitch,
-        
+
         Crewmate,
         Impostor,
         None,

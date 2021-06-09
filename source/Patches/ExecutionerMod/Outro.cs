@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 using TownOfUs.Roles;
 using UnityEngine;
@@ -8,10 +8,10 @@ namespace TownOfUs.ExecutionerMod
     [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.Start))]
     public static class Outro
     {
-        
+
         public static void Postfix(EndGameManager __instance)
         {
-            var role = Role.AllRoles.FirstOrDefault(x => x.RoleType == RoleEnum.Executioner && ((Executioner) x).TargetVotedOut);
+            var role = Role.AllRoles.FirstOrDefault(x => x.RoleType == RoleEnum.Executioner && ((Executioner)x).TargetVotedOut);
             if (role == null) return;
             PoolablePlayer[] array = Object.FindObjectsOfType<PoolablePlayer>();
             array[0].NameText.text = role.ColorString + array[0].NameText.text + "</color>";

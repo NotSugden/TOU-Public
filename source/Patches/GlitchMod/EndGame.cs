@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
 using Hazel;
@@ -18,11 +18,11 @@ namespace TownOfUs.GlitchMod
             {
                 if (role.RoleType == RoleEnum.Glitch)
                 {
-                    ((Glitch) role).Loses();
+                    ((Glitch)role).Loses();
                 }
             }
-            
-            var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte) CustomRPC.GlitchLose,
+
+            var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.GlitchLose,
                 SendOption.Reliable, -1);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
 

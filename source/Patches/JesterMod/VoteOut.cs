@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using HarmonyLib;
 using TownOfUs.Roles;
 
@@ -17,7 +17,7 @@ namespace TownOfUs.JesterMod
             if (role == null) return;
             if (role.RoleType == RoleEnum.Jester)
             {
-                ((Jester) role).Wins();
+                ((Jester)role).Wins();
             }
         }
     }

@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using Hazel;
 using Reactor;
 using TownOfUs.Roles;
@@ -17,7 +17,7 @@ namespace TownOfUs.AltruistMod
             if (!PlayerControl.LocalPlayer.CanMove) return false;
             if (PlayerControl.LocalPlayer.Data.IsDead) return false;
             var role = Roles.Role.GetRole<Altruist>(PlayerControl.LocalPlayer);
-            
+
             var flag2 = __instance.isCoolingDown;
             if (flag2) return false;
             if (!__instance.enabled) return false;
@@ -27,7 +27,7 @@ namespace TownOfUs.AltruistMod
             var playerId = role.CurrentTarget.ParentId;
 
             var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                (byte) CustomRPC.AltruistRevive, SendOption.Reliable, -1);
+                (byte)CustomRPC.AltruistRevive, SendOption.Reliable, -1);
             writer.Write(PlayerControl.LocalPlayer.PlayerId);
             writer.Write(playerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);

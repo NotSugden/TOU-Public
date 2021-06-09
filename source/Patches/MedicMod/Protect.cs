@@ -20,7 +20,7 @@ namespace TownOfUs.MedicMod
             if (!isCloseEnough) return false;
 
             var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                (byte) CustomRPC.Protect, SendOption.Reliable, -1);
+                (byte)CustomRPC.Protect, SendOption.Reliable, -1);
             writer.Write(PlayerControl.LocalPlayer.PlayerId);
             writer.Write(role.ClosestPlayer.PlayerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);

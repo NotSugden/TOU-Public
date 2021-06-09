@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -33,7 +33,7 @@ namespace TownOfUs.SwapperMod
                 if (swapper.ListOfActives.Count(x => x) == 2)
                 {
                     var toSet1 = true;
-                    for (var i = 0; i < swapper.ListOfActives.Count; i++)
+                    for (var i = 0;i < swapper.ListOfActives.Count;i++)
                     {
                         if (!swapper.ListOfActives[i]) continue;
 
@@ -53,7 +53,7 @@ namespace TownOfUs.SwapperMod
                 if (SwapVotes.Swap1 == null || SwapVotes.Swap2 == null) return true;
 
                 var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                    (byte) CustomRPC.SetSwaps, SendOption.Reliable, -1);
+                    (byte)CustomRPC.SetSwaps, SendOption.Reliable, -1);
                 writer.Write(SwapVotes.Swap1.TargetPlayerId);
                 writer.Write(SwapVotes.Swap2.TargetPlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -66,14 +66,14 @@ namespace TownOfUs.SwapperMod
         {
             var self = MayorMod.RegisterExtraVotes.CalculateAllVotes(__instance);
             var array = new byte[Mathf.Max(PlayerControl.AllPlayerControls.Count + 1, 11)];
-            for (var i = 0; i < array.Length; i++)
+            for (var i = 0;i < array.Length;i++)
             {
                 if (SwapVotes.Swap1 == null || SwapVotes.Swap2 == null)
                 {
                     array[i] = self[i];
                     continue;
                 }
-                    
+
                 if (i == SwapVotes.Swap1.TargetPlayerId + 1)
                 {
                     array[SwapVotes.Swap2.TargetPlayerId + 1] = self[i];
@@ -104,7 +104,7 @@ namespace TownOfUs.SwapperMod
             messageWriter.Write(tie);
             messageWriter.EndMessage();
         }
-        
+
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
         public static class CheckForEndVoting
@@ -118,7 +118,7 @@ namespace TownOfUs.SwapperMod
                     bool tie;
 
 
-                    var maxIdx = Extensions.IndexOfMax(selfIl2, (Func<byte, int>) ((p) => (int) p), out tie) - 1;
+                    var maxIdx = Extensions.IndexOfMax(selfIl2, (Func<byte, int>)((p) => (int)p), out tie) - 1;
                     var exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(v => (int)v.PlayerId == maxIdx);
                     var array = new byte[10];
                     foreach (var playerVoteArea in __instance.playerStates)
@@ -131,7 +131,7 @@ namespace TownOfUs.SwapperMod
                 return false;
             }
         }
-        
+
 
 
 

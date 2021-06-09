@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using Object = System.Object;
 
@@ -13,7 +13,7 @@ namespace TownOfUs.Roles
         public bool Enabled;
         public KillButtonManager SwoopButton
         {
-            get { return _swoopButton;}
+            get { return _swoopButton; }
             set
             {
                 _swoopButton = value;
@@ -35,11 +35,11 @@ namespace TownOfUs.Roles
         public float SwoopTimer()
         {
             var utcNow = DateTime.UtcNow;
-            var timeSpan = utcNow - LastSwooped;;
+            var timeSpan = utcNow - LastSwooped; ;
             var num = CustomGameOptions.SwoopCd * 1000f;
-            var flag2 = num - (float) timeSpan.TotalMilliseconds < 0f;
+            var flag2 = num - (float)timeSpan.TotalMilliseconds < 0f;
             if (flag2) return 0;
-            return (num - (float) timeSpan.TotalMilliseconds) / 1000f;
+            return (num - (float)timeSpan.TotalMilliseconds) / 1000f;
         }
 
         public void Swoop()
@@ -54,7 +54,7 @@ namespace TownOfUs.Roles
 
 
             Player.GetComponent<SpriteRenderer>().color = color;
-            
+
             Player.HatRenderer.SetHat(0, 0);
             Player.nameText.text = "";
             if (Player.MyPhysics.Skin.skin.ProdId != DestroyableSingleton<HatManager>.Instance
@@ -73,7 +73,7 @@ namespace TownOfUs.Roles
             Player.CurrentPet.Source = Player;
             Player.CurrentPet.Visible = Player.Visible;
         }
-        
+
 
         public void UnSwoop()
         {

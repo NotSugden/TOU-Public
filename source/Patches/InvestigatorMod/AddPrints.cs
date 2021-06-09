@@ -1,14 +1,16 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 using UnityEngine;
 
-namespace TownOfUs.InvestigatorMod {
+namespace TownOfUs.InvestigatorMod
+{
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
-    public static class AddPrints {
+    public static class AddPrints
+    {
         private static float _time = 0.0f;
         private static float Interval => CustomGameOptions.FootprintInterval;
         private static bool Vent => CustomGameOptions.VentFootprintVisible;
-        
+
         private const float PeriodInterval = 0.25f;
 
         public static bool GameStarted = false;
@@ -52,7 +54,7 @@ namespace TownOfUs.InvestigatorMod {
 
             // Update
 
-            for (var i = 0; i < investigator.AllPrints.Count; i++)
+            for (var i = 0;i < investigator.AllPrints.Count;i++)
             {
                 var footprint = investigator.AllPrints[i];
                 if (footprint.Update())

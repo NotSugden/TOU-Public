@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 
 namespace TownOfUs.MorphlingMod
@@ -10,16 +10,17 @@ namespace TownOfUs.MorphlingMod
         {
             foreach (var role in Roles.Role.GetRoles(RoleEnum.Morphling))
             {
-                
-                var morphling = (Roles.Morphling) role;
+
+                var morphling = (Roles.Morphling)role;
                 if (morphling.Morphed)
                 {
                     morphling.Morph();
-                } else if (morphling.MorphedPlayer)
+                }
+                else if (morphling.MorphedPlayer)
                 {
                     morphling.Unmorph();
                 }
-                
+
             }
         }
     }

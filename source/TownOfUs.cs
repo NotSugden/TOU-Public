@@ -18,13 +18,13 @@ using UnityEngine;
 
 namespace TownOfUs
 {
-	[BepInPlugin("com.slushiegoose.townofus", "Town Of Us", Version)]
-	[BepInDependency(ReactorPlugin.Id)]
-	public class TownOfUs : BasePlugin
-	{
-        public const string Version = "4.0.0-dev5"; 
-		public ConfigEntry<string> Ip { get; set; }
-		public ConfigEntry<ushort> Port { get; set; }
+    [BepInPlugin("com.slushiegoose.townofus", "Town Of Us", Version)]
+    [BepInDependency(ReactorPlugin.Id)]
+    public class TownOfUs : BasePlugin
+    {
+        public const string Version = "4.0.0-dev5";
+        public ConfigEntry<string> Ip { get; set; }
+        public ConfigEntry<ushort> Port { get; set; }
 
         public static Sprite JanitorClean;
         public static Sprite EngineerFix;
@@ -49,75 +49,77 @@ namespace TownOfUs
         public static Sprite IgniteSprite;
         public static Sprite ReviveSprite;
         public static Sprite ButtonSprite;
-		public static Sprite CycleSprite;
-		public static Sprite GuessSprite;
+        public static Sprite CycleSprite;
+        public static Sprite GuessSprite;
 
         public override void Load()
-		{
-			this._harmony = new Harmony("com.slushiegoose.townofus");
-		
-			CustomOption.Generate.GenerateAll();
+        {
+            this._harmony = new Harmony("com.slushiegoose.townofus");
 
-			JanitorClean = CreateSprite("TownOfUs.Resources.Janitor.png");
-			EngineerFix = CreateSprite("TownOfUs.Resources.Engineer.png");
-			SwapperSwitch = CreateSprite("TownOfUs.Resources.SwapperSwitch.png");
-			SwapperSwitchDisabled = CreateSprite("TownOfUs.Resources.SwapperSwitchDisabled.png");
-			Shift = CreateSprite("TownOfUs.Resources.Shift.png");
-			Footprint = CreateSprite("TownOfUs.Resources.Footprint.png");
-			Rewind = CreateSprite("TownOfUs.Resources.Rewind.png");
-			NormalKill = CreateSprite("TownOfUs.Resources.NormalKill.png");
-			GreyscaleKill = CreateSprite("TownOfUs.Resources.GreyscaleKill.png");
-			ShiftKill = CreateSprite("TownOfUs.Resources.ShiftKill.png");
-			MedicSprite = CreateSprite("TownOfUs.Resources.Medic.png");
-			SeerSprite = CreateSprite("TownOfUs.Resources.Seer.png");
-			SampleSprite = CreateSprite("TownOfUs.Resources.Sample.png");
-			MorphSprite = CreateSprite("TownOfUs.Resources.Morph.png");
-			Camouflage = CreateSprite("TownOfUs.Resources.Camouflage.png");
-			Arrow = CreateSprite("TownOfUs.Resources.Arrow.png");
-			Abstain = CreateSprite("TownOfUs.Resources.Abstain.png");
-			MineSprite = CreateSprite("TownOfUs.Resources.Mine.png");
-			SwoopSprite = CreateSprite("TownOfUs.Resources.Swoop.png");
-			DouseSprite = CreateSprite("TownOfUs.Resources.Douse.png");
-			IgniteSprite = CreateSprite("TownOfUs.Resources.Ignite.png");
-			ReviveSprite = CreateSprite("TownOfUs.Resources.Revive.png");
-			ButtonSprite = CreateSprite("TownOfUs.Resources.Button.png");
-			CycleSprite = CreateSprite("TownOfUs.Resources.Cycle.png");
-			GuessSprite = CreateSprite("TownOfUs.Resources.Guess.png");
+            CustomOption.Generate.GenerateAll();
+
+            JanitorClean = LoadResource("Janitor");
+            EngineerFix = LoadResource("Engineer");
+            SwapperSwitch = LoadResource("SwapperSwitch");
+            SwapperSwitchDisabled = LoadResource("SwapperSwitchDisabled");
+            Shift = LoadResource("Shift");
+            Footprint = LoadResource("Footprint");
+            Rewind = LoadResource("Rewind");
+            NormalKill = LoadResource("NormalKill");
+            GreyscaleKill = LoadResource("GreyscaleKill");
+            ShiftKill = LoadResource("ShiftKill");
+            MedicSprite = LoadResource("Medic");
+            SeerSprite = LoadResource("Seer");
+            SampleSprite = LoadResource("Sample");
+            MorphSprite = LoadResource("Morph");
+            Camouflage = LoadResource("Camouflage");
+            Arrow = LoadResource("Arrow");
+            Abstain = LoadResource("Abstain");
+            MineSprite = LoadResource("Mine");
+            SwoopSprite = LoadResource("Swoop");
+            DouseSprite = LoadResource("Douse");
+            IgniteSprite = LoadResource("Ignite");
+            ReviveSprite = LoadResource("Revive");
+            ButtonSprite = LoadResource("Button");
+            CycleSprite = LoadResource("Cycle");
+            GuessSprite = LoadResource("Guess");
 
             PalettePatch.Load();
-			ClassInjector.RegisterTypeInIl2Cpp<RainbowBehaviour>();
-			
-			this._harmony.PatchAll();
-		}
+            ClassInjector.RegisterTypeInIl2Cpp<RainbowBehaviour>();
+
+            this._harmony.PatchAll();
+        }
+
+        private static Sprite LoadResource(string name) => CreateSprite($"TownOfUs.Resources.{name}.png");
 
         public static Sprite CreateSprite(string name, bool hat = false, bool newHat = false)
         {
-	        var pixelsPerUnit = (hat && !newHat) ? 225f : 100f;
-	        var pivot = (hat && !newHat) ? new Vector2(0.5f, 0.8f) : new Vector2(0.5f, 0.5f);
+            var pixelsPerUnit = (hat && !newHat) ? 225f : 100f;
+            var pivot = (hat && !newHat) ? new Vector2(0.5f, 0.8f) : new Vector2(0.5f, 0.5f);
 
             var dimensions = newHat ? 128 : 0;
-			var assembly = Assembly.GetExecutingAssembly();
-			var tex = GUIExtensions.CreateEmptyTexture(dimensions, dimensions);
-			var imageStream = assembly.GetManifestResourceStream(name);
-			var img = imageStream.ReadFully();
-			LoadImage(tex, img, true);
-			tex.DontDestroy();
-			var sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, (float) tex.width, (float) tex.height), pivot, pixelsPerUnit);
+            var assembly = Assembly.GetExecutingAssembly();
+            var tex = GUIExtensions.CreateEmptyTexture(dimensions, dimensions);
+            var imageStream = assembly.GetManifestResourceStream(name);
+            var img = imageStream.ReadFully();
+            LoadImage(tex, img, true);
+            tex.DontDestroy();
+            var sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, (float)tex.width, (float)tex.height), pivot, pixelsPerUnit);
             sprite.DontDestroy();
-			return sprite.DontUnload();
-		}
+            return sprite.DontUnload();
+        }
 
         private static void LoadImage(Texture2D tex, byte[] data, bool markNonReadable)
-		{
-			_iCallLoadImage ??= IL2CPP.ResolveICall<DLoadImage>("UnityEngine.ImageConversion::LoadImage");
-			var il2CPPArray = (Il2CppStructArray<byte>) data;
-			_iCallLoadImage.Invoke(tex.Pointer, il2CPPArray.Pointer, markNonReadable);
-		}
+        {
+            _iCallLoadImage ??= IL2CPP.ResolveICall<DLoadImage>("UnityEngine.ImageConversion::LoadImage");
+            var il2CPPArray = (Il2CppStructArray<byte>)data;
+            _iCallLoadImage.Invoke(tex.Pointer, il2CPPArray.Pointer, markNonReadable);
+        }
 
-		private delegate bool DLoadImage(IntPtr tex, IntPtr data, bool markNonReadable);
+        private delegate bool DLoadImage(IntPtr tex, IntPtr data, bool markNonReadable);
 
-		private static DLoadImage _iCallLoadImage;
-		
-		private Harmony _harmony; 
-	}
+        private static DLoadImage _iCallLoadImage;
+
+        private Harmony _harmony;
+    }
 }

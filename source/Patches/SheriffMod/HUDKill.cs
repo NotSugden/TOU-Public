@@ -7,7 +7,7 @@ namespace TownOfUs.SheriffMod
     {
 
         private static KillButtonManager KillButton;
-        
+
         public static void Postfix(HudManager __instance)
         {
             UpdateKillButton(__instance);

@@ -8,7 +8,7 @@ namespace TownOfUs.CustomOption
 {
     public class CustomNumberOption : CustomOption
     {
-        
+
         protected float Min { get; set; }
         protected float Max { get; set; }
         protected float Increment { get; set; }
@@ -30,7 +30,7 @@ namespace TownOfUs.CustomOption
 
         protected internal float Get()
         {
-            return (float) Value;
+            return (float)Value;
         }
 
         protected internal void Increase()
@@ -38,13 +38,13 @@ namespace TownOfUs.CustomOption
             var increment = Input.GetKeyInt(KeyCode.LeftShift) ? 1 : Increment;
             Set(Mathf.Clamp(Get() + increment, Min, Max));
         }
-        
+
         protected internal void Decrease()
         {
             var increment = Increment > 1 && Input.GetKeyInt(KeyCode.LeftShift) ? 1 : Increment;
             Set(Mathf.Clamp(Get() - increment, Min, Max));
         }
-        
+
         public override void OptionCreated()
         {
             base.OptionCreated();

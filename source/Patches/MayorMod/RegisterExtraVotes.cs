@@ -42,7 +42,7 @@ namespace TownOfUs.MayorMod
 
         private static int AreaIndexOf(MeetingHud __instance, sbyte srcPlayerId)
         {
-            for (var i = 0; i < __instance.playerStates.Length; i++)
+            for (var i = 0;i < __instance.playerStates.Length;i++)
             {
                 if (__instance.playerStates[i].TargetPlayerId == srcPlayerId)
                 {
@@ -57,7 +57,7 @@ namespace TownOfUs.MayorMod
         {
             if (area.didVote)
             {
-                role.ExtraVotes.Add((byte) (suspectPlayerId + 1));
+                role.ExtraVotes.Add((byte)(suspectPlayerId + 1));
                 if (!PlayerControl.LocalPlayer.Is(RoleEnum.Mayor))
                 {
                     role.VoteBank--;
@@ -90,27 +90,27 @@ namespace TownOfUs.MayorMod
             foreach (var player in __instance.playerStates)
             {
                 if (!player.didVote) continue;
-                var num = (int) (player.votedFor + 1);
+                var num = (int)(player.votedFor + 1);
                 if (num < 0 || num >= array.Length) continue;
                 array[num] += 1;
             }
 
             foreach (var role in Role.GetRoles(RoleEnum.Mayor))
             {
-                foreach (var number in ((Mayor) role).ExtraVotes)
+                foreach (var number in ((Mayor)role).ExtraVotes)
                 {
                     array[number] += 1;
                 }
             }
 
-            var structArray = (Il2CppStructArray<byte>) array;
+            var structArray = (Il2CppStructArray<byte>)array;
 
             var maxIdx = Extensions.IndexOfMax(
                 structArray,
-                (Func<byte, int>) (p => (int) p),
+                (Func<byte, int>)(p => (int)p),
                 out var tie
             ) - 1;
-                
+
             if (tie)
             {
                 foreach (var player in __instance.playerStates)
@@ -120,7 +120,7 @@ namespace TownOfUs.MayorMod
                     if (modifier == null) continue;
                     if (modifier.ModifierType == ModifierEnum.Tiebreaker)
                     {
-                        var num = (int) (player.votedFor + 1);
+                        var num = (int)(player.votedFor + 1);
                         if (num < 0 || num >= array.Length) continue;
                         array[num] += 1;
                     }
@@ -144,7 +144,7 @@ namespace TownOfUs.MayorMod
 
                 var role = Role.GetRole<Mayor>(player);
 
-                var num = AreaIndexOf(__instance, (sbyte) srcPlayerId);
+                var num = AreaIndexOf(__instance, (sbyte)srcPlayerId);
                 var area = __instance.playerStates[num];
 
                 if (area.isDead) return false;
@@ -176,9 +176,9 @@ namespace TownOfUs.MayorMod
                 foreach (var role in Role.GetRoles(RoleEnum.Mayor))
                 {
                     var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                        (byte) CustomRPC.SetExtraVotes, SendOption.Reliable, -1);
+                        (byte)CustomRPC.SetExtraVotes, SendOption.Reliable, -1);
                     writer.Write(role.Player.PlayerId);
-                    writer.WriteBytesAndSize(((Mayor) role).ExtraVotes.ToArray());
+                    writer.WriteBytesAndSize(((Mayor)role).ExtraVotes.ToArray());
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                 }
 
@@ -191,7 +191,7 @@ namespace TownOfUs.MayorMod
         {
             foreach (var role in Role.GetRoles(RoleEnum.Mayor))
             {
-                var mayor = (Mayor) role;
+                var mayor = (Mayor)role;
                 mayor.ExtraVotes.Clear();
                 mayor.VoteBank++;
                 mayor.SelfVote = false;
@@ -205,7 +205,7 @@ namespace TownOfUs.MayorMod
         private static void Vote(MeetingHud __instance, PlayerVoteArea area2, int num,
             Component origin, bool isMayor = false)
         {
-            var playerById = GameData.Instance.GetPlayerById((byte) area2.TargetPlayerId);
+            var playerById = GameData.Instance.GetPlayerById((byte)area2.TargetPlayerId);
             var renderer =
                 UnityEngine.Object.Instantiate(__instance.PlayerVotePrefab);
             if (PlayerControl.GameOptions.AnonymousVotes || CustomGameOptions.MayorAnonymous && isMayor
@@ -242,17 +242,17 @@ namespace TownOfUs.MayorMod
                 __instance.TitleText.text = UnityEngine.Object.FindObjectOfType<TranslationController>()
                     .GetString(StringNames.MeetingVotingResults, Array.Empty<Il2CppSystem.Object>());
                 var num = 0;
-                for (var i = 0; i < __instance.playerStates.Length; i++)
+                for (var i = 0;i < __instance.playerStates.Length;i++)
                 {
                     var area = __instance.playerStates[i];
                     area.ClearForResults();
                     var num2 = 0;
-                    for (var j = 0; j < __instance.playerStates.Length; j++)
+                    for (var j = 0;j < __instance.playerStates.Length;j++)
                     {
                         var area2 = __instance.playerStates[j];
-                        var self = states[(int) area2.TargetPlayerId];
+                        var self = states[(int)area2.TargetPlayerId];
                         if ((self & 128) > 0) continue;
-                        var votedFor = (int) PlayerVoteArea.GetVotedFor(self);
+                        var votedFor = (int)PlayerVoteArea.GetVotedFor(self);
                         if (votedFor == area.TargetPlayerId)
                         {
                             Vote(__instance, area2, num2, area);
@@ -270,11 +270,11 @@ namespace TownOfUs.MayorMod
 
                 foreach (var role in Role.GetRoles(RoleEnum.Mayor))
                 {
-                    var mayor = (Mayor) role;
+                    var mayor = (Mayor)role;
                     foreach (var extraVote in mayor.ExtraVotes)
                     {
                         var area2 = __instance.playerStates.First(pv => pv.TargetPlayerId == role.Player.PlayerId);
-                        var votedFor = (int) extraVote - 1;
+                        var votedFor = (int)extraVote - 1;
                         if (votedFor == -1)
                         {
                             Vote(__instance, area2, num, __instance.SkippedVoting, true);
@@ -282,7 +282,7 @@ namespace TownOfUs.MayorMod
                         }
                         else
                         {
-                            for (var i = 0; i < __instance.playerStates.Length; i++)
+                            for (var i = 0;i < __instance.playerStates.Length;i++)
                             {
                                 var area = __instance.playerStates[i];
                                 if (votedFor != area.TargetPlayerId) continue;

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace TownOfUs.Roles
@@ -6,9 +6,9 @@ namespace TownOfUs.Roles
     public class Shifter : Role
     {
 
-        public PlayerControl ClosestPlayer { get; set;}
-        public DateTime LastShifted { get; set;}
-        
+        public PlayerControl ClosestPlayer { get; set; }
+        public DateTime LastShifted { get; set; }
+
         public Shifter(PlayerControl player) : base(player)
         {
             Name = "Shifter";
@@ -17,12 +17,12 @@ namespace TownOfUs.Roles
             RoleType = RoleEnum.Shifter;
             Faction = Faction.Neutral;
         }
-        
+
         public void Loses()
         {
             Player.Data.IsImpostor = true;
         }
-        
+
         public float ShifterShiftTimer()
         {
             var utcNow = DateTime.UtcNow;
@@ -32,6 +32,6 @@ namespace TownOfUs.Roles
             if (flag2) return 0;
             return (num - (float)timeSpan.TotalMilliseconds) / 1000f;
         }
-        
+
     }
 }

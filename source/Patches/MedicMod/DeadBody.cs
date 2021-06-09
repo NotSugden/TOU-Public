@@ -31,7 +31,7 @@ namespace TownOfUs.MedicMod
                 return
                     $"Body Report: The kill appears to have been a suicide! (Killed {Math.Round(br.KillAge / 1000)}s ago)";
             }
-            
+
             if (br.KillAge < CustomGameOptions.MedicReportNameDuration * 1000)
             {
                 return
@@ -60,7 +60,7 @@ namespace TownOfUs.MedicMod
                 {17, "lighter"},
                 {18, "lighter"},
                 {19, "lighter"},
-                
+
             };
             var typeOfColor = colors[br.Killer.Data.ColorId];
             return

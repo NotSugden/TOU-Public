@@ -1,15 +1,15 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace TownOfUs.Roles
 {
     public class Medic : Role
     {
-        
+
         public PlayerControl ClosestPlayer { get; set; }
         public bool UsedAbility { get; set; } = false;
         public PlayerControl ShieldedPlayer { get; set; }
         public PlayerControl exShielded { get; set; }
-        
+
         public Medic(PlayerControl player) : base(player)
         {
             Name = "Medic";

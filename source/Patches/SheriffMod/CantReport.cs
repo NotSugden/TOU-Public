@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 using TownOfUs.MedicMod;
 using UnityEngine;
@@ -27,7 +27,7 @@ namespace TownOfUs.SheriffMod
                 if (flag && !data.IsDead && !flag2 && collider2D.tag == "DeadBody")
                 {
                     DeadBody component = collider2D.GetComponent<DeadBody>();
-                    
+
                     if (Vector2.Distance(truePosition, component.TruePosition) <= __instance.MaxReportDistance)
                     {
                         var matches = Murder.KilledPlayers.FirstOrDefault(x => x.PlayerId == component.ParentId);
@@ -42,15 +42,16 @@ namespace TownOfUs.SheriffMod
             DestroyableSingleton<HudManager>.Instance.ReportButton.SetActive(flag2);
         }
     }
-    
+
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.ReportClosest))]
-    public static class DontReport {
+    public static class DontReport
+    {
 
         public static bool Prefix(PlayerControl __instance)
         {
             if (!__instance.Is(RoleEnum.Sheriff)) return true;
             if (CustomGameOptions.SheriffBodyReport) return true;
-            
+
             if (AmongUsClient.Instance.IsGameOver)
             {
                 return false;
@@ -81,6 +82,6 @@ namespace TownOfUs.SheriffMod
 
             return false;
         }
-    
+
     }
 }

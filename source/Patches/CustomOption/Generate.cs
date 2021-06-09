@@ -6,12 +6,12 @@ using System.Collections.Generic;
 
 namespace TownOfUs.CustomOption
 {
-	public class Generate
-	{
-		public static Func<object, string> PercentFormat { get; } = (value) => $"{value:0}%";
-		private static Func<object, string> CooldownFormat { get; } = (value) => $"{value:0.0#}s";
-		
-		public static CustomHeaderOption CrewmateRoles ;
+    public class Generate
+    {
+        public static Func<object, string> PercentFormat { get; } = (value) => $"{value:0}%";
+        private static Func<object, string> CooldownFormat { get; } = (value) => $"{value:0.0#}s";
+
+        public static CustomHeaderOption CrewmateRoles;
         public static CustomNumberOption MayorOn;
         public static CustomNumberOption LoversOn;
         public static CustomNumberOption SheriffOn;
@@ -24,24 +24,24 @@ namespace TownOfUs.CustomOption
         public static CustomNumberOption SpyOn;
         public static CustomNumberOption AltruistOn;
         public static CustomNumberOption ButtonBarryOn;
-        
-        public static CustomHeaderOption NeutralRoles ;
+
+        public static CustomHeaderOption NeutralRoles;
         public static CustomNumberOption JesterOn;
         public static CustomNumberOption ShifterOn;
         public static CustomNumberOption GlitchOn;
         public static CustomNumberOption ExecutionerOn;
         public static CustomNumberOption ArsonistOn;
         public static CustomNumberOption PhantomOn;
-        
-        public static CustomHeaderOption ImpostorRoles ;
+
+        public static CustomHeaderOption ImpostorRoles;
         public static CustomNumberOption JanitorOn;
         public static CustomNumberOption MorphlingOn;
         public static CustomNumberOption CamouflagerOn;
         public static CustomNumberOption MinerOn;
         public static CustomNumberOption SwooperOn;
-		public static CustomNumberOption AssassinOn;
-        
-        public static CustomHeaderOption Modifiers ;
+        public static CustomNumberOption AssassinOn;
+
+        public static CustomHeaderOption Modifiers;
         public static CustomNumberOption SnitchOn;
         public static CustomNumberOption TorchOn;
         public static CustomNumberOption DiseasedOn;
@@ -49,8 +49,8 @@ namespace TownOfUs.CustomOption
         public static CustomNumberOption TiebreakerOn;
         public static CustomNumberOption DrunkOn;
         public static CustomNumberOption BigBoiOn;
-        
-        public static CustomHeaderOption CustomGameSettings ;
+
+        public static CustomHeaderOption CustomGameSettings;
         public static CustomToggleOption ColourblindComms;
         public static CustomToggleOption MeetingColourblind;
         public static CustomToggleOption ImpostorSeeRoles;
@@ -61,14 +61,14 @@ namespace TownOfUs.CustomOption
         public static CustomNumberOption VanillaGame;
         public static CustomToggleOption VentAnimations;
 
-        public static CustomHeaderOption Mayor ;
+        public static CustomHeaderOption Mayor;
         public static CustomNumberOption MayorVoteBank;
         public static CustomToggleOption MayorAnonymous;
 
-        public static CustomHeaderOption Lovers ;
+        public static CustomHeaderOption Lovers;
         public static CustomToggleOption BothLoversDie;
-        
-        public static CustomHeaderOption Sheriff ;
+
+        public static CustomHeaderOption Sheriff;
         public static CustomToggleOption ShowSheriff;
         public static CustomToggleOption SheriffKillsCrewmate;
         public static CustomToggleOption SheriffKillsJester;
@@ -77,89 +77,89 @@ namespace TownOfUs.CustomOption
         public static CustomToggleOption SheriffKeepsGameAliveOn2;
         public static CustomToggleOption SheriffAlwaysKeepsGameAlive;
 
-        public static CustomHeaderOption Shifter ;
+        public static CustomHeaderOption Shifter;
         public static CustomNumberOption ShifterCd;
         public static CustomStringOption WhoShifts;
-        
-        public static CustomHeaderOption Engineer ;
+
+        public static CustomHeaderOption Engineer;
         public static CustomNumberOption EngineerFixes;
-        
-        public static CustomHeaderOption Investigator ;
+
+        public static CustomHeaderOption Investigator;
         public static CustomNumberOption FootprintSize;
         public static CustomNumberOption FootprintInterval;
         public static CustomNumberOption FootprintDuration;
         public static CustomToggleOption AnonymousFootPrint;
         public static CustomToggleOption VentFootprintVisible;
 
-        public static CustomHeaderOption TimeLord ;
+        public static CustomHeaderOption TimeLord;
         public static CustomToggleOption RewindRevive;
         public static CustomNumberOption RewindDuration;
         public static CustomNumberOption RewindCooldown;
         public static CustomToggleOption TimeLordVitals;
 
-        public static CustomHeaderOption Medic ;
+        public static CustomHeaderOption Medic;
         public static CustomStringOption ShowShielded;
         public static CustomToggleOption MedicReportSwitch;
         public static CustomNumberOption MedicReportNameDuration;
         public static CustomNumberOption MedicReportColorDuration;
         public static CustomStringOption WhoGetsNotification;
         public static CustomToggleOption ShieldBreaks;
-        
-        public static CustomHeaderOption Seer ;
+
+        public static CustomHeaderOption Seer;
         public static CustomNumberOption SeerCooldown;
         public static CustomStringOption SeerInfo;
         public static CustomStringOption SeeReveal;
         public static CustomToggleOption NeutralRed;
-        
-        public static CustomHeaderOption TheGlitch ;
+
+        public static CustomHeaderOption TheGlitch;
         public static CustomNumberOption MimicCooldownOption;
         public static CustomNumberOption MimicDurationOption;
         public static CustomNumberOption HackCooldownOption;
         public static CustomNumberOption HackDurationOption;
         public static CustomStringOption GlitchHackDistanceOption;
 
-		public static CustomHeaderOption Assassin ;
-		public static CustomNumberOption AssassinMaxKills;
+        public static CustomHeaderOption Assassin;
+        public static CustomNumberOption AssassinMaxKills;
         public static CustomToggleOption AssassinCanGuessCrewmate;
 
-        public static CustomHeaderOption Morphling ;
+        public static CustomHeaderOption Morphling;
         public static CustomNumberOption MorphlingCooldown;
         public static CustomNumberOption MorphlingDuration;
 
-        public static CustomHeaderOption Camouflager ;
+        public static CustomHeaderOption Camouflager;
         public static CustomNumberOption CamouflagerCooldown;
         public static CustomNumberOption CamouflagerDuration;
 
-        public static CustomHeaderOption Executioner ;
+        public static CustomHeaderOption Executioner;
         public static CustomStringOption OnTargetDead;
 
-        public static CustomHeaderOption Snitch ;
+        public static CustomHeaderOption Snitch;
         public static CustomToggleOption SnitchOnLaunch;
         public static CustomToggleOption SnitchCanSeeNeutrals;
 
-        public static CustomHeaderOption Altruist ;
+        public static CustomHeaderOption Altruist;
         public static CustomNumberOption ReviveDuration;
         public static CustomToggleOption AltruistTargetBody;
         public static CustomStringOption WhoSeesAltruistArrows;
-	        
-        public static CustomHeaderOption Miner ;
+
+        public static CustomHeaderOption Miner;
         public static CustomNumberOption MineCooldown;
-        
-        public static CustomHeaderOption Swooper ;
+
+        public static CustomHeaderOption Swooper;
         public static CustomNumberOption SwoopCooldown;
         public static CustomNumberOption SwoopDuration;
-        
-        public static CustomHeaderOption Arsonist ;
+
+        public static CustomHeaderOption Arsonist;
         public static CustomNumberOption DouseCooldown;
         public static CustomToggleOption ArsonistGameEnd;
 
-		public static void GenerateAll()
-		{
-			var num = 0;
+        public static void GenerateAll()
+        {
+            var num = 0;
 
-			Patches.ExportButton = new ImportExport(num++, "Save Custom Settings");
+            Patches.ExportButton = new ImportExport(num++, "Save Custom Settings");
             Patches.ImportButton = new ImportExport(num++, "Load Custom Settings");
-            
+
             CustomNumberOption PercentageOption(string color, string name, bool indent = true) =>
                 new CustomNumberOption(
                     indent, num++,
@@ -323,5 +323,5 @@ namespace TownOfUs.CustomOption
             SwoopCooldown = CooldownOption("Swoop Cooldown", 25, 10, 40, 2.5f);
             SwoopDuration = CooldownOption("Swoop Duration", 10, 5, 15, 1f);
         }
-	}
+    }
 }

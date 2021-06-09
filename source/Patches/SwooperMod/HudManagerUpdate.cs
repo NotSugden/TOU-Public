@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 using UnityEngine;
 
@@ -34,7 +34,7 @@ namespace TownOfUs.SwooperMod
                 role.SwoopButton.SetCoolDown(role.TimeRemaining, CustomGameOptions.SwoopDuration);
                 return;
             }
-            
+
             role.SwoopButton.SetCoolDown(role.SwoopTimer(), CustomGameOptions.MineCd);
 
 

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
 using Hazel;
@@ -17,10 +17,10 @@ namespace TownOfUs.ShifterMod
             {
                 if (role.RoleType == RoleEnum.Shifter)
                 {
-                    ((Roles.Shifter) role).Loses();
+                    ((Roles.Shifter)role).Loses();
                 }
             }
-            var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte) CustomRPC.ShifterLose,
+            var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShifterLose,
                 SendOption.Reliable, -1);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
 

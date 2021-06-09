@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -12,7 +12,7 @@ namespace TownOfUs.Roles
         public KillButtonManager _morphButton;
         public KillButtonManager MorphButton
         {
-            get { return _morphButton;}
+            get { return _morphButton; }
             set
             {
                 _morphButton = value;
@@ -55,9 +55,9 @@ namespace TownOfUs.Roles
             var utcNow = DateTime.UtcNow;
             var timeSpan = utcNow - LastMorphed;
             var num = CustomGameOptions.MorphlingCd * 1000f;
-            var flag2 = num - (float) timeSpan.TotalMilliseconds < 0f;
+            var flag2 = num - (float)timeSpan.TotalMilliseconds < 0f;
             if (flag2) return 0;
-            return (num - (float) timeSpan.TotalMilliseconds) / 1000f;
+            return (num - (float)timeSpan.TotalMilliseconds) / 1000f;
         }
     }
 }

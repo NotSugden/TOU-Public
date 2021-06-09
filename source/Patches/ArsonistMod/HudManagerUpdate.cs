@@ -23,7 +23,7 @@ namespace TownOfUs.ArsonistMod
                 }
             }
         }
-        
+
         public static void Postfix(HudManager __instance)
         {
             if (PlayerControl.AllPlayerControls.Count <= 1) return;
@@ -31,11 +31,11 @@ namespace TownOfUs.ArsonistMod
             if (PlayerControl.LocalPlayer.Data == null) return;
             if (!PlayerControl.LocalPlayer.Is(RoleEnum.Arsonist)) return;
             var role = Roles.Role.GetRole<Roles.Arsonist>(PlayerControl.LocalPlayer);
-            
+
             if (MeetingHud.Instance != null) UpdateMeeting(MeetingHud.Instance, role);
             foreach (var playerId in role.DousedPlayers)
             {
-                
+
                 var player = Utils.PlayerById(playerId);
                 if (player == null)
                 {
@@ -45,13 +45,13 @@ namespace TownOfUs.ArsonistMod
                 player.myRend.material.SetColor("_VisorColor", role.Color);
                 player.nameText.color = Color.black;
             }
-            
+
             if (role.IgniteButton == null)
             {
                 role.IgniteButton = Object.Instantiate(__instance.KillButton, HudManager.Instance.transform);
                 role.IgniteButton.renderer.enabled = true;
             }
-            
+
             role.IgniteButton.renderer.sprite = IgniteSprite;
             var position = __instance.KillButton.transform.localPosition;
             role.IgniteButton.transform.localPosition = new Vector3(position.x,
@@ -92,8 +92,8 @@ namespace TownOfUs.ArsonistMod
             role.IgniteButton.renderer.color = Palette.DisabledClear;
             role.IgniteButton.renderer.material.SetFloat("_Desat", 1f);
 
-            
-            
+
+
         }
 
     }

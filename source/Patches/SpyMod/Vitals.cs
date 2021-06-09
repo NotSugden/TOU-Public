@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using HarmonyLib;
 
@@ -10,14 +10,14 @@ namespace TownOfUs.SpyMod
         public static void Postfix(VitalsMinigame __instance)
         {
             if (!PlayerControl.LocalPlayer.Is(RoleEnum.Spy)) return;
-            for(int i=0; i<__instance.vitals.Count; i++)
-            {;
+            for (int i = 0;i < __instance.vitals.Count;i++)
+            {
                 var panel = __instance.vitals[i];
                 var info = GameData.Instance.AllPlayers.ToArray()[i];
                 if (!panel.IsDead) continue;
                 var deadBody = MedicMod.Murder.KilledPlayers.First(x => x.PlayerId == info.PlayerId);
-                var num = (float) (DateTime.UtcNow - deadBody.KillTime).TotalMilliseconds;
-                panel.Text.text = Math.Round(num/1000f) + "s";
+                var num = (float)(DateTime.UtcNow - deadBody.KillTime).TotalMilliseconds;
+                panel.Text.text = Math.Round(num / 1000f) + "s";
             }
         }
     }

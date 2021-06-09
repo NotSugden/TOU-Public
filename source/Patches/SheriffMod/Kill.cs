@@ -5,7 +5,7 @@ using Il2CppSystem.Reflection;
 
 namespace TownOfUs.SheriffMod
 {
-    
+
     [HarmonyPatch(typeof(KillButtonManager), nameof(KillButtonManager.PerformKill))]
     public static class Kill
     {
@@ -25,22 +25,23 @@ namespace TownOfUs.SheriffMod
             var distBetweenPlayers = Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, target);
             var flag3 = distBetweenPlayers < (double)GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance];
             if (!flag3) return false;
-            if(target.isShielded()) {
+            if (target.isShielded())
+            {
                 var medic = target.getMedic().Player.PlayerId;
                 var writer1 = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                        (byte) CustomRPC.AttemptSound, Hazel.SendOption.Reliable, -1);
-                    writer1.Write(medic);
-                    writer1.Write(target.PlayerId);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer1);
+                        (byte)CustomRPC.AttemptSound, Hazel.SendOption.Reliable, -1);
+                writer1.Write(medic);
+                writer1.Write(target.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer1);
 
-                    if (CustomGameOptions.ShieldBreaks)
-                    {
-                        role.LastKilled = DateTime.UtcNow;
-                    }
-                    
-                    MedicMod.StopKill.BreakShield(medic, target.PlayerId, CustomGameOptions.ShieldBreaks);
+                if (CustomGameOptions.ShieldBreaks)
+                {
+                    role.LastKilled = DateTime.UtcNow;
+                }
 
-                    return false;
+                MedicMod.StopKill.BreakShield(medic, target.PlayerId, CustomGameOptions.ShieldBreaks);
+
+                return false;
             }
 
             var flag4 = role.CanKill(target);

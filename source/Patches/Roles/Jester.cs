@@ -33,8 +33,8 @@ namespace TownOfUs.Roles
         {
             Player.Data.IsImpostor = true;
         }
-        
-        
+
+
         public Jester(PlayerControl player) : base(player)
         {
             Name = "Jester";
@@ -43,6 +43,6 @@ namespace TownOfUs.Roles
             RoleType = RoleEnum.Jester;
             Faction = Faction.Neutral;
         }
-        
-  }
+
+    }
 }

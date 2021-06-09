@@ -6,9 +6,9 @@ namespace TownOfUs.Roles
     public class TimeLord : Role
     {
 
-        public DateTime StartRewind { get; set;}
-        public DateTime FinishRewind { get; set;}
-        
+        public DateTime StartRewind { get; set; }
+        public DateTime FinishRewind { get; set; }
+
         public TimeLord(PlayerControl player) : base(player)
         {
             Name = "Time Lord";
@@ -17,7 +17,7 @@ namespace TownOfUs.Roles
             RoleType = RoleEnum.TimeLord;
             Scale = 1.4f;
         }
-        
+
         public float TimeLordRewindTimer()
         {
             var utcNow = DateTime.UtcNow;
@@ -29,7 +29,7 @@ namespace TownOfUs.Roles
             if (TimeLordMod.RecordRewind.rewinding)
             {
                 timespan = utcNow - StartRewind;
-                num = (CustomGameOptions.RewindDuration * 1000f)/3f;
+                num = (CustomGameOptions.RewindDuration * 1000f) / 3f;
             }
             else
             {
@@ -38,9 +38,9 @@ namespace TownOfUs.Roles
             }
 
 
-            var flag2 = num - (float) timespan.TotalMilliseconds < 0f;
+            var flag2 = num - (float)timespan.TotalMilliseconds < 0f;
             if (flag2) return 0;
-            return (num - (float) timespan.TotalMilliseconds) / 1000f;
+            return (num - (float)timespan.TotalMilliseconds) / 1000f;
         }
 
 

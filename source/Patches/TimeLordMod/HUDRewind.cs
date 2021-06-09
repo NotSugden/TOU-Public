@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 
 namespace TownOfUs.TimeLordMod
 {
@@ -21,9 +21,9 @@ namespace TownOfUs.TimeLordMod
             var rewindButton = DestroyableSingleton<HudManager>.Instance.KillButton;
 
             var role = Roles.Role.GetRole<Roles.TimeLord>(PlayerControl.LocalPlayer);
-            
-            
-            
+
+
+
             if (isDead)
             {
                 rewindButton.gameObject.SetActive(false);
@@ -35,7 +35,7 @@ namespace TownOfUs.TimeLordMod
                 rewindButton.isActive = !MeetingHud.Instance;
                 rewindButton.SetCoolDown(role.TimeLordRewindTimer(), role.GetCooldown());
             }
-            
+
             var renderer = rewindButton.renderer;
             if (!rewindButton.isCoolingDown & !RecordRewind.rewinding & rewindButton.enabled)
             {

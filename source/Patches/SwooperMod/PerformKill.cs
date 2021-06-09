@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using HarmonyLib;
 using Hazel;
@@ -26,7 +26,7 @@ namespace TownOfUs.SwooperMod
                 if (role.SwoopTimer() != 0) return false;
 
                 var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                    (byte) CustomRPC.Swoop, SendOption.Reliable, -1);
+                    (byte)CustomRPC.Swoop, SendOption.Reliable, -1);
                 var position = PlayerControl.LocalPlayer.transform.position;
                 writer.Write(PlayerControl.LocalPlayer.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -38,10 +38,10 @@ namespace TownOfUs.SwooperMod
 
             return true;
         }
-        
-        
 
-        
-        
+
+
+
+
     }
 }

@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using Hazel;
 using TownOfUs.Roles;
 using UnityEngine;
@@ -11,7 +11,7 @@ namespace TownOfUs.ExecutionerMod
         Crew,
         Jester,
     }
-    
+
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public class TargetColor
     {
@@ -38,18 +38,18 @@ namespace TownOfUs.ExecutionerMod
 
             role.target.nameText.color = Color.black;
 
-            if (PlayerControl.LocalPlayer.Data.IsDead)   return;
+            if (PlayerControl.LocalPlayer.Data.IsDead) return;
             if (!role.target.Data.IsDead && !role.target.Data.Disconnected) return;
             if (role.TargetVotedOut) return;
 
             var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                (byte) CustomRPC.ExecutionerToJester, SendOption.Reliable, -1);
+                (byte)CustomRPC.ExecutionerToJester, SendOption.Reliable, -1);
             writer.Write(PlayerControl.LocalPlayer.PlayerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            
+
             ExeToJes(PlayerControl.LocalPlayer);
-            
-            
+
+
         }
 
         public static void ExeToJes(PlayerControl player)

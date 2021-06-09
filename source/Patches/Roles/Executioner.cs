@@ -1,4 +1,4 @@
-using Hazel;
+﻿using Hazel;
 using Il2CppSystem.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +8,7 @@ namespace TownOfUs.Roles
     {
         public bool TargetVotedOut = false;
         public PlayerControl target;
-        
+
         protected override void IntroPrefix(IntroCutscene __instance, ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
         {
             var executionerteam = new List<PlayerControl>();
@@ -23,7 +23,7 @@ namespace TownOfUs.Roles
             Utils.EndGame();
             return false;
         }
-        
+
         public void Wins()
         {
             if (Player.Data.IsDead || Player.Data.Disconnected) return;

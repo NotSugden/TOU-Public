@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace TownOfUs.RainbowMod
@@ -17,7 +17,7 @@ namespace TownOfUs.RainbowMod
         public void Update()
         {
             if (Renderer == null) return;
-            
+
             if (RainbowUtils.IsRainbow(Id))
             {
                 RainbowUtils.SetRainbow(Renderer);
@@ -31,7 +31,7 @@ namespace TownOfUs.RainbowMod
                 RainbowUtils.SetFire(Renderer);
             }*/
         }
-        
-        public RainbowBehaviour(IntPtr ptr) : base(ptr) {}
+
+        public RainbowBehaviour(IntPtr ptr) : base(ptr) { }
     }
 }

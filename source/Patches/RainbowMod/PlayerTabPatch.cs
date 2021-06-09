@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using HarmonyLib;
 using UnityEngine;
@@ -14,7 +14,7 @@ namespace TownOfUs.RainbowMod
         {
             public static void Postfix(PlayerTab __instance)
             {
-                for (int i = 0; i < __instance.ColorChips.Count; i++)
+                for (int i = 0;i < __instance.ColorChips.Count;i++)
                 {
                     var chip = __instance.ColorChips.ToArray()[i];
                     chip.transform.localScale *= 0.8f;
@@ -34,6 +34,6 @@ namespace TownOfUs.RainbowMod
         }
 
     }
-    
-    
+
+
 }

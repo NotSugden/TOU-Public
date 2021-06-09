@@ -15,32 +15,32 @@ namespace TownOfUs.CustomOption
             List<CustomOption> options;
             if (optionn != null)
             {
-                options = new List<CustomOption> {optionn};
+                options = new List<CustomOption> { optionn };
             }
             else
             {
                 options = CustomOption.AllOptions;
             }
-            
+
             var writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId,
-                (byte) CustomRPC.SyncCustomSettings, SendOption.Reliable);
+                (byte)CustomRPC.SyncCustomSettings, SendOption.Reliable);
             foreach (var option in options)
             {
                 writer.Write(option.ID);
                 if (option.Type == CustomOptionType.Toggle) writer.Write((bool)option.Value);
                 else if (option.Type == CustomOptionType.Number) writer.Write((float)option.Value);
                 else if (option.Type == CustomOptionType.String) writer.Write((int)option.Value);
-                
+
             }
             writer.EndMessage();
-            
+
         }
 
         public static void ReceiveRpc(MessageReader reader)
         {
             while (reader.BytesRemaining > 0)
             {
-                
+
                 int id = reader.ReadInt32();
                 CustomOption customOption = CustomOption.AllOptions.FirstOrDefault(option => option.ID == id); // Works but may need to change to gameObject.name check
                 var type = customOption?.Type;
@@ -50,7 +50,7 @@ namespace TownOfUs.CustomOption
                 else if (type == CustomOptionType.String) value = reader.ReadInt32();
 
                 customOption?.Set(value);
-                
+
             }
         }
     }

@@ -120,10 +120,10 @@ namespace TownOfUs.AssassinMod
 
         public static void Postfix(MeetingHud __instance)
         {
-            
-            foreach(var role in Role.GetRoles(RoleEnum.Assassin))
+
+            foreach (var role in Role.GetRoles(RoleEnum.Assassin))
             {
-                var swapper = (Assassin) role;
+                var swapper = (Assassin)role;
                 swapper.GameObjects.Clear();
                 guesses.Clear();
             }
@@ -133,7 +133,7 @@ namespace TownOfUs.AssassinMod
             if (!PlayerControl.LocalPlayer.Is(RoleEnum.Assassin)) return;
             var assassinrole = Role.GetRole<Assassin>(PlayerControl.LocalPlayer);
             if (assassinrole.timesKilled == CustomGameOptions.AssassinMaxKills) return;
-            for (var i = 0; i < __instance.playerStates.Length; i++)
+            for (var i = 0;i < __instance.playerStates.Length;i++)
             {
                 var playerState = __instance.playerStates[i];
                 guesses.Add(-1);

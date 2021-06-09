@@ -7,7 +7,7 @@ namespace TownOfUs.Roles
 
         public int Uses = 0;
         public bool CanUse => Uses < CustomGameOptions.EngineerFixes;
-        
+
         public Engineer(PlayerControl player) : base(player)
         {
             Name = "Engineer";

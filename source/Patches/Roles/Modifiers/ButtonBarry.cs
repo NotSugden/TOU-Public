@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace TownOfUs.Roles.Modifiers
 {
@@ -6,7 +6,7 @@ namespace TownOfUs.Roles.Modifiers
     {
         public bool ButtonUsed;
         public KillButtonManager ButtonButton;
-        
+
         public ButtonBarry(PlayerControl player) : base(player)
         {
             Name = "Button Barry";
@@ -14,7 +14,7 @@ namespace TownOfUs.Roles.Modifiers
             Color = new Color(0.9f, 0f, 1f, 1f);
             ModifierType = ModifierEnum.ButtonBarry;
         }
-        
-        
+
+
     }
 }

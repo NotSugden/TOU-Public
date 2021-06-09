@@ -10,7 +10,7 @@ namespace TownOfUs.SnitchMod
     {
 
         public static Sprite Sprite => TownOfUs.Arrow;
-        
+
         public static void Postfix(PlayerControl __instance)
         {
             if (!__instance.Is(ModifierEnum.Snitch)) return;
@@ -44,7 +44,7 @@ namespace TownOfUs.SnitchMod
                     }
 
                     break;
-                
+
                 case 0:
                     if (localIsSnitch)
                     {
@@ -67,7 +67,7 @@ namespace TownOfUs.SnitchMod
                     }
 
                     break;
-                
+
             }
 
         }

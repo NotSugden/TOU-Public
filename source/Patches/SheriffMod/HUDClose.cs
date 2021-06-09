@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using HarmonyLib;
 
@@ -9,14 +9,14 @@ namespace TownOfUs.SheriffMod
     {
 
         public static void Postfix(UnityEngine.Object obj)
-        { 
+        {
             if (ExileController.Instance == null || obj != ExileController.Instance.gameObject) return;
             foreach (var role in Roles.Role.GetRoles(RoleEnum.Sheriff))
             {
-                var sheriff = (Roles.Sheriff) role;
+                var sheriff = (Roles.Sheriff)role;
                 sheriff.LastKilled = DateTime.UtcNow;
             }
-            
+
         }
     }
 }

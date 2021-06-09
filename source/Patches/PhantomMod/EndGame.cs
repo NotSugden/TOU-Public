@@ -19,7 +19,7 @@ namespace TownOfUs.PhantomMod
             }
             MessageWriter msg = AmongUsClient.Instance.StartRpcImmediately(
                 PlayerControl.LocalPlayer.NetId,
-                (byte) CustomRPC.PhantomLose,
+                (byte)CustomRPC.PhantomLose,
                 SendOption.Reliable,
                 -1
             );

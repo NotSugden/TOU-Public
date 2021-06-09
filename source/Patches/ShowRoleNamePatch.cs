@@ -2,7 +2,7 @@
 
 namespace TownOfUs
 {
-    
+
     public class ShowRoleNamePatch
     {
         public static void Patch(bool force = false)

@@ -18,7 +18,7 @@ namespace TownOfUs.TimeLordMod
             role.StartRewind = DateTime.UtcNow;
 
         }
-        
+
         public static void StopRewind(Roles.TimeLord role)
         {
             role.FinishRewind = DateTime.UtcNow;
@@ -27,8 +27,8 @@ namespace TownOfUs.TimeLordMod
             HudManager.Instance.FullScreen.enabled = false;
             HudManager.Instance.FullScreen.color = oldColor;
         }
-        
-        
-        
+
+
+
     }
 }

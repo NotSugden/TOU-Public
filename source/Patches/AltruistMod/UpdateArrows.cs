@@ -3,7 +3,8 @@ using Reactor.Extensions;
 
 namespace TownOfUs.AltruistMod
 {
-    public enum AltruistArrowTarget {
+    public enum AltruistArrowTarget
+    {
         Impostors,
         Glitch,
         ImpsAndGlitch
@@ -27,6 +28,6 @@ namespace TownOfUs.AltruistMod
 
             }
         }
-        
+
     }
 }

@@ -19,18 +19,18 @@ namespace TownOfUs.MedicMod
         Everyone = 2,
         Nobody = 3,
     }
-    
+
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public class ShowShield
     {
         public static Color ProtectedColor = Color.cyan;
-        
+
         public static void Postfix(HudManager __instance)
         {
-            
+
             foreach (var role in Roles.Role.GetRoles(RoleEnum.Medic))
             {
-                var medic = (Roles.Medic) role;
+                var medic = (Roles.Medic)role;
 
                 var exPlayer = medic.exShielded;
                 if (exPlayer != null)
@@ -40,7 +40,7 @@ namespace TownOfUs.MedicMod
                     medic.exShielded = null;
                     continue;
                 }
-                
+
                 var player = medic.ShieldedPlayer;
                 if (player == null) continue;
 
@@ -52,13 +52,13 @@ namespace TownOfUs.MedicMod
 
 
                 var showShielded = CustomGameOptions.ShowShielded;
-                if (showShielded ==  ShieldOptions.Everyone)
+                if (showShielded == ShieldOptions.Everyone)
                 {
                     player.myRend.material.SetColor("_VisorColor", ProtectedColor);
                     player.myRend.material.SetFloat("_Outline", 1f);
                     player.myRend.material.SetColor("_OutlineColor", ProtectedColor);
                 }
-                else if (PlayerControl.LocalPlayer.PlayerId == player.PlayerId && (showShielded ==  ShieldOptions.Self || showShielded == ShieldOptions.SelfAndMedic))
+                else if (PlayerControl.LocalPlayer.PlayerId == player.PlayerId && (showShielded == ShieldOptions.Self || showShielded == ShieldOptions.SelfAndMedic))
                 {
                     player.myRend.material.SetColor("_VisorColor", ProtectedColor);
                     player.myRend.material.SetFloat("_Outline", 1f);

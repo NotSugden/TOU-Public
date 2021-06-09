@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 using UnityEngine;
 using Debug = System.Diagnostics.Debug;
@@ -9,7 +9,7 @@ namespace TownOfUs.SeerMod
     public class Update
     {
 
-        public static string NameText(PlayerControl player, string str = "", bool meeting=false)
+        public static string NameText(PlayerControl player, string str = "", bool meeting = false)
         {
             if (CamouflageMod.CamouflageUnCamouflage.IsCamoed)
             {
@@ -23,16 +23,17 @@ namespace TownOfUs.SeerMod
 
             return player.name + str;
         }
-        
-        private static void UpdateMeeting(MeetingHud __instance) {
+
+        private static void UpdateMeeting(MeetingHud __instance)
+        {
             foreach (var role in Roles.Role.GetRoles(RoleEnum.Seer))
             {
-                var seerRole = (Roles.Seer) role;
+                var seerRole = (Roles.Seer)role;
                 if (!seerRole.Investigated.Contains(PlayerControl.LocalPlayer.PlayerId)) continue;
                 if (!seerRole.CheckSeeReveal(PlayerControl.LocalPlayer)) continue;
                 var state = __instance.playerStates.FirstOrDefault(x => x.TargetPlayerId == seerRole.Player.PlayerId);
                 state.NameText.color = seerRole.Color;
-                state.NameText.text = NameText(seerRole.Player,  " (Seer)", true);
+                state.NameText.text = NameText(seerRole.Player, " (Seer)", true);
             }
         }
         private static void UpdateMeeting(MeetingHud __instance, Roles.Seer seer)
@@ -49,7 +50,7 @@ namespace TownOfUs.SeerMod
                         case RoleEnum.Crewmate:
                             state.NameText.color =
                                 CustomGameOptions.SeerInfo == SeerInfo.Faction ? Color.green : Color.white;
-                            state.NameText.text = NameText(player,  (CustomGameOptions.SeerInfo == SeerInfo.Role ? " (Crew)" : ""), true);
+                            state.NameText.text = NameText(player, (CustomGameOptions.SeerInfo == SeerInfo.Role ? " (Crew)" : ""), true);
                             break;
                         case RoleEnum.Impostor:
                             state.NameText.color = CustomGameOptions.SeerInfo == SeerInfo.Faction
@@ -62,7 +63,7 @@ namespace TownOfUs.SeerMod
                             state.NameText.color = CustomGameOptions.SeerInfo == SeerInfo.Faction
                                 ? role.FactionColor
                                 : role.Color;
-                            state.NameText.text = NameText(player,  (CustomGameOptions.SeerInfo == SeerInfo.Role ? $" ({role.Name})" : ""), true);
+                            state.NameText.text = NameText(player, (CustomGameOptions.SeerInfo == SeerInfo.Role ? $" ({role.Name})" : ""), true);
                             break;
                     }
                 }
@@ -71,17 +72,17 @@ namespace TownOfUs.SeerMod
 
         [HarmonyPriority(Priority.Last)]
         private static void Postfix(HudManager __instance)
-        
+
         {
             if (PlayerControl.AllPlayerControls.Count <= 1) return;
             if (PlayerControl.LocalPlayer == null) return;
             if (PlayerControl.LocalPlayer.Data == null) return;
             foreach (var role in Roles.Role.GetRoles(RoleEnum.Seer))
             {
-                var seerRole = (Roles.Seer) role;
+                var seerRole = (Roles.Seer)role;
                 if (!seerRole.Investigated.Contains(PlayerControl.LocalPlayer.PlayerId)) continue;
                 if (!seerRole.CheckSeeReveal(PlayerControl.LocalPlayer)) continue;
-                
+
                 seerRole.Player.nameText.color = seerRole.Color;
                 seerRole.Player.nameText.text = NameText(seerRole.Player, " (Seer)");
             }
@@ -89,9 +90,9 @@ namespace TownOfUs.SeerMod
             if (!PlayerControl.LocalPlayer.Is(RoleEnum.Seer)) return;
             var seer = Roles.Role.GetRole<Roles.Seer>(PlayerControl.LocalPlayer);
             if (MeetingHud.Instance != null) UpdateMeeting(MeetingHud.Instance, seer);
-            
-            
-            
+
+
+
             foreach (var player in PlayerControl.AllPlayerControls)
             {
                 if (!seer.Investigated.Contains(player.PlayerId)) continue;
@@ -119,7 +120,7 @@ namespace TownOfUs.SeerMod
                 }
 
             }
-            
+
         }
     }
 }

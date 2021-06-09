@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 using TownOfUs.Roles;
 using UnityEngine;
@@ -8,12 +8,12 @@ namespace TownOfUs.JesterMod
     [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.Start))]
     public static class Outro
     {
-        
+
         public static void Postfix(EndGameManager __instance)
         {
 
-            
-            var role = Role.AllRoles.FirstOrDefault(x => x.RoleType == RoleEnum.Jester && ((Jester) x).VotedOut);
+
+            var role = Role.AllRoles.FirstOrDefault(x => x.RoleType == RoleEnum.Jester && ((Jester)x).VotedOut);
             if (role == null) return;
             PoolablePlayer[] array = Object.FindObjectsOfType<PoolablePlayer>();
             array[0].NameText.text = role.ColorString + array[0].NameText.text + "</color>";

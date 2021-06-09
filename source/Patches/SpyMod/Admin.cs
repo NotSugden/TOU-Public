@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using UnityEngine;
@@ -40,7 +40,7 @@ namespace TownOfUs.SpyMod
                     __instance.BackgroundColor.SetColor(Color.green);
                     __instance.SabotageText.gameObject.SetActive(false);
                 }
-                for (int i = 0; i < __instance.CountAreas.Length; i++)
+                for (int i = 0;i < __instance.CountAreas.Length;i++)
                 {
                     CounterArea counterArea = __instance.CountAreas[i];
                     var colourList = new List<int>();
@@ -56,7 +56,7 @@ namespace TownOfUs.SpyMod
 
                             int num = plainShipRoom.roomArea.OverlapCollider(__instance.filter, __instance.buffer);
                             int num2 = num;
-                            for (int j = 0; j < num; j++)
+                            for (int j = 0;j < num;j++)
                             {
                                 Collider2D collider2D = __instance.buffer[j];
                                 if (!(collider2D.tag == "DeadBody"))
@@ -99,13 +99,13 @@ namespace TownOfUs.SpyMod
                 if (!PlayerControl.LocalPlayer.Is(RoleEnum.Spy)) return;
                 if (!AllRooms.ContainsKey(__instance.RoomType)) return;
                 var list = AllRooms[__instance.RoomType];
-                for (int i = 0; i < __instance.myIcons.Count; i++)
+                for (int i = 0;i < __instance.myIcons.Count;i++)
                 {
                     var poolable = __instance.myIcons.ToArray()[i];
                     var rend = poolable.GetComponent<SpriteRenderer>();
                     if (rend != null && list.Count > i)
                     {
-    
+
                         PlayerControl.SetPlayerMaterialColors(list[i], rend);
                     }
                 }
