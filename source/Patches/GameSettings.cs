@@ -1,4 +1,4 @@
-
+﻿
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -110,7 +110,7 @@ namespace TownOfUs {
         {
             private static void Postfix()
             {
-                if (Input.GetKeyInt(KeyCode.Tab))
+                if (Input.GetKeyDown(KeyCode.Tab))
                 {
                     AllOptions = !AllOptions;
                 }

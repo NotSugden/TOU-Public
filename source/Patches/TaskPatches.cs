@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using UnityEngine;
 
 namespace TownOfUs
@@ -15,13 +15,16 @@ namespace TownOfUs
                 for (int i = 0; i < __instance.AllPlayers.Count; i++)
                 {
                     GameData.PlayerInfo playerInfo = __instance.AllPlayers.ToArray()[i];
-                    if (!playerInfo.Disconnected && playerInfo.Tasks != null && playerInfo.Object &&
-                        (PlayerControl.GameOptions.GhostsDoTasks || !playerInfo.IsDead) && !playerInfo.IsImpostor &&
-                        !(
-                            playerInfo._object.Is(RoleEnum.Jester) || playerInfo._object.Is(RoleEnum.Shifter) ||
-                            playerInfo._object.Is(RoleEnum.Glitch) || playerInfo._object.Is(RoleEnum.Executioner) ||
-                            playerInfo._object.Is(RoleEnum.Arsonist)
-                        ))
+                    if (
+                        !playerInfo.Disconnected &&
+                        playerInfo.Tasks != null &&
+                        playerInfo.Object &&
+                        (PlayerControl.GameOptions.GhostsDoTasks || !playerInfo.IsDead) &&
+                        !playerInfo.IsImpostor &&
+                        !playerInfo._object.Is(new RoleEnum[] {
+                            RoleEnum.Jester, RoleEnum.Shifter, RoleEnum.Glitch, RoleEnum.Executioner, RoleEnum.Arsonist
+                        })
+                    )
                     {
                         for (int j = 0; j < playerInfo.Tasks.Count; j++)
                         {
@@ -46,9 +49,9 @@ namespace TownOfUs
                 float num = float.MaxValue;
                 PlayerControl @object = __0.Object;
 
-                var flag = @object.Is(RoleEnum.Glitch) || @object.Is(RoleEnum.Jester) ||
-                           @object.Is(RoleEnum.Shifter) || @object.Is(RoleEnum.Executioner) || 
-                           @object.Is(RoleEnum.Arsonist);
+                var flag = @object.Is(new RoleEnum[] {
+                    RoleEnum.Jester, RoleEnum.Shifter, RoleEnum.Glitch, RoleEnum.Executioner, RoleEnum.Arsonist
+                });
 
                 Vector2 truePosition = @object.GetTruePosition();
                 Vector3 position = __instance.transform.position;

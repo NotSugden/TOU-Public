@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 using UnityEngine;
 
@@ -14,9 +14,6 @@ namespace TownOfUs
         private static Sprite Douse => TownOfUs.DouseSprite;
 
         private static Sprite Revive => TownOfUs.ReviveSprite;
-
-        private static Sprite Kill => TownOfUs.Kill;
-        private static Sprite Button => TownOfUs.ButtonSprite;
 
 
         
@@ -57,7 +54,7 @@ namespace TownOfUs
             }
             else
             {
-                __instance.KillButton.renderer.sprite = Kill;
+                __instance.KillButton.renderer.sprite = TranslationController.Instance.GetImage(ImageNames.KillButton);
                 flag = PlayerControl.LocalPlayer.Is(RoleEnum.Sheriff);
             }
 

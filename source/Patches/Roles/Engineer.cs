@@ -1,11 +1,12 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace TownOfUs.Roles
 {
     public class Engineer : Role
     {
 
-        public bool UsedThisRound {get; set;} = false;
+        public int Uses = 0;
+        public bool CanUse => Uses < CustomGameOptions.EngineerFixes;
         
         public Engineer(PlayerControl player) : base(player)
         {

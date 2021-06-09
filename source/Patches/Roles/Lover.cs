@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hazel;
@@ -59,18 +59,15 @@ namespace TownOfUs.Roles
         
         public static void Gen(List<PlayerControl> crewmates, List<PlayerControl> impostors)
         {
-            //System.Console.WriteLine("LOVER2");
             if (crewmates.Count <= 0) return;
             if (crewmates.Count <= 1 && impostors.Count < 1) return;
 
-            //System.Console.WriteLine("LOVER3");
             var b = UnityEngine.Random.RandomRangeInt(0, 3);
 
             if (b == 0 & impostors.Count < 1) b = 1;
             
             if (b != 0 & crewmates.Count <= 1) b = 0;
 
-            //System.Console.WriteLine("LOVER4");
             var flag2 = b == 0;
             var num = UnityEngine.Random.RandomRangeInt(0, crewmates.Count);
             var player1 = crewmates[num];
@@ -112,7 +109,6 @@ namespace TownOfUs.Roles
 
             if (CheckLoversWin())
             {
-                //System.Console.WriteLine("LOVERS WIN");
                 var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
                     (byte) CustomRPC.LoveWin, SendOption.Reliable, -1);
                 writer.Write(Player.PlayerId);
@@ -140,7 +136,6 @@ namespace TownOfUs.Roles
 
         private bool CheckLoversWin()
         {
-            //System.Console.WriteLine("CHECKWIN");
             var players = PlayerControl.AllPlayerControls.ToArray();
             var alives = players.Where(x => !x.Data.IsDead).ToList();
             var lover1 = Player;
@@ -155,7 +150,6 @@ namespace TownOfUs.Roles
             if (AllRoles.Where(x => x.RoleType == RoleEnum.Jester).Any(x => ((Jester) x).VotedOut)) return;
             /*var lover1 = Player;
             var lover2 = OtherLover.Player;
-            //System.Console.WriteLine("reached révoila");
             lover1.Data.IsImpostor = true;
             lover1.Data.IsDead = false;
             lover2.Data.IsImpostor = true;

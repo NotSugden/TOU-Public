@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using UnityEngine;
 
 namespace TownOfUs.AltruistMod
@@ -27,7 +27,7 @@ namespace TownOfUs.AltruistMod
             {
                 var component = role.CurrentTarget.GetComponent<SpriteRenderer>();
                 component.material.SetFloat("_Outline", 1f);
-                component.material.SetColor("_OutlineColor", Color.red);
+                component.material.SetColor("_OutlineColor", Color.yellow);
                 __instance.renderer.color = Palette.EnabledColor;
                 __instance.renderer.material.SetFloat("_Desat", 0f);
                 return;

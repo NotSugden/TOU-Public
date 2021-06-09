@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
@@ -63,7 +63,6 @@ namespace TownOfUs.SwapperMod
                 role.ListOfActives[index] = !role.ListOfActives[index];
 
                 _mostRecentId = index;
-                PluginSingleton<TownOfUs>.Instance.Log.LogMessage(string.Join(" ", role.ListOfActives));
             }
 
             return Listener;

@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 
 namespace TownOfUs.MedicMod
 {
@@ -37,12 +37,19 @@ namespace TownOfUs.MedicMod
                 protectButton.gameObject.SetActive(!MeetingHud.Instance);
                 protectButton.isActive = !MeetingHud.Instance;
                 protectButton.SetCoolDown(0f, 1f);
-                role.ClosestPlayer = Utils.getClosestPlayer(PlayerControl.LocalPlayer);
-                var distBetweenPlayers = Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer);
-                var flag9 = distBetweenPlayers < maxDistance;
-                if (flag9 && __instance.enabled && !role.UsedAbility)
+                var closestPlayer = role.ClosestPlayer = Utils.getClosestPlayer(PlayerControl.LocalPlayer);
+                if (
+                    closestPlayer == null || (
+                        Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer) < maxDistance
+                    )
+                )
                 {
-                    protectButton.SetTarget(role.ClosestPlayer);
+                    protectButton.SetTarget(null);
+                }
+                else if (__instance.enabled && !role.UsedAbility)
+                {
+                    protectButton.SetTarget(closestPlayer);
+                    role.ClosestPlayer.myRend.material.SetColor("_OutlineColor", role.Color);
                 }
             }
         }

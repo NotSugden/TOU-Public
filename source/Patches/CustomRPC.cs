@@ -1,4 +1,4 @@
-namespace TownOfUs
+﻿namespace TownOfUs
 {
     public enum CustomRPC
     {
@@ -17,7 +17,6 @@ namespace TownOfUs
         SetCamouflager,
         SetExecutioner,
         SetTarget,
-        SetChild,
         SetSpy,
         SetSnitch,
         SetMiner,
@@ -26,6 +25,7 @@ namespace TownOfUs
         SetAssassin,
         SetArsonist,
         SetAltruist,
+        SetPhantom,
         SetButtonBarry,
 
         SetTorch,
@@ -43,11 +43,13 @@ namespace TownOfUs
         LoveWin,
         GlitchWin,
         ArsonistWin,
+        PhantomWin,
         JesterLose,
         ExecutionerLose,
         ShifterLose,
         GlitchLose,
         ArsonistLose,
+        PhantomLose,
         NobodyWins,
         
         JanitorClean,
@@ -69,6 +71,8 @@ namespace TownOfUs
         Ignite,
         AltruistRevive,
         BarryButton,
+        CatchPhantom,
+        ForceSetPhantom,
 
         SetGlitch,
         BypassKill,
@@ -82,6 +86,6 @@ namespace TownOfUs
 
         Start,
         SyncCustomSettings,
-        FixAnimation
+        FixAnimation,
     }
 }

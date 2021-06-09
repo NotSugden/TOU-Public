@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using HarmonyLib;
 using UnityEngine;
@@ -14,8 +14,12 @@ namespace TownOfUs
         {
             var num = float.MaxValue;
             var localPlayer = pc.Object;
-            couldUse = (PlayerControl.LocalPlayer.Is(RoleEnum.Engineer) || localPlayer.Data.IsImpostor && !localPlayer.Is(RoleEnum.Morphling)  && !localPlayer.Is(RoleEnum.Swooper)) &&
-                       !localPlayer.Data.IsDead;
+            couldUse = (
+                PlayerControl.LocalPlayer.Is(RoleEnum.Engineer) ||
+                localPlayer.Data.IsImpostor &&
+                !localPlayer.Is(new RoleEnum[] { RoleEnum.Morphling, RoleEnum.Swooper })
+                //!localPlayer.Is(RoleEnum.Morphling)  && !localPlayer.Is(RoleEnum.Swooper)
+            ) && !localPlayer.Data.IsDead;
             canUse = couldUse;
     
             num = Vector2.Distance(localPlayer.GetTruePosition(), __instance.transform.position);

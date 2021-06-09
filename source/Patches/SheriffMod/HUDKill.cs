@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 
 namespace TownOfUs.SheriffMod
 {
@@ -36,12 +36,19 @@ namespace TownOfUs.SheriffMod
                     KillButton.gameObject.SetActive(!MeetingHud.Instance);
                     KillButton.isActive = !MeetingHud.Instance;
                     KillButton.SetCoolDown(role.SheriffKillTimer(), PlayerControl.GameOptions.KillCooldown + 15f);
-                    role.ClosestPlayer = Utils.getClosestPlayer(PlayerControl.LocalPlayer);
-                    var distBetweenPlayers = Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer);
-                    var flag9 = distBetweenPlayers < GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance];
-                    if (flag9 && KillButton.enabled)
+                    var closestPlayer = role.ClosestPlayer = Utils.getClosestPlayer(PlayerControl.LocalPlayer);
+                    if (
+                        closestPlayer == null || (
+                            Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer) < GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance]
+                        )
+                    )
+                    {
+                        KillButton.SetTarget(null);
+                    }
+                    else if (KillButton.enabled)
                     {
                         KillButton.SetTarget(role.ClosestPlayer);
+                        role.ClosestPlayer.myRend.material.SetColor("_OutlineColor", role.Color);
                     }
                 }
             }

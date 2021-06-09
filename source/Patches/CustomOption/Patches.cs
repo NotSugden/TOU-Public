@@ -1,4 +1,4 @@
-// This folder is a Stripped down version of Reactor-Essentials
+﻿// This folder is a Stripped down version of Reactor-Essentials
 // Please use https://github.com/DorCoMaNdO/Reactor-Essentials because it is more updated and less buggy
 
 using System;
@@ -15,12 +15,11 @@ namespace TownOfUs.CustomOption
     public static class Patches
     {
 
-        public static Export ExportButton;
-        public static Import ImportButton;
+        public static ImportExport ExportButton;
+        public static ImportExport ImportButton;
         public static List<OptionBehaviour> DefaultOptions;
         public static float LobbyTextRowHeight { get; set; } = 0.081F;
-        
-        
+
         private static List<OptionBehaviour> CreateOptions(GameOptionsMenu __instance)
         {
             var options = new List<OptionBehaviour>();
@@ -352,7 +351,7 @@ namespace TownOfUs.CustomOption
         private class HudManagerUpdate
         {
             private static Scroller Scroller;
-            private const float MinX = -5.233334F/*-5.3F*/, OriginalY = 2.9F, MinY = 3F; // Differs to cause excess options to appear cut off to encourage scrolling
+            private const float MinX = -4.75F, OriginalY = 2.9F, MinY = 3F; // Differs to cause excess options to appear cut off to encourage scrolling
             private static Vector3 LastPosition = new Vector3(MinX, MinY);
 
             public static void Prefix(HudManager __instance)

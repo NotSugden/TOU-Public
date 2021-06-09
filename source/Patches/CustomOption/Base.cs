@@ -1,4 +1,4 @@
-// This folder is a Stripped down version of Reactor-Essentials
+﻿// This folder is a Stripped down version of Reactor-Essentials
 // Please use https://github.com/DorCoMaNdO/Reactor-Essentials because it is more updated and less buggy
 
 using System;
@@ -52,7 +52,6 @@ namespace TownOfUs.CustomOption
         protected internal void Set(object value, bool SendRpc = true)
         {
             
-            System.Console.WriteLine($"{Name} set to {value}");
             
             Value = value;
 

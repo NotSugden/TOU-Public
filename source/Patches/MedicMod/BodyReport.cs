@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using HarmonyLib;
 
@@ -9,20 +9,17 @@ namespace TownOfUs.MedicMod
     {
         static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] GameData.PlayerInfo info)
         {
-            //System.Console.WriteLine("Report Body!");
             if (info == null) return;
             var matches = Murder.KilledPlayers.Where(x => x.PlayerId == info.PlayerId).ToArray();
             DeadPlayer killer = null;
 
             if (matches.Length > 0)
             {
-                //System.Console.WriteLine("RBOOF");
                 killer = matches[0];
             }
 
             if (killer == null)
             {
-                //System.Console.WriteLine("RBTWOOF");
                 return;
             }
 
@@ -35,7 +32,6 @@ namespace TownOfUs.MedicMod
             var isUserMedic = PlayerControl.LocalPlayer.Is(RoleEnum.Medic);
             if (!isUserMedic)
                 return;
-            //System.Console.WriteLine("RBTHREEF");
             var br = new BodyReport
             {
                 Killer = Utils.PlayerById(killer.KillerId),
@@ -44,16 +40,13 @@ namespace TownOfUs.MedicMod
                 KillAge = (float) (DateTime.UtcNow - killer.KillTime).TotalMilliseconds,
             };
             
-            //System.Console.WriteLine("FIVEF");
 
             var reportMsg = BodyReport.ParseBodyReport(br);
             
-            //System.Console.WriteLine("SIXTHF");
 
             if (string.IsNullOrWhiteSpace(reportMsg))
                 return;
             
-            //System.Console.WriteLine("SEFENFTH");
 
             if (DestroyableSingleton<HudManager>.Instance)
             {

@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 
 namespace TownOfUs.ShifterMod
 {
@@ -35,12 +35,19 @@ namespace TownOfUs.ShifterMod
                 shiftButton.gameObject.SetActive(!MeetingHud.Instance);
                 shiftButton.isActive = !MeetingHud.Instance;
                 shiftButton.SetCoolDown(role.ShifterShiftTimer(), CustomGameOptions.ShifterCd);
-                role.ClosestPlayer = Utils.getClosestPlayer(PlayerControl.LocalPlayer);
-                var distBetweenPlayers = Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer);
-                var flag9 = distBetweenPlayers < maxDistance;
-                if (flag9 && __instance.enabled)
+                var closestPlayer = role.ClosestPlayer = Utils.getClosestPlayer(PlayerControl.LocalPlayer);
+                if (
+                    closestPlayer == null || (
+                        Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer) < maxDistance
+                    )
+                )
+                {
+                    shiftButton.SetTarget(null);
+                }
+                else if (__instance.enabled)
                 {
                     shiftButton.SetTarget(role.ClosestPlayer);
+                    role.ClosestPlayer.myRend.material.SetColor("_OutlineColor", role.Color);
                 }
 
             }

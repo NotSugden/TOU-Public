@@ -1,4 +1,4 @@
-// This folder is a Stripped down version of Reactor-Essentials
+﻿// This folder is a Stripped down version of Reactor-Essentials
 // Please use https://github.com/DorCoMaNdO/Reactor-Essentials because it is more updated and less buggy
 
 using System.Collections.Generic;
@@ -38,7 +38,6 @@ namespace TownOfUs.CustomOption
 
         public static void ReceiveRpc(MessageReader reader)
         {
-            PluginSingleton<TownOfUs>.Instance.Log.LogInfo($"Options received:");
             while (reader.BytesRemaining > 0)
             {
                 
@@ -51,8 +50,6 @@ namespace TownOfUs.CustomOption
                 else if (type == CustomOptionType.String) value = reader.ReadInt32();
 
                 customOption?.Set(value);
-                
-                PluginSingleton<TownOfUs>.Instance.Log.LogInfo($"{customOption?.Name} : {customOption}:");
                 
             }
         }

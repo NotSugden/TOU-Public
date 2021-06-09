@@ -1,7 +1,6 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 using Hazel;
-using DateTime = Il2CppSystem.DateTime;
 
 namespace TownOfUs.EngineerMod
 {
@@ -17,13 +16,13 @@ namespace TownOfUs.EngineerMod
             if (PlayerControl.LocalPlayer.Data.IsDead) return false;
             if (!__instance.enabled) return false;
             var role = Roles.Role.GetRole<Roles.Engineer>(PlayerControl.LocalPlayer);
-            if (role.UsedThisRound) return false;
+            if (!role.CanUse) return false;
             var system = ShipStatus.Instance.Systems[SystemTypes.Sabotage].Cast<SabotageSystemType>();
             var specials = system.specials.ToArray();
             var dummyActive = system.dummy.IsActive;
             var sabActive = specials.Any(s => s.IsActive);
             if (!sabActive | dummyActive) return false;
-            role.UsedThisRound = true;
+            role.Uses++;
 
             switch (PlayerControl.GameOptions.MapId)
             {

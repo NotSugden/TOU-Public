@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 using TownOfUs.Roles;
 using UnityEngine;
@@ -37,6 +37,11 @@ namespace TownOfUs.ArsonistMod
             {
                 
                 var player = Utils.PlayerById(playerId);
+                if (player == null)
+                {
+                    role.DousedPlayers.Remove(playerId);
+                    continue;
+                }
                 player.myRend.material.SetColor("_VisorColor", role.Color);
                 player.nameText.color = Color.black;
             }
@@ -56,16 +61,24 @@ namespace TownOfUs.ArsonistMod
             __instance.KillButton.gameObject.SetActive(!PlayerControl.LocalPlayer.Data.IsDead && !MeetingHud.Instance);
             role.IgniteButton.SetCoolDown(0f, 1f);
             __instance.KillButton.SetCoolDown(role.DouseTimer(), CustomGameOptions.DouseCd);
-            role.closestPlayer = Utils.getClosestPlayer(PlayerControl.LocalPlayer);
-            var distance = Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.closestPlayer);
-            var flag9 = distance < GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance];
-            if (flag9 && __instance.KillButton.isActiveAndEnabled && !role.IgniteUsed)
-            {
-                __instance.KillButton.SetTarget(role.closestPlayer);
-            }
-            else
+            var closestPlayer = role.closestPlayer = Utils.getClosestPlayer(
+                PlayerControl.LocalPlayer,
+                PlayerControl.AllPlayerControls.ToArray().Where(
+                    x => !role.DousedPlayers.Contains(x.PlayerId)
+                ).ToList()
+            );
+            if (
+                closestPlayer == null || (
+                    Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.closestPlayer) < GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance]
+                )
+            )
             {
                 __instance.KillButton.SetTarget(null);
+            }
+            else if (__instance.KillButton.isActiveAndEnabled && !role.IgniteUsed)
+            {
+                __instance.KillButton.SetTarget(role.closestPlayer);
+                role.closestPlayer.myRend.material.SetColor("_OutlineColor", role.Color);
             }
 
 

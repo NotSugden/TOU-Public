@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 
 namespace TownOfUs.SeerMod
@@ -35,13 +35,20 @@ namespace TownOfUs.SeerMod
                 investigateButton.gameObject.SetActive(!MeetingHud.Instance);
                 investigateButton.isActive = !MeetingHud.Instance;
                 investigateButton.SetCoolDown(role.SeerTimer(), CustomGameOptions.SeerCd);
-                role.ClosestPlayer = Utils.getClosestPlayer(PlayerControl.LocalPlayer,
+                var closestPlayer = role.ClosestPlayer = Utils.getClosestPlayer(PlayerControl.LocalPlayer,
                     PlayerControl.AllPlayerControls.ToArray().Where(x => !role.Investigated.Contains(x.PlayerId)).ToList());
-                var distBetweenPlayers = Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer);
-                var flag9 = distBetweenPlayers < maxDistance;
-                if (flag9 && __instance.enabled)
+                if (
+                    closestPlayer == null || (
+                        Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer) < maxDistance
+                    )
+                )
+                {
+                    investigateButton.SetTarget(null);
+                }
+                else if (__instance.enabled)
                 {
                     investigateButton.SetTarget(role.ClosestPlayer);
+                    role.ClosestPlayer.myRend.material.SetColor("_OutlineColor", role.Color);
                 }
 
             }

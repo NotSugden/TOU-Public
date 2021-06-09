@@ -17,7 +17,7 @@ namespace TownOfUs.AssassinMod
         public static Sprite CycleSprite => TownOfUs.CycleSprite;
         public static Sprite GuessSprite => TownOfUs.GuessSprite;
 
-        private static List<RoleEnum> guesses = new List<RoleEnum>();
+        private static List<int> guesses = new List<int>();
 
         private static GameObject makeButton(PlayerVoteArea voteArea, Vector3 diffPos, Sprite sprite, Action onClick)
         {
@@ -28,9 +28,8 @@ namespace TownOfUs.AssassinMod
             var passive = button.GetComponent<PassiveButton>();
 
             renderer.sprite = sprite;
-            var pos = button.transform.position = confirmButton.transform.position - diffPos;
+            button.transform.position = confirmButton.transform.position - diffPos;
 
-            // button.transform.localScale *= 0.2f;
             button.layer = 5;
             button.transform.parent = voteArea.transform;
 
@@ -66,17 +65,26 @@ namespace TownOfUs.AssassinMod
             role.GameObjects.Add(roleGuessText.gameObject);
         }
 
+        private static List<RoleEnum> GetEnabledRoles()
+        {
+            var enabledRoles = CustomGameOptions.GetEnabledRoles();
+            if (CustomGameOptions.AssassinCanGuessCrewmate) enabledRoles.Insert(0, RoleEnum.Crewmate);
+            return enabledRoles;
+        }
+
         private static Action Guess(PlayerVoteArea voteArea, Assassin assassin, int index)
         {
             void Listener()
             {
-                var guess = guesses.ElementAt(index);
-                if (guess == RoleEnum.None) return;
+                var guessIndex = guesses.ElementAt(index);
+                if (guessIndex == -1) return;
 
                 var player = PlayerControl.AllPlayerControls.ToArray().FirstOrDefault(
                     p => p.PlayerId == voteArea.TargetPlayerId
                 );
                 var role = Role.GetRole(player);
+                var enabledRoles = GetEnabledRoles();
+                var guess = enabledRoles[guessIndex];
                 if (role.RoleType != guess)
                 {
                     player = PlayerControl.LocalPlayer;
@@ -84,7 +92,7 @@ namespace TownOfUs.AssassinMod
                         v => v.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId
                     );
                 }
-                Utils.RpcKillDuringMeeting(player);
+                Utils.RpcKillDuringMeeting(voteArea, player);
                 assassin.timesKilled++;
                 ShowHideButtons.Confirm.Prefix(MeetingHud.Instance);
             }
@@ -96,24 +104,11 @@ namespace TownOfUs.AssassinMod
         {
             void Listener()
             {
-                var currentGuess = guesses.ElementAt(index);
-                switch (currentGuess)
-                {
-                    case RoleEnum.Engineer:
-                        currentGuess = RoleEnum.Lover;
-                        break;
-                    case RoleEnum.Altruist:
-                        currentGuess = RoleEnum.Glitch;
-                        break;
-                    case RoleEnum.Glitch:
-                    case RoleEnum.None:
-                        currentGuess = RoleEnum.Sheriff;
-                        break;
-                    default:
-                        currentGuess++;
-                        break;
-                }
-                guesses[index] = currentGuess;
+                var enabledRoles = GetEnabledRoles();
+                var newGuess = guesses.ElementAt(index) + 1;
+                if (newGuess >= enabledRoles.Count) newGuess = 0;
+                guesses[index] = newGuess;
+                var currentGuess = enabledRoles[newGuess];
                 var name = Role.GetRoleName(currentGuess);
                 var color = Role.GetRoleColor(currentGuess);
                 guessText.text = name;
@@ -141,9 +136,13 @@ namespace TownOfUs.AssassinMod
             for (var i = 0; i < __instance.playerStates.Length; i++)
             {
                 var playerState = __instance.playerStates[i];
-                guesses.Add(RoleEnum.None);
+                guesses.Add(-1);
                 if (playerState.TargetPlayerId != PlayerControl.LocalPlayer.PlayerId)
-                    GenButton(assassinrole, i, playerState.isDead);
+                {
+                    var role = Role.GetRole(playerState);
+                    if (role?.Faction != Faction.Impostors)
+                        GenButton(assassinrole, i, playerState.isDead);
+                }
             }
         }
     }

@@ -1,7 +1,8 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 using TownOfUs.CustomHats;
 using UnityEngine;
+using Reactor.Extensions;
 
 namespace TownOfUs {
 
@@ -9,19 +10,6 @@ namespace TownOfUs {
     [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
     public static class PingTracker_Update
     {
-        [HarmonyPrefix]
-        public static void Prefix(PingTracker __instance)
-        {
-            if (!__instance.GetComponentInChildren<SpriteRenderer>())
-            {
-                GameObject spriteObject = new GameObject("Polus Sprite");
-                spriteObject.AddComponent<SpriteRenderer>().sprite = TownOfUs.PolusSprite;
-                spriteObject.transform.parent = __instance.transform;
-                spriteObject.transform.localPosition = new Vector3(-1.1f, 0f, -1);
-                spriteObject.transform.localScale *= 0.72f;
-            }
-        }
-        
         [HarmonyPostfix]
         public static void Postfix(PingTracker __instance)
         {
@@ -29,10 +17,9 @@ namespace TownOfUs {
             position.DistanceFromEdge = new Vector3(3f, 0.4f, 0);
             position.AdjustPosition();
             
-            __instance.text.text = 
-                $"<color=#00FF00FF>TownOfUs v3.0.1</color>\n" +
-                "Sugden ;)\n" +
-                $"Moving to <color=#BEA4FFFF>Polus.gg</color>\n" +
+            __instance.text.text =
+                Utils.ColorText(RainbowUtils.Rainbow, $"TownOfUs v{TownOfUs.Version}\n") +
+                $"Sugden ;)\n" +
                 $"Ping: {AmongUsClient.Instance.Ping}ms";
             
         }

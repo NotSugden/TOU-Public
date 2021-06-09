@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using HarmonyLib;
 using Hazel;
@@ -32,7 +32,7 @@ namespace TownOfUs.ArsonistMod
             if (__instance != DestroyableSingleton<HudManager>.Instance.KillButton) return true;
             if (!__instance.isActiveAndEnabled) return false;
             if (role.closestPlayer == null) return false;
-            if(role.DouseTimer() != 0) return false;
+            if (role.DouseTimer() != 0) return false;
             if (role.DousedPlayers.Contains(role.closestPlayer.PlayerId)) return false;
             var distBetweenPlayers = Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.closestPlayer);
             var flag3 = distBetweenPlayers <

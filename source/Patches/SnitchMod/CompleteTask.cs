@@ -1,6 +1,7 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 using UnityEngine;
+using TownOfUs.Roles.Modifiers;
 
 namespace TownOfUs.SnitchMod
 {
@@ -12,27 +13,26 @@ namespace TownOfUs.SnitchMod
         
         public static void Postfix(PlayerControl __instance)
         {
-            if (!__instance.Is(RoleEnum.Snitch)) return;
+            if (!__instance.Is(ModifierEnum.Snitch)) return;
             if (__instance.Data.IsDead) return;
             var taskinfos = __instance.Data.Tasks.ToArray();
 
             var tasksLeft = taskinfos.Count(x => !x.Complete);
-            var role = Roles.Role.GetRole<Roles.Snitch>(__instance);
-            role.TasksLeft = tasksLeft;
+            var modifier = Modifier.GetModifier<Snitch>(__instance);
+            modifier.TasksLeft = tasksLeft;
+            var localIsSnitch = PlayerControl.LocalPlayer.Is(ModifierEnum.Snitch);
+            var role = Roles.Role.GetRole(__instance);
+            if (localIsSnitch) role?.RegenTask();
             switch (tasksLeft)
             {
                 case 1:
-                    
-                    role.RegenTask();
-                    if (PlayerControl.LocalPlayer.Is(RoleEnum.Snitch))
+                    if (localIsSnitch)
                     {
-                        
-                        Reactor.Coroutines.Start(Utils.FlashCoroutine(role.Color));
-                        
+                        Reactor.Coroutines.Start(Utils.FlashCoroutine(modifier.Color));
                     }
                     else if (PlayerControl.LocalPlayer.Data.IsImpostor)
                     {
-                        Reactor.Coroutines.Start(Utils.FlashCoroutine(role.Color));
+                        Reactor.Coroutines.Start(Utils.FlashCoroutine(modifier.Color));
                         var gameObj = new GameObject();
                         var arrow = gameObj.AddComponent<ArrowBehaviour>();
                         gameObj.transform.parent = PlayerControl.LocalPlayer.gameObject.transform;
@@ -40,17 +40,18 @@ namespace TownOfUs.SnitchMod
                         renderer.sprite = Sprite;
                         arrow.image = renderer;
                         gameObj.layer = 5;
-                        role.ImpArrows.Add(arrow);
+                        modifier.ImpArrows.Add(arrow);
                     }
 
                     break;
                 
                 case 0:
-                    role.RegenTask();
-                    if (PlayerControl.LocalPlayer.Is(RoleEnum.Snitch))
+                    if (localIsSnitch)
                     {
                         Reactor.Coroutines.Start(Utils.FlashCoroutine(Color.green));
-                        var impostors = PlayerControl.AllPlayerControls.ToArray().Where(x => x.Data.IsImpostor);
+                        var impostors = PlayerControl.AllPlayerControls.ToArray().Where(
+                            x => x.Data.IsImpostor || (CustomGameOptions.SnitchCanSeeNeutrals && x.Is(RoleEnum.Glitch))
+                        );
                         foreach (var imp in impostors)
                         {
                             var gameObj = new GameObject();
@@ -60,11 +61,9 @@ namespace TownOfUs.SnitchMod
                             renderer.sprite = Sprite;
                             arrow.image = renderer;
                             gameObj.layer = 5;
-                            role.SnitchArrows.Add(arrow);
-                            role.SnitchTargets.Add(imp);
-
+                            modifier.SnitchArrows.Add(arrow);
+                            modifier.SnitchTargets.Add(imp);
                         }
-                        
                     }
 
                     break;

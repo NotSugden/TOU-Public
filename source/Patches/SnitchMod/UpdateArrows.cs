@@ -1,6 +1,7 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 using Reactor.Extensions;
+using TownOfUs.Roles.Modifiers;
 
 namespace TownOfUs.SnitchMod
 {
@@ -9,9 +10,9 @@ namespace TownOfUs.SnitchMod
     {
         public static void Postfix(PlayerControl __instance)
         {
-            foreach (var role in Roles.Role.AllRoles.Where(x => x.RoleType == RoleEnum.Snitch))
+            foreach (var modifier in Modifier.AllModifiers.Where(x => x.ModifierType == ModifierEnum.Snitch))
             {
-                var snitch = (Roles.Snitch) role;
+                var snitch = (Snitch) modifier;
                 if (PlayerControl.LocalPlayer.Data.IsDead || snitch.Player.Data.IsDead)
                 {
                     snitch.SnitchArrows.DestroyAll();

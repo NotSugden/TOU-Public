@@ -1,4 +1,4 @@
-namespace TownOfUs
+﻿namespace TownOfUs
 {
     public enum RoleEnum
     {
@@ -15,10 +15,9 @@ namespace TownOfUs
         Medic,
         Seer,
         Executioner,
-        Child,
         Spy,
-        Snitch,
         Arsonist,
+        Phantom,
         Altruist,
 
         Assassin,
@@ -44,5 +43,6 @@ namespace TownOfUs
         Drunk,
         BigBoi,
         ButtonBarry,
+        Snitch
     }
 }

@@ -15,7 +15,7 @@ namespace TownOfUs.GlitchMod
             {
                 ((Glitch)glitch).LastMimic = DateTime.UtcNow;
                 ((Glitch)glitch).LastHack = DateTime.UtcNow;
-                ((Glitch)glitch).LastKill = DateTime.UtcNow.AddSeconds(CustomGameOptions.InitialGlitchKillCooldown + (CustomGameOptions.GlitchKillCooldown * -1));
+                ((Glitch)glitch).LastKill = DateTime.UtcNow.AddSeconds(15f + (PlayerControl.GameOptions.KillCooldown * -1));
             }
         }
     }

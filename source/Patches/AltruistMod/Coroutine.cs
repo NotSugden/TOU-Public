@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,6 @@ namespace TownOfUs.AltruistMod
         public static ArrowBehaviour Arrow;
         public static PlayerControl Target;
         public static Sprite Sprite => TownOfUs.Arrow;
-        
         public static IEnumerator AltruistRevive(DeadBody target, Altruist role)
         {
             var parentId = target.ParentId;
@@ -96,9 +95,19 @@ namespace TownOfUs.AltruistMod
                 {
                 }
             }
-            
 
-            if (PlayerControl.LocalPlayer.Data.IsImpostor)
+            var setting = CustomGameOptions.WhoSeesAltruistArrow;
+            var targetBoth = setting == AltruistArrowTarget.ImpsAndGlitch;
+            var targetImpostor = targetBoth || setting == AltruistArrowTarget.Impostors;
+            var targetGlitch = targetBoth || setting == AltruistArrowTarget.Glitch;
+
+            var localPlayer = PlayerControl.LocalPlayer;
+            if (
+                !localPlayer.Data.IsDead &&
+                (localPlayer.Is(RoleEnum.Sheriff) && Role.GetRole<Sheriff>(localPlayer).Kills.Contains(player.PlayerId)) ||
+                (targetImpostor && localPlayer.Data.IsImpostor) ||
+                (targetGlitch && localPlayer.Is(RoleEnum.Glitch))
+            )
             {
                 var gameObj = new GameObject();
                 Arrow = gameObj.AddComponent<ArrowBehaviour>();

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Linq;
 using HarmonyLib;
@@ -103,7 +103,6 @@ namespace TownOfUs.ShifterMod
         public static void Shift(Roles.Shifter shifterRole, PlayerControl other)
         {
             var role = Utils.GetRole(other);
-            //System.Console.WriteLine(role);
             //TODO - Shift Animation
             shifterRole.LastShifted = DateTime.UtcNow;
             var shifter = shifterRole.Player;
@@ -113,7 +112,6 @@ namespace TownOfUs.ShifterMod
             var swapTasks = true;
             var lovers = false;
             var resetShifter = false;
-            var snitch = false;
 
             Roles.Role newRole;
 
@@ -132,7 +130,6 @@ namespace TownOfUs.ShifterMod
                 case RoleEnum.Seer:
                 case RoleEnum.Executioner:
                 case RoleEnum.Spy:
-                case RoleEnum.Snitch:
                 case RoleEnum.Arsonist:
                 case RoleEnum.Crewmate:
                 case RoleEnum.Altruist:
@@ -146,14 +143,9 @@ namespace TownOfUs.ShifterMod
                     newRole = Roles.Role.GetRole(other);
                     newRole.Player = shifter;
 
-                    if (role == RoleEnum.Snitch)
-                    {
-                        SnitchMod.CompleteTask.Postfix(shifter);
-                    }
-
                     var modifier = Modifier.GetModifier(other);
                     var modifier2 = Modifier.GetModifier(shifter);
-                    if (modifier != null && modifier2 != null)
+                    if (modifier?.ModifierType != ModifierEnum.Snitch && modifier2?.ModifierType != ModifierEnum.Snitch)
                     {
                         modifier.Player = shifter;
                         modifier2.Player = other;
@@ -162,13 +154,13 @@ namespace TownOfUs.ShifterMod
                         Modifier.ModifierDictionary.Add(shifter.PlayerId, modifier);
                         Modifier.ModifierDictionary.Add(other.PlayerId, modifier2);
                     }
-                    else if (modifier2 != null)
+                    else if (modifier2?.ModifierType != ModifierEnum.Snitch)
                     {
                         modifier2.Player = other;
                         Modifier.ModifierDictionary.Remove(shifter.PlayerId);
                         Modifier.ModifierDictionary.Add(other.PlayerId, modifier2);
                     }
-                    else if (modifier != null)
+                    else if (modifier?.ModifierType != ModifierEnum.Snitch)
                     {
                         modifier.Player = shifter;
                         Modifier.ModifierDictionary.Remove(other.PlayerId);
@@ -181,7 +173,6 @@ namespace TownOfUs.ShifterMod
 
                     Roles.Role.RoleDictionary.Add(shifter.PlayerId, newRole);
                     lovers = role == RoleEnum.Lover;
-                    snitch = role == RoleEnum.Snitch;
 
                     foreach (var exeRole in Roles.Role.AllRoles.Where(x => x.RoleType == RoleEnum.Executioner))
                     {
@@ -223,7 +214,6 @@ namespace TownOfUs.ShifterMod
                 case RoleEnum.Impostor:
                 case RoleEnum.Glitch:
                 case RoleEnum.Shifter:
-                case RoleEnum.Child:
                 case RoleEnum.Assassin:
                     shifter.Data.IsImpostor = true;
                     shifter.MurderPlayer(shifter);
@@ -255,23 +245,6 @@ namespace TownOfUs.ShifterMod
                     var otherLover = lover.OtherLover;
                     otherLover.RegenTask();
                 }
-
-                if (snitch)
-                {
-                    var snitchRole = Roles.Role.GetRole<Snitch>(shifter);
-                    snitchRole.ImpArrows.DestroyAll();
-                    snitchRole.SnitchArrows.DestroyAll();
-                    snitchRole.SnitchTargets.Clear();
-                    SnitchMod.CompleteTask.Postfix(shifter);
-                    if (other.AmOwner)
-                    {
-                        foreach (var player in PlayerControl.AllPlayerControls)
-                        {
-                            player.nameText.color = Color.white;
-                            
-                        }
-                    }
-                }
                 
                 if (resetShifter)
                 {
@@ -279,9 +252,6 @@ namespace TownOfUs.ShifterMod
                 }
             }
 
-            //System.Console.WriteLine(shifter.Is(RoleEnum.Sheriff));
-            //System.Console.WriteLine(other.Is(RoleEnum.Sheriff));
-            //System.Console.WriteLine(Roles.Role.GetRole(shifter));
             if (shifter.AmOwner || other.AmOwner)
             {
                 if (shifter.Is(RoleEnum.Arsonist) && other.AmOwner)

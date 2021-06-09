@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 using UnityEngine;
 
@@ -45,7 +45,6 @@ namespace TownOfUs.Modifiers
             /*var bodies = Object.FindObjectsOfType<DeadBody>();
             foreach (var body in bodies)
             {
-                System.Console.WriteLine(body.ParentId);
                 var player = PlayerControl.AllPlayerControls.ToArray().FirstOrDefault(x => x.PlayerId == body.ParentId);
                 if (player != null)
                 {

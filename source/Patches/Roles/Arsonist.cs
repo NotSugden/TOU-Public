@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hazel;
@@ -12,12 +12,12 @@ namespace TownOfUs.Roles
         public bool IgniteUsed;
         public bool ArsonistWins;
         public DateTime LastDoused;
-
+        
         private KillButtonManager _igniteButton;
 
         public KillButtonManager IgniteButton
         {
-            get { return _igniteButton;}
+            get { return _igniteButton; }
             set
             {
                 _igniteButton = value;
@@ -39,9 +39,9 @@ namespace TownOfUs.Roles
 
         internal override bool CheckEndCriteria(ShipStatus __instance)
         {
-            
+            var players = PlayerControl.AllPlayerControls.ToArray().Where(x => !x.Data.IsDead && !x.Data.Disconnected);
 
-            if (PlayerControl.AllPlayerControls.ToArray().Count(x => !x.Data.IsDead && !x.Data.Disconnected) == 0)
+            if (players.Count() == 0)
             {
                 var writer = AmongUsClient.Instance.StartRpcImmediately(
                     PlayerControl.LocalPlayer.NetId,
@@ -49,23 +49,20 @@ namespace TownOfUs.Roles
                     SendOption.Reliable,
                     -1
                 );
-                writer.Write(Player.PlayerId);
                 Wins();
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 Utils.EndGame();
                 return false;
-
             }
 
             if (IgniteUsed || Player.Data.IsDead) return true;
             
-            return !CustomGameOptions.ArsonistGameEnd;
+            return !(CustomGameOptions.ArsonistGameEnd && players.Any(player => player.Data.IsImpostor || player.Is(RoleEnum.Glitch)));
         }
 
 
         public void Wins()
         {
-            //System.Console.WriteLine("Reached Here - Glitch Edition");
             ArsonistWins = true;
         }
         public void Loses()

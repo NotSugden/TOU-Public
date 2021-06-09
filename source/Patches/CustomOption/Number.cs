@@ -1,4 +1,4 @@
-// This folder is a Stripped down version of Reactor-Essentials
+﻿// This folder is a Stripped down version of Reactor-Essentials
 // Please use https://github.com/DorCoMaNdO/Reactor-Essentials because it is more updated and less buggy
 
 using System;
@@ -35,12 +35,14 @@ namespace TownOfUs.CustomOption
 
         protected internal void Increase()
         {
-            Set(Mathf.Clamp(Get() + Increment, Min, Max));
+            var increment = Input.GetKeyInt(KeyCode.LeftShift) ? 1 : Increment;
+            Set(Mathf.Clamp(Get() + increment, Min, Max));
         }
         
         protected internal void Decrease()
         {
-            Set(Mathf.Clamp(Get() - Increment, Min, Max));
+            var increment = Increment > 1 && Input.GetKeyInt(KeyCode.LeftShift) ? 1 : Increment;
+            Set(Mathf.Clamp(Get() - increment, Min, Max));
         }
         
         public override void OptionCreated()

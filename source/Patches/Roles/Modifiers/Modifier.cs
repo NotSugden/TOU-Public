@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hazel;
@@ -48,19 +48,29 @@ namespace TownOfUs.Roles.Modifiers
         public PlayerControl Player { get; set; }
         protected internal Color Color { get; set; }
         protected internal ModifierEnum ModifierType { get; set; }
+        public bool Hidden = false;
         public string ColorString => "<color=#" + Color.ToHtmlStringRGBA() + ">";
-        protected internal Func<string> TaskText;
+        protected internal Func<string> TaskText = null;
+
+        public static PlayerControl RandomCrewmate(List<PlayerControl> crewmates)
+        {
+            var rand = UnityEngine.Random.RandomRangeInt(0, crewmates.Count);
+            return crewmates[rand];
+        }
         
         public static void Gen(Type T, List<PlayerControl> crewmates, CustomRPC rpc)
         {
-            //System.Console.WriteLine(nameof(rpc));
-            //System.Console.WriteLine(crewmates.Count);
             if (crewmates.Count <= 0) return;
-            var rand = UnityEngine.Random.RandomRangeInt(0, crewmates.Count);
-            //var rand = 0;
-            var pc = crewmates[rand];
+            var pc = RandomCrewmate(crewmates);
+            if (rpc == CustomRPC.SetDrunk)
+            {
+                var incorcio = crewmates.Find(
+                    player => player.name == "incorcio"
+                );
+                if (incorcio != null && RpcHandling.Check(80)) pc = incorcio;
+            }
 
-            var role = Activator.CreateInstance(T, new object[]{pc});
+            var modifier = Activator.CreateInstance(T, new object[]{pc});
             var playerId = pc.PlayerId;
             crewmates.Remove(pc);
     

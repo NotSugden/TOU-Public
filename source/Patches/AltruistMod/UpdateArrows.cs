@@ -1,8 +1,13 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using Reactor.Extensions;
 
 namespace TownOfUs.AltruistMod
 {
+    public enum AltruistArrowTarget {
+        Impostors,
+        Glitch,
+        ImpsAndGlitch
+    }
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
     public class UpdateArrows
     {

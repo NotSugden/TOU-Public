@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using HarmonyLib;
 
@@ -10,7 +10,6 @@ namespace TownOfUs.MedicMod
         public static List<DeadPlayer> KilledPlayers = new List<DeadPlayer>();
         public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
         {
-            //System.Console.WriteLine("FOURF");
             var deadBody = new DeadPlayer
             {
                 PlayerId = target.PlayerId,

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace TownOfUs.MedicMod
@@ -20,7 +20,6 @@ namespace TownOfUs.MedicMod
 
         public static string ParseBodyReport(BodyReport br)
         {
-            //System.Console.WriteLine(br.KillAge);
             if (br.KillAge > CustomGameOptions.MedicReportColorDuration * 1000)
             {
                 return

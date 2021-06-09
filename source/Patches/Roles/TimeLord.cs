@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace TownOfUs.Roles
@@ -46,7 +46,7 @@ namespace TownOfUs.Roles
 
         public float GetCooldown()
         {
-            return TimeLordMod.RecordRewind.rewinding ? CustomGameOptions.RewindDuration : CustomGameOptions.SheriffKillCd;
+            return TimeLordMod.RecordRewind.rewinding ? CustomGameOptions.RewindDuration : CustomGameOptions.RewindCooldown;
         }
     }
 }

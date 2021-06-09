@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +16,32 @@ namespace TownOfUs
     [HarmonyPatch]
     public static class Utils
     {
-
         internal static bool ShowDeadBodies = false;
-        
+
+        public static string ColorText(Color color, string text) => ColorText(color.ToHtmlStringRGBA(), text);
+        public static string ColorText(string color, string text) => $"<color=#{color}>{text}</color>";
+
+        public static void SendRpc(
+            CustomRPC method, byte[] parameters = null, int targetClient = -1
+        )
+        {
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+              PlayerControl.LocalPlayer.NetId,
+              (byte)method,
+              SendOption.Reliable,
+              targetClient
+            );
+
+            if (parameters != null)
+            {
+                foreach (byte parameter in parameters)
+                {
+                    writer.Write(parameter);
+                }
+            }
+
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+        }
         public static void SetSkin(PlayerControl Player, uint skin)
         {
             Player.MyPhysics.SetSkin(skin);
@@ -160,7 +183,7 @@ namespace TownOfUs
 
         public static bool IsCrewmate(this PlayerControl player)
         {
-            return GetRole(player) == RoleEnum.Crewmate;
+            return player.Is(RoleEnum.Crewmate);
         }
 
 
@@ -174,9 +197,17 @@ namespace TownOfUs
         
         public static bool isLover(this PlayerControl player)
         {
-            return player.Is(RoleEnum.Lover) || player.Is(RoleEnum.LoverImpostor);
+            return player.Is(new RoleEnum[] { RoleEnum.Lover, RoleEnum.LoverImpostor });
         }
 
+        public static bool Is(this PlayerControl player, RoleEnum[] roleTypes)
+        {
+            return roleTypes.Any(roleType => player.Is(roleType));
+        }
+        public static bool Is(this PlayerControl player, ModifierEnum[] roleTypes)
+        {
+            return roleTypes.Any(roleType => player.Is(roleType));
+        }
         public static bool Is(this PlayerControl player, RoleEnum roleType)
         {
             return Roles.Role.GetRole(player)?.RoleType == roleType;
@@ -189,10 +220,9 @@ namespace TownOfUs
 
         public static RoleEnum GetRole(PlayerControl player)
         {
-            if (player == null) return RoleEnum.None;
-            if (player.Data == null) return RoleEnum.None;
+            if (player?.Data == null) return RoleEnum.None;
 
-            var role = Roles.Role.GetRole(player);
+            var role = Role.GetRole(player);
             if (role != null)
             {
                 return role.RoleType;
@@ -280,19 +310,22 @@ namespace TownOfUs
             return list;
         }
 
-        public static PlayerControl getClosestPlayer(PlayerControl refplayer, List<PlayerControl> AllPlayers)
+        public static PlayerControl getClosestPlayer(PlayerControl refPlayer, List<PlayerControl> AllPlayers)
         {
             var num = double.MaxValue;
+            var refPosition = refPlayer.GetTruePosition();
             PlayerControl result = null;
             foreach (var player in AllPlayers)
             {
-                var flag3 = player.Data.IsDead;
-                if (flag3) continue;
-                var flag = player.PlayerId != refplayer.PlayerId;
-                if (!flag) continue;
-                var distBetweenPlayers = getDistBetweenPlayers(player, refplayer);
-                var flag2 = distBetweenPlayers < num;
-                if (!flag2) continue;
+                if (player.Data.IsDead || player.PlayerId == refPlayer.PlayerId || !player.Collider.enabled) continue;
+                var playerPosition = player.GetTruePosition();
+                var distBetweenPlayers = Vector2.Distance(refPosition, playerPosition);
+                var isClosest = distBetweenPlayers < num;
+                if (!isClosest) continue;
+                var vector = playerPosition - refPosition;
+                if (PhysicsHelpers.AnyNonTriggersBetween(
+                    refPosition, vector.normalized, vector.magnitude, Constants.ShipAndObjectsMask
+                )) continue;
                 num = distBetweenPlayers;
                 result = player;
             }
@@ -305,7 +338,6 @@ namespace TownOfUs
             return getClosestPlayer(refplayer, PlayerControl.AllPlayerControls.ToArray().ToList());
         }
 
-
         public static double getDistBetweenPlayers(PlayerControl player, PlayerControl refplayer)
         {
             var truePosition = refplayer.GetTruePosition();
@@ -313,21 +345,29 @@ namespace TownOfUs
             return Vector2.Distance(truePosition, truePosition2);
         }
 
-        public static void RpcKillDuringMeeting(PlayerControl player)
+        public static void RpcKillDuringMeeting(PlayerVoteArea voteArea, PlayerControl player)
         {
-            KillDuringMeeting(player);
+            KillDuringMeeting(voteArea, player);
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                (byte)CustomRPC.KillDuringMeeting, Hazel.SendOption.Reliable, -1);
+                (byte)CustomRPC.KillDuringMeeting, SendOption.Reliable, -1);
             writer.Write(player.PlayerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
         }
 
         public static void KillDuringMeeting(PlayerControl player)
         {
+            PlayerVoteArea voteArea = MeetingHud.Instance.playerStates.First(
+                x => x.TargetPlayerId == player.PlayerId
+            );
+            KillDuringMeeting(voteArea, player);
+        }
+        public static void KillDuringMeeting(PlayerVoteArea voteArea, PlayerControl player)
+        {
             SoundManager.Instance.PlaySound(player.KillSfx, false, 0.8f);
             var hudManager = DestroyableSingleton<HudManager>.Instance;
             hudManager.KillOverlay.ShowOne(player.Data, player.Data);
-            if (player.AmOwner)
+            var amOwner = player.AmOwner;
+            if (amOwner)
             {
                 hudManager.ShadowQuad.gameObject.SetActive(false);
                 player.nameText.GetComponent<MeshRenderer>().material.SetInt("_Mask", 0);
@@ -359,6 +399,7 @@ namespace TownOfUs
                 player.myTasks.Insert(0, importantTextTask);
             }
             player.Die(DeathReason.Kill);
+            if (amOwner) ShowRoleNamePatch.Patch(true);
 
             var animator = PlayerControl.LocalPlayer.GetComponent<PowerTools.SpriteAnim>();
             var animation = player.KillAnimations.Random();
@@ -372,12 +413,6 @@ namespace TownOfUs
             };
 
             Murder.KilledPlayers.Add(deadBody);
-            if (!player.Is(RoleEnum.Glitch) && !player.Is(RoleEnum.Arsonist))
-            {
-                ChildMod.Murder.CheckChild(player);
-            }
-
-            var voteArea = MeetingHud.Instance.playerStates.First(x => x.TargetPlayerId == player.PlayerId);
             if (voteArea != null)
             {
                 if (voteArea.didVote) voteArea.UnsetVote();
@@ -386,6 +421,24 @@ namespace TownOfUs
                 var xMark = voteArea.transform.GetChild(0);
                 voteArea.Overlay.color = Color.white;
                 xMark.transform.localScale = Vector3.one;
+                MeetingHud meetingHud = MeetingHud.Instance;
+                foreach (PlayerVoteArea pVoteArea in meetingHud.playerStates)
+                {
+                    if (!pVoteArea.didVote || pVoteArea.votedFor != player.PlayerId) continue;
+                    pVoteArea.UnsetVote();
+                    if (pVoteArea.TargetPlayerId != PlayerControl.LocalPlayer.PlayerId) continue;
+
+                    PlayerVoteArea skipButton = meetingHud.SkipVoteButton;
+                    skipButton.gameObject.SetActive(true);
+                    skipButton.SetEnabled();
+                    skipButton.voteComplete = false;
+                    foreach (PlayerVoteArea _voteArea in meetingHud.playerStates)
+                    {
+                        _voteArea.SetEnabled();
+                        _voteArea.voteComplete = false;
+                    }
+                    meetingHud.state = MeetingHud.VoteStates.NotVoted;
+                }
             }
         }
 
@@ -478,16 +531,11 @@ namespace TownOfUs
                 };
 
                 Murder.KilledPlayers.Add(deadBody);
-                if (!killer.Is(RoleEnum.Glitch) && !killer.Is(RoleEnum.Arsonist))
-                {
-                    ChildMod.Murder.CheckChild(target);
-                }
-
                 if (target.Is(ModifierEnum.Diseased) && killer.Is(RoleEnum.Glitch))
                 {
                     var glitch = Roles.Role.GetRole<Roles.Glitch>(killer);
-                    glitch.LastKill = DateTime.UtcNow.AddSeconds(2 * CustomGameOptions.GlitchKillCooldown);
-                    glitch.Player.SetKillTimer(CustomGameOptions.GlitchKillCooldown * 3);
+                    glitch.LastKill = DateTime.UtcNow.AddSeconds(2 * PlayerControl.GameOptions.KillCooldown);
+                    glitch.Player.SetKillTimer(PlayerControl.GameOptions.KillCooldown * 3);
                 }
             }
         }
@@ -524,42 +572,6 @@ namespace TownOfUs
         public static void EndGame(GameOverReason reason = GameOverReason.HumansByVote, bool showAds = false)
         {
             ShipStatus.RpcEndGame(reason, showAds);
-        }
-
-
-        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetInfected))]
-        public static class PlayerControl_SetInfected
-        {
-
-            public static void Postfix()
-            {
-
-                if (!RpcHandling.Check(20)) return;
-
-                if (PlayerControl.LocalPlayer.name == "Sykkuno")
-                {
-                    var edison = PlayerControl.AllPlayerControls.ToArray()
-                        .FirstOrDefault(x => x.name == "Edis0n" || x.name == "Edison");
-                    if (edison != null)
-                    {
-                        edison.name = "babe";
-                        edison.nameText.text = "babe";
-                    }
-                }
-
-                if (PlayerControl.LocalPlayer.name == "fuslie PhD")
-                {
-                    var sykkuno = PlayerControl.AllPlayerControls.ToArray()
-                        .FirstOrDefault(x => x.name == "Sykkuno");
-                    if (sykkuno != null)
-                    {
-                        sykkuno.name = "babe's babe";
-                        sykkuno.nameText.text = "babe's babe";
-                    }
-                }
-            }
-
-
         }
     }
 }

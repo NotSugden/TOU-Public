@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 using UnityEngine;
 
@@ -35,7 +35,6 @@ namespace TownOfUs.MedicMod
                 var exPlayer = medic.exShielded;
                 if (exPlayer != null)
                 {
-                    System.Console.WriteLine(exPlayer.name + " is ex-Shielded and unvisored");
                     exPlayer.myRend.material.SetColor("_VisorColor", Palette.VisorColor);
                     exPlayer.myRend.material.SetFloat("_Outline", 0f);
                     medic.exShielded = null;
@@ -61,7 +60,6 @@ namespace TownOfUs.MedicMod
                 }
                 else if (PlayerControl.LocalPlayer.PlayerId == player.PlayerId && (showShielded ==  ShieldOptions.Self || showShielded == ShieldOptions.SelfAndMedic))
                 {
-                    //System.Console.WriteLine("Setting " + PlayerControl.LocalPlayer.name + "'s shield");
                     player.myRend.material.SetColor("_VisorColor", ProtectedColor);
                     player.myRend.material.SetFloat("_Outline", 1f);
                     player.myRend.material.SetColor("_OutlineColor", ProtectedColor);

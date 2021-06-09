@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
@@ -70,8 +70,6 @@ namespace TownOfUs.TimeLordMod
                     Minigame.Instance.Close();
                 } catch {}
             }
-            //System.Console.WriteLine("Rewinding...");
-            //System.Console.Write(points.Count);
 
             if (points.Count > 2)
             {

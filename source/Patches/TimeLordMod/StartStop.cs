@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace TownOfUs.TimeLordMod
@@ -9,7 +9,6 @@ namespace TownOfUs.TimeLordMod
 
         public static void StartRewind(Roles.TimeLord role)
         {
-            //System.Console.WriteLine("START...");
             RecordRewind.rewinding = true;
             RecordRewind.whoIsRewinding = role;
             PlayerControl.LocalPlayer.moveable = false;
@@ -22,7 +21,6 @@ namespace TownOfUs.TimeLordMod
         
         public static void StopRewind(Roles.TimeLord role)
         {
-            //System.Console.WriteLine("STOP...");
             role.FinishRewind = DateTime.UtcNow;
             RecordRewind.rewinding = false;
             PlayerControl.LocalPlayer.moveable = true;

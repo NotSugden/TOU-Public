@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -87,7 +87,6 @@ namespace TownOfUs.Roles
 
         public void Wins()
         {
-            //System.Console.WriteLine("Reached Here - Glitch Edition");
             GlitchWins = true;
         }
 
@@ -295,7 +294,6 @@ namespace TownOfUs.Roles
                         AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Ended)
                     {
                         PlayerControl.LocalPlayer.myTasks.Remove(mimicText);
-                        //System.Console.WriteLine("Unsetting mimic");
                         __instance.LastMimic = DateTime.UtcNow;
                         __instance.IsUsingMimic = false;
                         __instance.MimicTarget = null;
@@ -321,28 +319,14 @@ namespace TownOfUs.Roles
 
         public void Update(HudManager __instance)
         {
-            if (!this.Player.Data.IsDead)
+            if (!Player.Data.IsDead)
             {
-                this.ClosestPlayer = Utils.getClosestPlayer(this.Player);
+                ClosestPlayer = Utils.getClosestPlayer(Player);
 
-                if (this.ClosestPlayer != null && this.Player != null)
-                    DistClosest = Utils.getDistBetweenPlayers(this.Player, this.ClosestPlayer);
+                if (ClosestPlayer != null && Player != null)
+                    DistClosest = Utils.getDistBetweenPlayers(Player, ClosestPlayer);
             }
-
-            Player.nameText.color = Color;
-
-            if (MeetingHud.Instance != null)
-                foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
-                    if (player.NameText != null && this.Player.PlayerId == player.TargetPlayerId)
-                        player.NameText.color = Color;
-
-            if (HudManager.Instance != null && HudManager.Instance.Chat != null)
-                foreach (var bubble in HudManager.Instance.Chat.chatBubPool.activeChildren)
-                    if (bubble.Cast<ChatBubble>().NameText != null &&
-                        this.Player.Data.PlayerName == bubble.Cast<ChatBubble>().NameText.text)
-                        bubble.Cast<ChatBubble>().NameText.color = Color;
-
-            this.FixedUpdate(__instance);
+            FixedUpdate(__instance);
         }
 
         public bool lastMouse = false;
@@ -432,9 +416,9 @@ namespace TownOfUs.Roles
                 __instance.KillButton.gameObject.SetActive(__instance.UseButton.isActiveAndEnabled &&
                                                            !__gInstance.Player.Data.IsDead);
                 __instance.KillButton.SetCoolDown(
-                    CustomGameOptions.GlitchKillCooldown -
+                    PlayerControl.GameOptions.KillCooldown -
                     (float) (DateTime.UtcNow - __gInstance.LastKill).TotalSeconds,
-                    CustomGameOptions.GlitchKillCooldown);
+                    PlayerControl.GameOptions.KillCooldown);
 
                 __instance.KillButton.SetTarget(null);
                 __gInstance.KillTarget = null;
@@ -474,7 +458,7 @@ namespace TownOfUs.Roles
                     }
 
                     __gInstance.LastKill = DateTime.UtcNow;
-                    __gInstance.Player.SetKillTimer(CustomGameOptions.GlitchKillCooldown);
+                    __gInstance.Player.SetKillTimer(PlayerControl.GameOptions.KillCooldown);
                     Utils.RpcMurderPlayer(__gInstance.Player, __gInstance.KillTarget);
                 }
             }
@@ -539,7 +523,6 @@ namespace TownOfUs.Roles
                     }
 
                     __gInstance.LastHack = DateTime.UtcNow;
-                    //System.Console.WriteLine("Hacking " + __gInstance.HackTarget.Data.PlayerName + "...");
                     __gInstance.RpcSetHacked(__gInstance.HackTarget);
                 }
             }
@@ -633,7 +616,6 @@ namespace TownOfUs.Roles
                     {
                         bool oldDead = player.Data.IsDead;
                         player.Data.IsDead = false;
-                        //System.Console.WriteLine(player.PlayerId);
                         __gInstance.MimicList.AddChat(player, "Click here");
                         player.Data.IsDead = oldDead;
                     }

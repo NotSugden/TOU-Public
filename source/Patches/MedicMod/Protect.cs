@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using Hazel;
 
 namespace TownOfUs.MedicMod
@@ -15,7 +15,10 @@ namespace TownOfUs.MedicMod
             if (!PlayerControl.LocalPlayer.CanMove) return false;
             if (PlayerControl.LocalPlayer.Data.IsDead) return false;
             if (role.UsedAbility) return false;
-            
+            var distBetweenPlayers = Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer);
+            var isCloseEnough = distBetweenPlayers < (double)GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance];
+            if (!isCloseEnough) return false;
+
             var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
                 (byte) CustomRPC.Protect, SendOption.Reliable, -1);
             writer.Write(PlayerControl.LocalPlayer.PlayerId);

@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 using Il2CppSystem.Collections.Generic;
 using TownOfUs.Roles;
@@ -62,12 +62,6 @@ namespace TownOfUs
                 foreach(var win in winners) TempData.winners.Add(win);
                 return;
             }
-            var child = Role.AllRoles.FirstOrDefault(x => x.RoleType == RoleEnum.Child && ((Child) x).Dead);
-            if (child != null)
-            {
-                TempData.winners = new List<WinningPlayerData>();
-                return;
-            }
 
             var glitch = Role.AllRoles.FirstOrDefault(x => x.RoleType == RoleEnum.Glitch && ((Glitch) x).GlitchWins);
             if (glitch != null)
@@ -86,10 +80,16 @@ namespace TownOfUs
                 TempData.winners = new List<WinningPlayerData>();
                 foreach(var win in winners) TempData.winners.Add(win);
                 return;
-                
             }
 
-
+            var phantom = Role.AllRoles.FirstOrDefault(x => x.RoleType == RoleEnum.Phantom && ((Phantom) x).CompletedTasks);
+            if (phantom != null)
+            {
+                var winners = Utils.potentialWinners.Where(x => x.Name == phantom.PlayerName).ToList();
+                TempData.winners = new List<WinningPlayerData>();
+                foreach (var win in winners) TempData.winners.Add(win);
+                return;
+            }
         }
     }
 }

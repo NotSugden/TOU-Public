@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -205,19 +205,16 @@ namespace TownOfUs.MayorMod
         private static void Vote(MeetingHud __instance, PlayerVoteArea area2, int num,
             Component origin, bool isMayor = false)
         {
-            ////System.Console.WriteLine(PlayerControl.GameOptions.AnonymousVotes);
             var playerById = GameData.Instance.GetPlayerById((byte) area2.TargetPlayerId);
             var renderer =
                 UnityEngine.Object.Instantiate(__instance.PlayerVotePrefab);
             if (PlayerControl.GameOptions.AnonymousVotes || CustomGameOptions.MayorAnonymous && isMayor
             ) //Should be AnonymousVotes but weird
             {
-                //System.Console.WriteLine("ANONS");
                 PlayerControl.SetPlayerMaterialColors(Palette.DisabledGrey, renderer);
             }
             else
             {
-                //System.Console.WriteLine("NONANONS");
                 PlayerControl.SetPlayerMaterialColors(playerById.ColorId, renderer);
             }
 

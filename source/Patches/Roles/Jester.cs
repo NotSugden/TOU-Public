@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using Hazel;
 using Il2CppSystem.Collections.Generic;
 using UnityEngine;
@@ -26,7 +26,6 @@ namespace TownOfUs.Roles
 
         public void Wins()
         {
-            //System.Console.WriteLine("Reached Here - Jester edition");
             VotedOut = true;
         }
 
