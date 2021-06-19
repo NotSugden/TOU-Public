@@ -5,9 +5,6 @@ using HarmonyLib;
 using Hazel;
 using Il2CppSystem.Collections.Generic;
 using Reactor.Extensions;
-using Reactor.Net;
-using TownOfUs.JesterMod;
-using TownOfUs.LoversMod;
 using TownOfUs.Roles;
 using TownOfUs.Roles.Modifiers;
 using UnityEngine;
@@ -215,6 +212,7 @@ namespace TownOfUs.ShifterMod
                 case RoleEnum.Glitch:
                 case RoleEnum.Shifter:
                 case RoleEnum.Assassin:
+                case RoleEnum.Undertaker:
                     shifter.Data.IsImpostor = true;
                     shifter.MurderPlayer(shifter);
                     shifter.Data.IsImpostor = false;

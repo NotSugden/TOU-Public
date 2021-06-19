@@ -40,11 +40,9 @@ namespace TownOfUs.MorphlingMod
             {
                 role.MorphButton.SetCoolDown(0f, 1f);
                 var closestPlayer = role.closestPlayer = Utils.getClosestPlayer(PlayerControl.LocalPlayer);
-                // var distance = 
-                // var flag9 = distance < ;
                 if (
                     closestPlayer == null || (
-                        Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.closestPlayer) < GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance]
+                        Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, closestPlayer) > GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance]
                     )
                 )
                 {

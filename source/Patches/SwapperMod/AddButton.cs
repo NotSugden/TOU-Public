@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
-using Reactor;
 using TownOfUs.Roles;
 using UnityEngine;
 using UnityEngine.UI;
-using Debug = System.Diagnostics.Debug;
 using Object = UnityEngine.Object;
 
 namespace TownOfUs.SwapperMod
@@ -37,7 +34,7 @@ namespace TownOfUs.SwapperMod
             var passive = newButton.GetComponent<PassiveButton>();
 
             renderer.sprite = DisabledSprite;
-            newButton.transform.position = confirmButton.transform.position - new Vector3(0.5f, 0f, 0f);
+            newButton.transform.position = confirmButton.transform.position - new Vector3(0.25f, 0f, 0f);
             newButton.transform.localScale *= 0.8f;
             newButton.layer = 5;
             newButton.transform.parent = confirmButton.transform.parent.parent;
@@ -46,7 +43,6 @@ namespace TownOfUs.SwapperMod
             passive.OnClick.AddListener(SetActive(role, index));
             role.Buttons.Add(newButton);
             role.ListOfActives.Add(false);
-
         }
 
 
@@ -84,7 +80,7 @@ namespace TownOfUs.SwapperMod
             var swapperrole = Role.GetRole<Swapper>(PlayerControl.LocalPlayer);
             for (var i = 0;i < __instance.playerStates.Length;i++)
             {
-                GenButton(swapperrole, i, __instance.playerStates[i].isDead);
+                GenButton(swapperrole, i, __instance.playerStates[i].AmDead);
             }
         }
     }

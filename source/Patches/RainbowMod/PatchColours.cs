@@ -9,57 +9,24 @@ namespace TownOfUs.RainbowMod
     {
         public static bool Prefix(ref string __result, [HarmonyArgument(0)] StringNames name)
         {
-            switch ((int)name)
+            var newResult = (int)name switch
             {
-                case 999991:
-                    __result = "MELON";
-                    return false;
-                case 999992:
-                    __result = "CHOCO";
-                    return false;
-                case 999993:
-                    __result = "LTBL";
-                    return false;
-                case 999994:
-                    __result = "BEIGE";
-                    return false;
-                case 999995:
-                    __result = "LTPNK";
-                    return false;
-                case 999996:
-                    __result = "TURQ";
-                    return false;
-                case 999997:
-                    __result = "RNBW";
-                    return false;
-                case 999981:
-                    __result = "Watermelon";
-                    return false;
-                case 999982:
-                    __result = "Chocolate";
-                    return false;
-                case 999983:
-                    __result = "Sky Blue";
-                    return false;
-                case 999984:
-                    __result = "Beige";
-                    return false;
-                case 999985:
-                    __result = "Hot Pink";
-                    return false;
-                case 999986:
-                    __result = "Turquoise";
-                    return false;
-                case 999987:
-                    __result = "Rainbow";
-                    return false;
-                case 999989:
-                    __result = "Lilac";
-                    return false;
-                case 999999:
-                    __result = "LILAC";
-                    return false;
-
+                999990 => "Watermelon",
+                999991 => "Chocolate",
+                999992 => "Sky Blue",
+                999993 => "Beige",
+                999994 => "Hot Pink",
+                999995 => "Turquoise",
+                999996 => "Lilac",
+                //999997 => "Galaxy",
+                //999998 => "Fire",
+                999999 => "Rainbow",
+                _ => null
+            };
+            if (newResult != null)
+            {
+                __result = newResult;
+                return false;
             }
 
             return true;

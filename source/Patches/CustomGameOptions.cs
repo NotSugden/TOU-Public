@@ -50,6 +50,7 @@ namespace TownOfUs
         public static int MinerOn => (int)Generate.MinerOn.Get();
         public static int SwooperOn => (int)Generate.SwooperOn.Get();
         public static int AssassinOn => (int)Generate.AssassinOn.Get();
+        public static int UndertakerOn => (int)Generate.UndertakerOn.Get();
         public static int ArsonistOn => (int)Generate.ArsonistOn.Get();
         public static int PhantomOn => (int)Generate.PhantomOn.Get();
         public static int AltruistOn => (int)Generate.AltruistOn.Get();
@@ -70,7 +71,6 @@ namespace TownOfUs
         public static bool SheriffKillsJester => Generate.SheriffKillsJester.Get();
         public static bool SheriffKillsArsonist => Generate.SheriffKillsArsonist.Get();
         public static int MayorVoteBank => (int)Generate.MayorVoteBank.Get();
-        public static bool MayorAnonymous => Generate.MayorAnonymous.Get();
         public static float ShifterCd => Generate.ShifterCd.Get();
 
         public static ShifterMod.ShiftEnum WhoShifts =>
@@ -86,7 +86,6 @@ namespace TownOfUs
         public static float RewindDuration => Generate.RewindDuration.Get();
         public static float RewindCooldown => Generate.RewindCooldown.Get();
         public static bool TimeLordVitals => Generate.TimeLordVitals.Get();
-
 
         public static MedicMod.ShieldOptions ShowShielded => (MedicMod.ShieldOptions)Generate.ShowShielded.Get();
 
@@ -128,6 +127,8 @@ namespace TownOfUs
         public static float MineCd => Generate.MineCooldown.Get();
         public static float SwoopCd => Generate.SwoopCooldown.Get();
         public static float SwoopDuration => Generate.SwoopDuration.Get();
+
+        public static float DragCooldown => Generate.DragCooldown.Get();
 
         public static bool ImpostorSeeRoles => Generate.ImpostorSeeRoles.Get();
         public static bool DeadSeeRoles => Generate.DeadSeeRoles.Get();

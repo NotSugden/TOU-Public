@@ -16,13 +16,13 @@ namespace TownOfUs.JanitorMod
         {
             if (role.CurrentTarget && role.CurrentTarget != target)
             {
-                role.CurrentTarget.GetComponent<SpriteRenderer>().material.SetFloat("_Outline", 0f);
+                role.CurrentTarget.bodyRenderer.material.SetFloat("_Outline", 0f);
             }
 
             role.CurrentTarget = target;
-            if (role.CurrentTarget && __instance.enabled)
+            if (target && __instance.enabled)
             {
-                var component = role.CurrentTarget.GetComponent<SpriteRenderer>();
+                var component = target.bodyRenderer;
                 component.material.SetFloat("_Outline", 1f);
                 component.material.SetColor("_OutlineColor", Color.yellow);
                 __instance.renderer.color = Palette.EnabledColor;

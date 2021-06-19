@@ -40,7 +40,7 @@ namespace TownOfUs.MedicMod
                 var closestPlayer = role.ClosestPlayer = Utils.getClosestPlayer(PlayerControl.LocalPlayer);
                 if (
                     closestPlayer == null || (
-                        Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer) < maxDistance
+                        Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer) > maxDistance
                     )
                 )
                 {

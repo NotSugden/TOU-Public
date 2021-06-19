@@ -26,6 +26,7 @@
         Morphling,
         Camouflager,
         Janitor,
+        Undertaker,
 
         Glitch,
 

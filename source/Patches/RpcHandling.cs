@@ -33,7 +33,6 @@ namespace TownOfUs
             {
 
                 byte readByte, readByte1, readByte2;
-                sbyte readSByte, readSByte2;
                 switch ((CustomRPC)callId)
                 {
                     case CustomRPC.SetMayor:
@@ -220,7 +219,7 @@ namespace TownOfUs
                     case CustomRPC.SetExtraVotes:
 
                         var mayor = Utils.PlayerById(reader.ReadByte());
-                        var mayorRole = Roles.Role.GetRole<Mayor>(mayor);
+                        var mayorRole = Role.GetRole<Mayor>(mayor);
                         mayorRole.ExtraVotes = reader.ReadBytesAndSize().ToList();
                         if (!mayor.Is(RoleEnum.Mayor))
                         {
@@ -230,12 +229,12 @@ namespace TownOfUs
                         break;
 
                     case CustomRPC.SetSwaps:
-                        readSByte = reader.ReadSByte();
+                        readByte = reader.ReadByte();
                         SwapperMod.SwapVotes.Swap1 =
-                            MeetingHud.Instance.playerStates.First(x => x.TargetPlayerId == readSByte);
-                        readSByte2 = reader.ReadSByte();
+                            MeetingHud.Instance.playerStates.First(x => x.TargetPlayerId == readByte);
+                        readByte2 = reader.ReadByte();
                         SwapperMod.SwapVotes.Swap2 =
-                            MeetingHud.Instance.playerStates.First(x => x.TargetPlayerId == readSByte2);
+                            MeetingHud.Instance.playerStates.First(x => x.TargetPlayerId == readByte2);
                         break;
 
                     case CustomRPC.Shift:
@@ -345,6 +344,9 @@ namespace TownOfUs
                     case CustomRPC.SetCamouflager:
                         new Roles.Camouflager(Utils.PlayerById(reader.ReadByte()));
                         break;
+                    case CustomRPC.SetUndertaker:
+                        new Undertaker(Utils.PlayerById(reader.ReadByte()));
+                        break;
                     case CustomRPC.Camouflage:
                         var camouflager = Utils.PlayerById(reader.ReadByte());
                         var camouflagerRole = Roles.Role.GetRole<Camouflager>(camouflager);
@@ -402,6 +404,24 @@ namespace TownOfUs
                         PhantomMod.SetPhantom.RemoveTasks(player);
                         PhantomMod.SetPhantom.AddCollider(phantom);
                         PlayerControl.LocalPlayer.MyPhysics.ResetMoveState(true);
+                        break;
+                    case CustomRPC.DragBody:
+                        var dPlayer = Utils.PlayerById(reader.ReadByte());
+                        var undertaker = Role.GetRole<Undertaker>(dPlayer);
+                        readByte = reader.ReadByte();
+                        var bodies = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+                        foreach (var deadBody in bodies)
+                        {
+                            if (deadBody.ParentId == readByte)
+                            {
+                                undertaker.CurrentlyDragging = deadBody;
+                            }
+                        }
+                        break;
+                    case CustomRPC.DropBody:
+                        var drPlayer = Utils.PlayerById(reader.ReadByte());
+                        var undertaker1 = Role.GetRole<Undertaker>(drPlayer);
+                        undertaker1.CurrentlyDragging = null;
                         break;
                     case CustomRPC.CatchPhantom:
                         var phantom_ = Role.GetRole<Phantom>(Utils.PlayerById(reader.ReadByte()));
@@ -583,6 +603,7 @@ namespace TownOfUs
                 CheckRole(CustomGameOptions.MinerOn, typeof(Miner), CustomRPC.SetMiner);
                 CheckRole(CustomGameOptions.SwooperOn, typeof(Swooper), CustomRPC.SetSwooper);
                 CheckRole(CustomGameOptions.JanitorOn, typeof(Janitor), CustomRPC.SetJanitor);
+                CheckRole(CustomGameOptions.UndertakerOn, typeof(Undertaker), CustomRPC.SetUndertaker);
                 #endregion
                 list = CrewmateModifiers;
                 #region Crewmate Modifiers
@@ -643,6 +664,11 @@ namespace TownOfUs
 
         private static void GenEachRole(List<GameData.PlayerInfo> infected)
         {
+            if (TutorialManager.InstanceExists)
+            {
+                Role.Gen(typeof(Swapper), PlayerControl.LocalPlayer, CustomRPC.SetSwapper);
+                return;
+            }
             ShuffleAndSort(CrewmateRoles);
             ShuffleAndSort(NeutralRoles);
             ShuffleAndSort(ImpostorRoles);
@@ -666,6 +692,7 @@ namespace TownOfUs
             }
 
             var crewmates = Utils.getCrewmates(infected);
+			crewmates.Shuffle();
             var impostors = Utils.getImpostors(infected);
             var impRoles = ImpostorRoles.Take(CustomGameOptions.MaxImpostorRoles);
 

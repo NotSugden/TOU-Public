@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using HarmonyLib;
-using TownOfUs.CustomHats;
+﻿using HarmonyLib;
 using UnityEngine;
-using Reactor.Extensions;
 
 namespace TownOfUs
 {
@@ -15,12 +12,12 @@ namespace TownOfUs
         public static void Postfix(PingTracker __instance)
         {
             AspectPosition position = __instance.GetComponent<AspectPosition>();
-            position.DistanceFromEdge = new Vector3(3f, 0.4f, 0);
+            position.DistanceFromEdge = new Vector3(3.25f, 0f, 0);
             position.AdjustPosition();
 
             __instance.text.text =
                 Utils.ColorText(RainbowUtils.Rainbow, $"TownOfUs v{TownOfUs.Version}\n") +
-                Utils.ColorText(Color.green, "Originally made by Slushiegoose") +
+                Utils.ColorText(Color.green, "Originally made by Slushiegoose\n") +
                 $"Custom Patch By Sugden\n" +
                 $"Ping: {AmongUsClient.Instance.Ping}ms";
 

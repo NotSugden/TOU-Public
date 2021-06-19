@@ -1,9 +1,10 @@
-﻿using System;
+﻿/*using System;
+ * TEMPORARILY DISABLED
 using System.Linq;
 using HarmonyLib;
 
 namespace TownOfUs.SpyMod
-{
+
     [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Update))]
     public class Vitals
     {
@@ -17,8 +18,9 @@ namespace TownOfUs.SpyMod
                 if (!panel.IsDead) continue;
                 var deadBody = MedicMod.Murder.KilledPlayers.First(x => x.PlayerId == info.PlayerId);
                 var num = (float)(DateTime.UtcNow - deadBody.KillTime).TotalMilliseconds;
-                panel.Text.text = Math.Round(num / 1000f) + "s";
+                panel..text = Math.Round(num / 1000f) + "s";
             }
         }
     }
 }
+*/

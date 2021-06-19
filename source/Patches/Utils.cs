@@ -18,8 +18,11 @@ namespace TownOfUs
     {
         internal static bool ShowDeadBodies = false;
 
-        public static string ColorText(Color color, string text) => ColorText(color.ToHtmlStringRGBA(), text);
-        public static string ColorText(string color, string text) => $"<color=#{color}>{text}</color>";
+        public static string ColorText(Color32 color, string text) => ColorText(
+            string.Format("{0:X2}{1:X2}{2:X2}{3:X2}", new object[] { color.r, color.g, color.b, color.a }),
+            text
+        );
+        public static string ColorText(string hex, string text) => $"<color=#{hex}>{text}</color>";
 
         public static void SendRpc(
             CustomRPC method, byte[] parameters = null, int targetClient = -1
@@ -365,7 +368,7 @@ namespace TownOfUs
         {
             SoundManager.Instance.PlaySound(player.KillSfx, false, 0.8f);
             var hudManager = DestroyableSingleton<HudManager>.Instance;
-            hudManager.KillOverlay.ShowOne(player.Data, player.Data);
+            hudManager.KillOverlay.ShowKillAnimation(player.Data, player.Data);
             var amOwner = player.AmOwner;
             if (amOwner)
             {
@@ -397,14 +400,24 @@ namespace TownOfUs
                 }
 
                 player.myTasks.Insert(0, importantTextTask);
+
+                if (player.Is(RoleEnum.Swapper))
+                {
+                    var buttons = Role.GetRole<Swapper>(player).Buttons;
+                    foreach (var button in buttons)
+                    {
+                        button.SetActive(false);
+                        button.GetComponent<PassiveButton>().OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+                    }
+                }
             }
             player.Die(DeathReason.Kill);
-            if (amOwner) ShowRoleNamePatch.Patch(true);
-
-            var animator = PlayerControl.LocalPlayer.GetComponent<PowerTools.SpriteAnim>();
-            var animation = player.KillAnimations.Random();
-            new PowerTools.WaitForAnimationFinish(animator, animation.BlurAnim);
-            animator.Play(player.MyPhysics.IdleAnim, 1f);
+            var meetingHud = MeetingHud.Instance;
+            if (amOwner)
+            {
+                meetingHud.SetForegroundForDead();
+                ShowRoleNamePatch.Patch(true);
+            }
             var deadBody = new DeadPlayer
             {
                 PlayerId = player.PlayerId,
@@ -413,33 +426,37 @@ namespace TownOfUs
             };
 
             Murder.KilledPlayers.Add(deadBody);
-            if (voteArea != null)
+            if (voteArea == null) return;
+            if (voteArea.DidVote) voteArea.UnsetVote();
+            voteArea.AmDead = true;
+            voteArea.Overlay.gameObject.SetActive(true);
+            voteArea.Overlay.color = Color.white;
+            voteArea.XMark.gameObject.SetActive(true);
+            voteArea.XMark.transform.localScale = Vector3.one;
+            var amHost = AmongUsClient.Instance.AmHost;
+            foreach (var playerVoteArea in meetingHud.playerStates)
             {
-                if (voteArea.didVote) voteArea.UnsetVote();
-                voteArea.SetDead(player.AmOwner, voteArea.didReport, true);
-                voteArea.Overlay.gameObject.SetActive(true);
-                var xMark = voteArea.transform.GetChild(0);
-                voteArea.Overlay.color = Color.white;
-                xMark.transform.localScale = Vector3.one;
-                MeetingHud meetingHud = MeetingHud.Instance;
-                foreach (PlayerVoteArea pVoteArea in meetingHud.playerStates)
+                if (!playerVoteArea.DidVote || playerVoteArea.VotedFor != player.PlayerId) return;
+                if (amHost)
                 {
-                    if (!pVoteArea.didVote || pVoteArea.votedFor != player.PlayerId) continue;
-                    pVoteArea.UnsetVote();
-                    if (pVoteArea.TargetPlayerId != PlayerControl.LocalPlayer.PlayerId) continue;
-
-                    PlayerVoteArea skipButton = meetingHud.SkipVoteButton;
-                    skipButton.gameObject.SetActive(true);
-                    skipButton.SetEnabled();
-                    skipButton.voteComplete = false;
-                    foreach (PlayerVoteArea _voteArea in meetingHud.playerStates)
-                    {
-                        _voteArea.SetEnabled();
-                        _voteArea.voteComplete = false;
-                    }
-                    meetingHud.state = MeetingHud.VoteStates.NotVoted;
+                    meetingHud.RpcClearVote(playerVoteArea.TargetPlayerId);
                 }
+                playerVoteArea.UnsetVote();
+                var voteAreaPlayer = PlayerById(playerVoteArea.TargetPlayerId);
+                if (!voteAreaPlayer.AmOwner) continue;
+                var skipButton = meetingHud.SkipVoteButton;
+                skipButton.gameObject.SetActive(true);
+                skipButton.SetEnabled();
+                skipButton.voteComplete = false;
+                foreach (var playerVoteArea2 in meetingHud.playerStates)
+                {
+                    playerVoteArea2.SetEnabled();
+                    playerVoteArea2.voteComplete = false;
+                }
+                meetingHud.state = MeetingHud.VoteStates.NotVoted;
             }
+            if (!amHost) return;
+            meetingHud.CheckForEndVoting();
         }
 
         public static void RpcMurderPlayer(PlayerControl killer, PlayerControl target, bool showBody = true)
@@ -483,9 +500,9 @@ namespace TownOfUs
                     catch
                     {
                     }
-
-                    DestroyableSingleton<HudManager>.Instance.KillOverlay.ShowOne(killer.Data, data);
-                    DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
+                    var hudManager = HudManager.Instance;
+                    hudManager.KillOverlay.ShowKillAnimation(killer.Data, data);
+                    hudManager.ShadowQuad.gameObject.SetActive(false);
                     target.nameText.GetComponent<MeshRenderer>().material.SetInt("_Mask", 0);
                     target.RpcSetScanner(false);
                     ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
@@ -535,7 +552,7 @@ namespace TownOfUs
                 if (target.Is(ModifierEnum.Diseased) && killer.Is(RoleEnum.Glitch))
                 {
                     var glitch = Roles.Role.GetRole<Roles.Glitch>(killer);
-                    glitch.LastKill = DateTime.UtcNow.AddSeconds(2 * PlayerControl.GameOptions.KillCooldown);
+                    glitch.KillTimer = PlayerControl.GameOptions.KillCooldown * 3;
                     glitch.Player.SetKillTimer(PlayerControl.GameOptions.KillCooldown * 3);
                 }
             }

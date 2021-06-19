@@ -27,6 +27,7 @@
         SetAltruist,
         SetPhantom,
         SetButtonBarry,
+        SetUndertaker,
 
         SetTorch,
         SetDiseased,
@@ -73,6 +74,8 @@
         BarryButton,
         CatchPhantom,
         ForceSetPhantom,
+        DragBody,
+        DropBody,
 
         SetGlitch,
         BypassKill,

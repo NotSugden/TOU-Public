@@ -7,7 +7,7 @@ namespace TownOfUs.SwapperMod
     {
         public static void Postfix()
         {
-            if (PlayerControl.LocalPlayer.Is(RoleEnum.Swapper))
+            if (!TutorialManager.InstanceExists && PlayerControl.LocalPlayer.Is(RoleEnum.Swapper))
             {
                 PlayerControl.LocalPlayer.RemainingEmergencies = 0;
             }
@@ -19,7 +19,7 @@ namespace TownOfUs.SwapperMod
     {
         public static void Postfix()
         {
-            if (PlayerControl.LocalPlayer.Is(RoleEnum.Swapper))
+            if (!TutorialManager.InstanceExists && PlayerControl.LocalPlayer.Is(RoleEnum.Swapper))
             {
                 PlayerControl.LocalPlayer.RemainingEmergencies = 0;
             }

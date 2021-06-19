@@ -19,7 +19,6 @@ namespace TownOfUs.PhantomMod
         [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.ResetMoveState))]
         public class ResetMoveState
         {
-            // Token: 0x06000321 RID: 801 RVA: 0x0001011C File Offset: 0x0000E31C
             public static void Postfix(PlayerPhysics __instance)
             {
                 var player = __instance.myPlayer;

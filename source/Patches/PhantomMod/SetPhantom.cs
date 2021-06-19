@@ -15,11 +15,20 @@ namespace TownOfUs.PhantomMod
             if (WillBePhantom == null) return;
             var localPlayer = PlayerControl.LocalPlayer;
             var localPlayerId = localPlayer.PlayerId;
-            if (
-                !(localPlayer.Data.IsDead || __instance.exiledPlayer?.Object?.PlayerId == localPlayerId) ||
-                localPlayerId != WillBePhantom.PlayerId ||
-                localPlayer.Is(RoleEnum.Phantom)
-            ) return;
+            var exiled = __instance.exiledPlayer?.Object?.PlayerId == localPlayerId;
+            if (exiled) localPlayer.Data.IsDead = true;
+            else if (!localPlayer.Data.IsDead) return;
+
+            if (localPlayerId != WillBePhantom.PlayerId) return;
+            Vent vent;
+            if (localPlayer.Is(RoleEnum.Phantom))
+            {
+                vent = ShipStatus.Instance.AllVents[UnityEngine.Random.RandomRangeInt(0, ShipStatus.Instance.AllVents.Count)];
+                localPlayer.NetTransform.RpcSnapTo(vent.transform.position);
+                vent.Use();
+				localPlayer.gameObject.layer = LayerMask.NameToLayer("Players");
+                return;
+            }
             Role.RoleDictionary.Remove(localPlayer.PlayerId);
             var phantom = new Phantom(PlayerControl.LocalPlayer);
             phantom.RegenTask();
@@ -33,8 +42,10 @@ namespace TownOfUs.PhantomMod
                 -1
             );
             AmongUsClient.Instance.FinishRpcImmediately(msg);
-            Vent vent = ShipStatus.Instance.AllVents[UnityEngine.Random.RandomRangeInt(0, ShipStatus.Instance.AllVents.Count)];
-            localPlayer.NetTransform.RpcSnapTo(vent.transform.position);
+            vent = ShipStatus.Instance.AllVents[UnityEngine.Random.RandomRangeInt(0, ShipStatus.Instance.AllVents.Count)];
+            localPlayer.NetTransform.RpcSnapTo(vent.transform.position + new Vector3(0f, 0.5f, 0f));
+			localPlayer.gameObject.layer = LayerMask.NameToLayer("Players");
+			localPlayer.Collider.enabled = true;
             vent.Use();
         }
 
@@ -55,7 +66,6 @@ namespace TownOfUs.PhantomMod
                 task.taskStep = 0;
                 var taskData = player.Data.FindTaskById(playerTask.Id);
                 taskData.Complete = false;
-
             }
         }
 
@@ -80,8 +90,9 @@ namespace TownOfUs.PhantomMod
         public static void AddCollider(Phantom role)
         {
             var player = role.Player;
-            var boxCollider2D = player.gameObject.AddComponent<BoxCollider2D>();
+            var boxCollider2D = player.Collider = player.gameObject.AddComponent<BoxCollider2D>();
             boxCollider2D.isTrigger = true;
+			boxCollider2D.enabled = true;
             var passiveButton = player.gameObject.AddComponent<PassiveButton>();
             passiveButton.OnClick = new Button.ButtonClickedEvent();
             passiveButton.OnMouseOut = new Button.ButtonClickedEvent();

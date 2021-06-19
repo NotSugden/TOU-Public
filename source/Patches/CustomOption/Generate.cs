@@ -40,6 +40,7 @@ namespace TownOfUs.CustomOption
         public static CustomNumberOption MinerOn;
         public static CustomNumberOption SwooperOn;
         public static CustomNumberOption AssassinOn;
+        public static CustomNumberOption UndertakerOn;
 
         public static CustomHeaderOption Modifiers;
         public static CustomNumberOption SnitchOn;
@@ -63,7 +64,6 @@ namespace TownOfUs.CustomOption
 
         public static CustomHeaderOption Mayor;
         public static CustomNumberOption MayorVoteBank;
-        public static CustomToggleOption MayorAnonymous;
 
         public static CustomHeaderOption Lovers;
         public static CustomToggleOption BothLoversDie;
@@ -129,6 +129,9 @@ namespace TownOfUs.CustomOption
         public static CustomHeaderOption Camouflager;
         public static CustomNumberOption CamouflagerCooldown;
         public static CustomNumberOption CamouflagerDuration;
+
+        public static CustomHeaderOption Undertaker;
+        public static CustomNumberOption DragCooldown;
 
         public static CustomHeaderOption Executioner;
         public static CustomStringOption OnTargetDead;
@@ -208,6 +211,7 @@ namespace TownOfUs.CustomOption
             CamouflagerOn = ImpostorOption("Camouflager");
             MinerOn = ImpostorOption("Miner");
             SwooperOn = ImpostorOption("Swooper");
+			UndertakerOn = ImpostorOption("Undertaker");
 
             Modifiers = new CustomHeaderOption(num++, "Modifiers");
             SnitchOn = PercentageOption("D4AF37FF", "Snitch");
@@ -232,7 +236,6 @@ namespace TownOfUs.CustomOption
 
             Mayor = new CustomHeaderOption(num++, Utils.ColorText("704FA8FF", "Mayor"));
             MayorVoteBank = NumberOptionMinValue("Initial Mayor Vote Bank", 1f, 1f, 5f);
-            MayorAnonymous = ToggleOption("Mayor Votes Show Anonymous", false);
 
             Lovers = new CustomHeaderOption(num++, Utils.ColorText("FF66CCFF", "Lovers"));
             BothLoversDie = ToggleOption("Both Lovers Die", true);
@@ -305,7 +308,7 @@ namespace TownOfUs.CustomOption
             ArsonistGameEnd = ToggleOption("Game keeps going so long as Arsonist and killer is alive", false);
 
             Assassin = new CustomHeaderOption(num++, "<color=#FF0000FF>Assassin</color>");
-            AssassinMaxKills = CooldownOption("Max Role Guess Kills", 2, 1, 9, 1);
+            AssassinMaxKills = NumberOption("Max Role Guess Kills", 2, 9, 1);
             AssassinCanGuessCrewmate = ToggleOption("Can Guess 'Crewmate'", false);
 
             Morphling = new CustomHeaderOption(num++, "<color=#FF0000FF>Morphling</color>");
@@ -315,6 +318,9 @@ namespace TownOfUs.CustomOption
             Camouflager = new CustomHeaderOption(num++, "<color=#FF0000FF>Camouflager</color>");
             CamouflagerCooldown = CooldownOption("Camouflager Cooldown", 25, 10, 40, 2.5f);
             CamouflagerDuration = CooldownOption("Camouflager Duration", 10, 5, 15, 1f);
+
+            Undertaker = new CustomHeaderOption(num++, "<color=#FF0000FF>Undertaker</color>");
+            DragCooldown = CooldownOption("Drag Cooldown", 25, 10, 60, 2.5f);
 
             Miner = new CustomHeaderOption(num++, "<color=#FF0000FF>Miner</color>");
             MineCooldown = CooldownOption("Mine Cooldown", 25, 10, 40, 2.5f);

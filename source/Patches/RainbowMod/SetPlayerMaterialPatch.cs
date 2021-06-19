@@ -15,7 +15,11 @@ namespace TownOfUs.RainbowMod
             }
 
             r.AddRend(rend, colorId);
-            return !RainbowUtils.IsRainbow(colorId);
+            return !(
+                RainbowUtils.IsRainbow(colorId) /*||
+                RainbowUtils.IsGalaxy(colorId) ||
+                RainbowUtils.IsFire(colorId)*/
+            );
         }
     }
 
@@ -31,7 +35,7 @@ namespace TownOfUs.RainbowMod
             }
 
             r.AddRend(rend, 0);
-            return !RainbowUtils.IsRainbow(0);
+            return true;
         }
     }
 }

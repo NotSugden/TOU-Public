@@ -58,8 +58,8 @@ namespace TownOfUs.AssassinMod
             roleGuessText.transform.position = nameText.transform.position - new Vector3(0f, 0.25f, 0f);
             roleGuessText.text = "None";
 
-            var cycleButton = makeButton(voteArea, new Vector3(0.4f, -0.15f, 0f), CycleSprite, CycleGuess(roleGuessText, index));
-            var guessButton = makeButton(voteArea, new Vector3(0.4f, 0.15f, 0f), GuessSprite, Guess(voteArea, role, index));
+            var cycleButton = makeButton(voteArea, new Vector3(0.2f, -0.15f, 0f), CycleSprite, CycleGuess(roleGuessText, index));
+            var guessButton = makeButton(voteArea, new Vector3(0.2f, 0.15f, 0f), GuessSprite, Guess(voteArea, role, index));
             role.GameObjects.Add(cycleButton);
             role.GameObjects.Add(guessButton);
             role.GameObjects.Add(roleGuessText.gameObject);
@@ -76,6 +76,7 @@ namespace TownOfUs.AssassinMod
         {
             void Listener()
             {
+                if (MeetingHud.Instance.state == MeetingHud.VoteStates.Discussion) return;
                 var guessIndex = guesses.ElementAt(index);
                 if (guessIndex == -1) return;
 
@@ -118,6 +119,7 @@ namespace TownOfUs.AssassinMod
             return Listener;
         }
 
+        [HarmonyPriority(Priority.Last)]
         public static void Postfix(MeetingHud __instance)
         {
 
@@ -140,8 +142,8 @@ namespace TownOfUs.AssassinMod
                 if (playerState.TargetPlayerId != PlayerControl.LocalPlayer.PlayerId)
                 {
                     var role = Role.GetRole(playerState);
-                    if (role?.Faction != Faction.Impostors)
-                        GenButton(assassinrole, i, playerState.isDead);
+                    if (role != null && role.Faction != Faction.Impostors)
+                        GenButton(assassinrole, i, playerState.AmDead);
                 }
             }
         }

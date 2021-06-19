@@ -9,7 +9,10 @@ namespace TownOfUs.SnitchMod
     public class CompleteTask
     {
 
-        public static Sprite Sprite => TownOfUs.Arrow;
+        public static Sprite ArrowSprite => TownOfUs.Arrow;
+		
+		public static bool CanSee(PlayerControl player) =>
+			player.Data.IsImpostor || (CustomGameOptions.SnitchCanSeeNeutrals && player.Is(RoleEnum.Glitch));
 
         public static void Postfix(PlayerControl __instance)
         {
@@ -30,17 +33,10 @@ namespace TownOfUs.SnitchMod
                     {
                         Reactor.Coroutines.Start(Utils.FlashCoroutine(modifier.Color));
                     }
-                    else if (PlayerControl.LocalPlayer.Data.IsImpostor)
+                    else if (CanSee(PlayerControl.LocalPlayer))
                     {
                         Reactor.Coroutines.Start(Utils.FlashCoroutine(modifier.Color));
-                        var gameObj = new GameObject();
-                        var arrow = gameObj.AddComponent<ArrowBehaviour>();
-                        gameObj.transform.parent = PlayerControl.LocalPlayer.gameObject.transform;
-                        var renderer = gameObj.AddComponent<SpriteRenderer>();
-                        renderer.sprite = Sprite;
-                        arrow.image = renderer;
-                        gameObj.layer = 5;
-                        modifier.ImpArrows.Add(arrow);
+                        modifier.AddImpArrow();
                     }
 
                     break;
@@ -49,27 +45,14 @@ namespace TownOfUs.SnitchMod
                     if (localIsSnitch)
                     {
                         Reactor.Coroutines.Start(Utils.FlashCoroutine(Color.green));
-                        var impostors = PlayerControl.AllPlayerControls.ToArray().Where(
-                            x => x.Data.IsImpostor || (CustomGameOptions.SnitchCanSeeNeutrals && x.Is(RoleEnum.Glitch))
-                        );
+                        var impostors = PlayerControl.AllPlayerControls.ToArray().Where(CanSee);
                         foreach (var imp in impostors)
                         {
-                            var gameObj = new GameObject();
-                            var arrow = gameObj.AddComponent<ArrowBehaviour>();
-                            gameObj.transform.parent = PlayerControl.LocalPlayer.gameObject.transform;
-                            var renderer = gameObj.AddComponent<SpriteRenderer>();
-                            renderer.sprite = Sprite;
-                            arrow.image = renderer;
-                            gameObj.layer = 5;
-                            modifier.SnitchArrows.Add(arrow);
-                            modifier.SnitchTargets.Add(imp);
+                            modifier.AddSnitchArrow(imp);
                         }
                     }
-
                     break;
-
             }
-
         }
     }
 }

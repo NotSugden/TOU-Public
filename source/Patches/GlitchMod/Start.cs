@@ -10,12 +10,13 @@ namespace TownOfUs.GlitchMod
     {
         static void Postfix(IntroCutscene __instance)
         {
-            var glitch = Role.AllRoles.FirstOrDefault(x => x.RoleType == RoleEnum.Glitch);
+            var _role = Role.AllRoles.FirstOrDefault(x => x.RoleType == RoleEnum.Glitch);
+            var glitch = _role != null ? (Glitch)_role : null;
             if (glitch != null)
             {
-                ((Glitch)glitch).LastMimic = DateTime.UtcNow;
-                ((Glitch)glitch).LastHack = DateTime.UtcNow;
-                ((Glitch)glitch).LastKill = DateTime.UtcNow.AddSeconds(15f + (PlayerControl.GameOptions.KillCooldown * -1));
+                glitch.MimicTimer = CustomGameOptions.MimicCooldown;
+                glitch.HackTimer = CustomGameOptions.HackCooldown;
+                glitch.KillTimer = 10f;
             }
         }
     }

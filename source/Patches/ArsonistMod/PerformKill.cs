@@ -53,15 +53,22 @@ namespace TownOfUs.ArsonistMod
 
         public static void Ignite(Arsonist role)
         {
-
+			var writer = AmongUsClient.Instance.StartRpcImmediately(
+                PlayerControl.LocalPlayer.NetId,
+                (byte)CustomRPC.ArsonistWin,
+                SendOption.Reliable,
+                -1
+            );
+            role.Wins();
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            Utils.EndGame();
             foreach (var playerId in role.DousedPlayers)
             {
                 var player = Utils.PlayerById(playerId);
-                if (player.Data.IsDead) continue;
-                Utils.MurderPlayer(player, player);
+                if (player?.Data == null || player.Data.IsDead) continue;
+                Utils.MurderPlayer(role.Player, player);
             }
             Utils.MurderPlayer(role.Player, role.Player);
-
 
             role.IgniteUsed = true;
         }

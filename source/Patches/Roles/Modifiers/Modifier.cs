@@ -49,7 +49,6 @@ namespace TownOfUs.Roles.Modifiers
         protected internal Color Color { get; set; }
         protected internal ModifierEnum ModifierType { get; set; }
         public bool Hidden = false;
-        public string ColorString => "<color=#" + Color.ToHtmlStringRGBA() + ">";
         protected internal Func<string> TaskText = null;
 
         public static PlayerControl RandomCrewmate(List<PlayerControl> crewmates)

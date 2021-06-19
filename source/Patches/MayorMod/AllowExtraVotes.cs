@@ -5,20 +5,20 @@ using TownOfUs.Roles;
 namespace TownOfUs.MayorMod
 {
     [HarmonyPatch(typeof(PlayerVoteArea))]
-    public class AllowExtraVotes
+    public class Allow
     {
-
-
-
         [HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.Select))]
         public static class Select
         {
             public static bool Prefix(PlayerVoteArea __instance)
             {
-                if (!PlayerControl.LocalPlayer.Is(RoleEnum.Mayor)) return true;
-                var role = Roles.Role.GetRole<Mayor>(PlayerControl.LocalPlayer);
+                if (
+                    MeetingHud.Instance.state == MeetingHud.VoteStates.Animating ||
+                    !PlayerControl.LocalPlayer.Is(RoleEnum.Mayor)
+                ) return true;
+                var role = Role.GetRole<Mayor>(PlayerControl.LocalPlayer);
                 if (PlayerControl.LocalPlayer.Data.IsDead) return false;
-                if (__instance.isDead) return false;
+                if (__instance.AmDead) return false;
                 if (!role.CanVote || !__instance.Parent.Select(__instance.TargetPlayerId)) return false;
                 __instance.Buttons.SetActive(true);
                 return false;
@@ -31,7 +31,7 @@ namespace TownOfUs.MayorMod
             public static bool Prefix(PlayerVoteArea __instance)
             {
                 if (!PlayerControl.LocalPlayer.Is(RoleEnum.Mayor)) return true;
-                var role = Roles.Role.GetRole<Mayor>(PlayerControl.LocalPlayer);
+                var role = Role.GetRole<Mayor>(PlayerControl.LocalPlayer);
                 if (__instance.Parent.state == MeetingHud.VoteStates.Proceeding ||
                     __instance.Parent.state == MeetingHud.VoteStates.Results)
                 {
@@ -52,8 +52,5 @@ namespace TownOfUs.MayorMod
                 return false;
             }
         }
-
-
-
     }
 }

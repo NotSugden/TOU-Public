@@ -50,7 +50,6 @@ namespace TownOfUs.JanitorMod
                 if (!(distance < closestDistance)) continue;
                 closestBody = component;
                 closestDistance = distance;
-
             }
 
 

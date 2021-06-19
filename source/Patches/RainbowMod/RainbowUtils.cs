@@ -12,11 +12,11 @@ public class RainbowUtils
     public static Color Rainbow => new HSBColor(PP(0, 1, 0.3f), 1, 1).ToColor();
     public static Color RainbowShadow => Shadow(Rainbow);
 
-    /*public static Color Galaxy => new HSBColor(PP(0.5f, 0.87f, 0.4f), 1, 1).ToColor();
+    public static Color Galaxy => new HSBColor(PP(0.5f, 0.87f, 0.4f), 1, 1).ToColor();
     public static Color GalaxyShadow => Shadow(Galaxy);
 
     public static Color Fire => new HSBColor(PP(0f, 0.17f, 0.4f), 1, 1).ToColor();
-    public static Color FireShadow => Shadow(Fire);*/
+    public static Color FireShadow => Shadow(Fire);
 
 
     public static float PP(float min, float max, float mul)
@@ -35,8 +35,8 @@ public class RainbowUtils
         rend.material.SetColor(BodyColor, Rainbow);
         rend.material.SetColor(VisorColor, Palette.VisorColor);
     }
-
-    /*public static void SetGalaxy(Renderer rend)
+    /*
+    public static void SetGalaxy(Renderer rend)
     {
         rend.material.SetColor(BackColor, GalaxyShadow);
         rend.material.SetColor(BodyColor, Galaxy);
@@ -54,20 +54,19 @@ public class RainbowUtils
     {
         try
         {
-            return (int)Palette.ShortColorNames[id] == 999997;
-        }
-        catch
+            return (int)Palette.ColorNames[id] == 999999;
+        } catch
         {
             return false;
         }
     }
     /*public static bool IsGalaxy(int id)
     {
-        return Palette.ShortColorNames[id] == "GLXY";
+        return (int)Palette.ShortColorNames[id] == 999997;
     }
     public static bool IsFire(int id)
     {
-        return Palette.ShortColorNames[id] == "FIRE";
+        return (int)Palette.ShortColorNames[id] == 999998;
     }*/
 }
 

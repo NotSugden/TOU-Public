@@ -39,7 +39,7 @@ namespace TownOfUs.SeerMod
                     PlayerControl.AllPlayerControls.ToArray().Where(x => !role.Investigated.Contains(x.PlayerId)).ToList());
                 if (
                     closestPlayer == null || (
-                        Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer) < maxDistance
+                        Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer) > maxDistance
                     )
                 )
                 {

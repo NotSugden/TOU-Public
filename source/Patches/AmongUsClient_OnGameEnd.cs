@@ -2,6 +2,7 @@
 using HarmonyLib;
 using Il2CppSystem.Collections.Generic;
 using TownOfUs.Roles;
+using UnityEngine;
 
 namespace TownOfUs
 {
@@ -23,7 +24,6 @@ namespace TownOfUs
     {
         public static void Prefix()
         {
-
             var jester = Role.AllRoles.FirstOrDefault(x => x.RoleType == RoleEnum.Jester && ((Jester)x).VotedOut);
             var executioner = Role.AllRoles.FirstOrDefault(x => x.RoleType == RoleEnum.Executioner && ((Executioner)x).TargetVotedOut);
             if (Role.NobodyWins)

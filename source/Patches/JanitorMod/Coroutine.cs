@@ -13,7 +13,7 @@ namespace TownOfUs.JanitorMod
         {
             KillButtonTarget.SetTarget(DestroyableSingleton<HudManager>.Instance.KillButton, null, role);
             role.Player.SetKillTimer(PlayerControl.GameOptions.KillCooldown);
-            var renderer = body.GetComponent<SpriteRenderer>();
+            var renderer = body.bodyRenderer;
             var backColor = renderer.material.GetColor(BackColor);
             var bodyColor = renderer.material.GetColor(BodyColor);
             var newColor = new Color(1f, 1f, 1f, 0f);

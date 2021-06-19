@@ -15,7 +15,7 @@ namespace TownOfUs.PhantomMod
             var role = Role.AllRoles.FirstOrDefault(x => x.RoleType == RoleEnum.Phantom && ((Phantom)x).CompletedTasks);
             if (role == null) return;
             var array = UnityEngine.Object.FindObjectsOfType<PoolablePlayer>();
-            array[0].NameText.text = role.ColorString + array[0].NameText.text + "</color>";
+            array[0].NameText.text = Utils.ColorText(role.Color, array[0].NameText.text);
             __instance.BackgroundBar.material.color = role.Color;
             var textMeshPro = UnityEngine.Object.Instantiate(__instance.WinText);
             textMeshPro.text = "Phantom wins";

@@ -14,7 +14,7 @@ namespace TownOfUs.SheriffMod
             foreach (var role in Roles.Role.GetRoles(RoleEnum.Sheriff))
             {
                 var sheriff = (Roles.Sheriff)role;
-                sheriff.LastKilled = DateTime.UtcNow;
+                sheriff.KillTimer = PlayerControl.GameOptions.KillCooldown;
             }
 
         }

@@ -7,7 +7,6 @@ namespace TownOfUs
     [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
     public static class VersionShowerUpdate
     {
-
         public static void Postfix(VersionShower __instance)
         {
             var text = __instance.text;

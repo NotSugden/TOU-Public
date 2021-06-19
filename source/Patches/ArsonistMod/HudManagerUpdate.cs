@@ -69,7 +69,7 @@ namespace TownOfUs.ArsonistMod
             );
             if (
                 closestPlayer == null || (
-                    Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.closestPlayer) < GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance]
+                    Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.closestPlayer) > GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance]
                 )
             )
             {

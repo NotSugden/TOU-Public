@@ -22,7 +22,7 @@ namespace TownOfUs.Roles
             yourTeam = loverTeam;
         }
 
-        protected override bool Criteria()
+        public override bool Criteria()
         {
             return base.Criteria() || GetRole(PlayerControl.LocalPlayer) == OtherLover;
         }
@@ -174,7 +174,7 @@ namespace TownOfUs.Roles
         {
             var imp = num == 2 && loverImpostor;
             Name = imp ? "Loving Impostor" : "Lover";
-            ImpostorText = () => "You are in " + ColorString + "Love</color> with " + ColorString + OtherLover.Player.name;
+            ImpostorText = () => $"You are in {Utils.ColorText(Color, "Love")} with {Utils.ColorText(Color, OtherLover.Player.name)}";
             TaskText = () => $"Stay alive with your love {OtherLover.Player.name} \n and win together";
             RoleType = imp ? RoleEnum.LoverImpostor : RoleEnum.Lover;
             Num = num;

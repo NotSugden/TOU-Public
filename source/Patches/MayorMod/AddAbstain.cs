@@ -6,7 +6,6 @@ namespace TownOfUs.MayorMod
 {
     public class AddAbstain
     {
-
         private static Sprite Abstain => TownOfUs.Abstain;
         public static void UpdateButton(Mayor role, MeetingHud __instance)
         {
@@ -15,21 +14,18 @@ namespace TownOfUs.MayorMod
             role.Abstain.voteComplete = skip.voteComplete;
             role.Abstain.GetComponent<SpriteRenderer>().enabled = skip.GetComponent<SpriteRenderer>().enabled;
             role.Abstain.GetComponent<SpriteRenderer>().sprite = Abstain;
-
         }
 
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
         public class MeetingHudStart
         {
-
-
             public static void GenButton(Mayor role, MeetingHud __instance)
             {
                 var skip = __instance.SkipVoteButton;
                 role.Abstain = Object.Instantiate(skip, skip.transform.parent);
                 role.Abstain.Parent = __instance;
-                role.Abstain.SetTargetPlayerId(11);
+                role.Abstain.SetTargetPlayerId(254);
                 role.Abstain.transform.localPosition = skip.transform.localPosition +
                                                        new Vector3(0f, -0.17f, 0f);
                 skip.transform.localPosition += new Vector3(0f, 0.20f, 0f);
@@ -76,7 +72,7 @@ namespace TownOfUs.MayorMod
             {
                 if (!PlayerControl.LocalPlayer.Is(RoleEnum.Mayor)) return;
                 var mayorRole = Role.GetRole<Mayor>(PlayerControl.LocalPlayer);
-                if (__0 != 11)
+                if (__0 != 254)
                 {
                     mayorRole.Abstain.ClearButtons();
                 }
@@ -111,17 +107,11 @@ namespace TownOfUs.MayorMod
                             mayorRole.Abstain.SetDisabled();
                             break;
                         }
-
-
                         mayorRole.Abstain.SetEnabled();
                         break;
                 }
                 UpdateButton(mayorRole, __instance);
             }
         }
-
-
-
-
     }
 }

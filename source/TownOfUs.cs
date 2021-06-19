@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using Reactor;
-using Reactor.Extensions;
-using Reactor.Unstrip;
-using TownOfUs.CustomOption;
+//using Reactor.Extensions;
 using TownOfUs.RainbowMod;
 using UnhollowerBaseLib;
 using UnhollowerRuntimeLib;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace TownOfUs
 {
@@ -22,7 +19,7 @@ namespace TownOfUs
     [BepInDependency(ReactorPlugin.Id)]
     public class TownOfUs : BasePlugin
     {
-        public const string Version = "4.0.0-dev5";
+        public const string Version = "4.0.0-dev20";
         public ConfigEntry<string> Ip { get; set; }
         public ConfigEntry<ushort> Port { get; set; }
 
@@ -51,6 +48,13 @@ namespace TownOfUs
         public static Sprite ButtonSprite;
         public static Sprite CycleSprite;
         public static Sprite GuessSprite;
+        public static Sprite DragSprite;
+        public static Sprite DropSprite;
+
+        public static void LogMessage(object message)
+        {
+            PluginSingleton<TownOfUs>.Instance.Log.LogMessage(message);
+        }
 
         public override void Load()
         {
@@ -83,30 +87,82 @@ namespace TownOfUs
             ButtonSprite = LoadResource("Button");
             CycleSprite = LoadResource("Cycle");
             GuessSprite = LoadResource("Guess");
+            DragSprite = LoadResource("Drag");
+            DropSprite = LoadResource("Drop");
 
             PalettePatch.Load();
             ClassInjector.RegisterTypeInIl2Cpp<RainbowBehaviour>();
 
             this._harmony.PatchAll();
+
+            var customServer = new ServerInfo("CustomServer-1", "among-us.sugden.cf", 22023);
+            var customRegion = new DnsRegionInfo(customServer.Ip, "Custom Servers", StringNames.NoTranslation, new ServerInfo[] {
+                customServer
+            }).Cast<IRegionInfo>();
+            var newRegions = new IRegionInfo[] { customRegion };
+
+            ServerManager.DefaultRegions = ServerManager.DefaultRegions.Concat(newRegions).ToArray();
+            var serverManager = ServerManager.Instance;
+            serverManager.AvailableRegions = ServerManager.DefaultRegions;
+            serverManager.CurrentRegion = customRegion;
+            serverManager.CurrentServer = customServer;
+            serverManager.SaveServers();
+
+            SceneManager.add_sceneLoaded(
+                (UnityEngine.Events.UnityAction<Scene, LoadSceneMode>)delegate (Scene scene, LoadSceneMode loadSceneMode)
+                {
+                    DestroyableSingleton<ModManager>.Instance.ShowModStamp();
+                }
+            );
         }
 
         private static Sprite LoadResource(string name) => CreateSprite($"TownOfUs.Resources.{name}.png");
 
-        public static Sprite CreateSprite(string name, bool hat = false, bool newHat = false)
+        /*public static Sprite CreateSprite(string name, bool hat = false, bool newHat = false)
         {
-            var pixelsPerUnit = (hat && !newHat) ? 225f : 100f;
+            var pixelsPerUnit = hat ? 225f : 100f;
             var pivot = (hat && !newHat) ? new Vector2(0.5f, 0.8f) : new Vector2(0.5f, 0.5f);
 
             var dimensions = newHat ? 128 : 0;
             var assembly = Assembly.GetExecutingAssembly();
-            var tex = GUIExtensions.CreateEmptyTexture(dimensions, dimensions);
+            var tex = new Texture2D(dimensions, dimensions, TextureFormat.Alpha8, false);
             var imageStream = assembly.GetManifestResourceStream(name);
             var img = imageStream.ReadFully();
             LoadImage(tex, img, true);
             tex.DontDestroy();
-            var sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, (float)tex.width, (float)tex.height), pivot, pixelsPerUnit);
+            var sprite = newHat
+                ? Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), pivot)
+                : Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), pivot, pixelsPerUnit);
             sprite.DontDestroy();
             return sprite.DontUnload();
+        }*/
+
+        public static Sprite CreateSprite(string name, bool hat = false)
+        {
+            var pixelsPerUnit = hat ? 225f : 100f;
+            var pivot = hat ? new Vector2(0.5f, 0.8f) : new Vector2(0.5f, 0.5f);
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            var texture2D = Extensions.CreateEmptyTexture(0, 0);
+            var manifestResourceStream = executingAssembly.GetManifestResourceStream(name);
+            var data = manifestResourceStream.ReadFully();
+            LoadImage(texture2D, data, true);
+            texture2D.DontDestroy();
+            var sprite = Sprite.Create(texture2D, new Rect(0f, 0f, texture2D.width, texture2D.height), pivot, pixelsPerUnit);
+            sprite.DontDestroy();
+            return sprite;
+        }
+
+        public static Sprite CreatePolusHat(string name)
+        {
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            var manifestResourceStream = executingAssembly.GetManifestResourceStream(name);
+            var data = manifestResourceStream.ReadFully();
+            var texture2D = new Texture2D(128, 128, TextureFormat.Alpha8, false);
+            LoadImage(texture2D, data, false);
+            texture2D.DontDestroy();
+            var sprite = Sprite.Create(texture2D, new Rect(0f, 0f, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+            sprite.DontDestroy();
+            return sprite;
         }
 
         private static void LoadImage(Texture2D tex, byte[] data, bool markNonReadable)

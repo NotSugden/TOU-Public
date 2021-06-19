@@ -24,7 +24,24 @@ namespace TownOfUs.Roles
         {
             Faded = true;
             var color = new Color(1f, 1f, 1f, 0f);
-            var magnitude = (PlayerControl.LocalPlayer.GetTruePosition() - Player.GetTruePosition()).magnitude;
+			var localPlayer = PlayerControl.LocalPlayer;
+			if (localPlayer.Collider == null) {
+				if (localPlayer.gameObject == null) {
+					System.Console.WriteLine("localplayer has no gameObject");
+					return;
+				}
+				var collider = localPlayer.Collider = localPlayer.gameObject.AddComponent<Collider2D>();
+				collider.isTrigger = true;
+			}
+            if (Player.Collider == null)
+            {
+				if (Player.gameObject == null) {
+					System.Console.WriteLine("role player has no gameObject");
+					return;
+				}
+                PhantomMod.SetPhantom.AddCollider(this);
+            }
+            var magnitude = (localPlayer.GetTruePosition() - Player.GetTruePosition()).magnitude;
             var num = Mathf.Max(
                 0f,
                 (magnitude / (ShipStatus.Instance.MaxLightRadius * PlayerControl.GameOptions.CrewLightMod)) - 1f

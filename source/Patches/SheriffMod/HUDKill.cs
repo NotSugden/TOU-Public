@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using UnityEngine;
 
 namespace TownOfUs.SheriffMod
 {
@@ -35,11 +36,16 @@ namespace TownOfUs.SheriffMod
                 {
                     KillButton.gameObject.SetActive(!MeetingHud.Instance);
                     KillButton.isActive = !MeetingHud.Instance;
-                    KillButton.SetCoolDown(role.SheriffKillTimer(), PlayerControl.GameOptions.KillCooldown + 15f);
+                    if (PlayerControl.LocalPlayer.CanMove)
+                    {
+                        var maxCooldown = PlayerControl.GameOptions.KillCooldown;
+                        role.KillTimer = Mathf.Clamp(role.KillTimer - Time.fixedDeltaTime, 0f, maxCooldown);
+                        KillButton.SetCoolDown(role.KillTimer, maxCooldown);
+                    }
                     var closestPlayer = role.ClosestPlayer = Utils.getClosestPlayer(PlayerControl.LocalPlayer);
                     if (
                         closestPlayer == null || (
-                            Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer) < GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance]
+                            Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer) > GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance]
                         )
                     )
                     {

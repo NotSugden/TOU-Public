@@ -16,9 +16,7 @@ namespace TownOfUs.SnitchMod
                 if (PlayerControl.LocalPlayer.Data.IsDead || snitch.Player.Data.IsDead)
                 {
                     snitch.SnitchArrows.DestroyAll();
-                    snitch.SnitchArrows.Clear();
                     snitch.ImpArrows.DestroyAll();
-                    snitch.ImpArrows.Clear();
                 }
 
                 foreach (var arrow in snitch.ImpArrows)

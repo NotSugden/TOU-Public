@@ -19,7 +19,7 @@ namespace TownOfUs.AltruistMod
             var role = Roles.Role.GetRole<Altruist>(PlayerControl.LocalPlayer);
 
             var flag2 = __instance.isCoolingDown;
-            if (flag2) return false;
+            if (flag2 || role.CurrentTarget == null) return false;
             if (!__instance.enabled) return false;
             var maxDistance = GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance];
             if (Vector2.Distance(role.CurrentTarget.TruePosition,

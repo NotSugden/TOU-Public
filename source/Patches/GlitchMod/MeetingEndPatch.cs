@@ -13,7 +13,7 @@ namespace TownOfUs.GlitchMod
             {
                 var glitch = Roles.Role.AllRoles.FirstOrDefault(x => x.RoleType == RoleEnum.Glitch);
                 if (glitch != null)
-                    ((Roles.Glitch)glitch).LastKill = DateTime.UtcNow;
+                    ((Roles.Glitch)glitch).KillTimer = PlayerControl.GameOptions.KillCooldown;
             }
         }
     }

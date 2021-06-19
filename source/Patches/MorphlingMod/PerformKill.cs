@@ -25,7 +25,11 @@ namespace TownOfUs.MorphlingMod
                 if (!__instance.isActiveAndEnabled) return false;
                 if (role.MorphButton.renderer.sprite == SampleSprite)
                 {
-                    if (target == null) return false;
+                    if (
+						target == null || (
+							Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, target) > GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance]
+						)
+					) return false;
                     role.SampledPlayer = target;
                     role.MorphButton.renderer.sprite = MorphSprite;
                     role.MorphButton.SetTarget(null);

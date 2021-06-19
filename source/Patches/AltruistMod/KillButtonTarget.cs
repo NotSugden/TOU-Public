@@ -17,16 +17,16 @@ namespace TownOfUs.AltruistMod
         {
             if (role.CurrentTarget && role.CurrentTarget != target)
             {
-                role.CurrentTarget.GetComponent<SpriteRenderer>().material.SetFloat("_Outline", 0f);
+                role.CurrentTarget.bodyRenderer.material.SetFloat("_Outline", 0f);
             }
 
 
             if (target != null && target.ParentId == DontRevive) target = null;
             role.CurrentTarget = target;
-            if (role.CurrentTarget && __instance.enabled)
+            if (target && __instance.enabled)
             {
-                var component = role.CurrentTarget.GetComponent<SpriteRenderer>();
-                component.material.SetFloat("_Outline", 1f);
+                var component = target.bodyRenderer;
+				component.material.SetFloat("_Outline", 1f);
                 component.material.SetColor("_OutlineColor", Color.yellow);
                 __instance.renderer.color = Palette.EnabledColor;
                 __instance.renderer.material.SetFloat("_Desat", 0f);

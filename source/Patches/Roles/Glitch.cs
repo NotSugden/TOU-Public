@@ -15,9 +15,10 @@ namespace TownOfUs.Roles
     {
         public PlayerControl ClosestPlayer { get; set; }
         public double DistClosest { get; set; }
-        public DateTime LastMimic { get; set; }
-        public DateTime LastHack { get; set; }
         public DateTime LastKill { get; set; }
+        public float MimicTimer;
+        public float HackTimer;
+        public float KillTimer;
         public KillButtonManager HackButton { get; set; }
         public KillButtonManager MimicButton { get; set; }
         public PlayerControl KillTarget { get; set; }
@@ -45,20 +46,20 @@ namespace TownOfUs.Roles
 
         public Glitch(PlayerControl owner) : base(owner)
         {
-            this.Name = "The Glitch";
-            this.LastHack = DateTime.UtcNow;
-            this.LastMimic = DateTime.UtcNow;
-            this.LastKill = DateTime.UtcNow;
-            this.HackButton = null;
-            this.MimicButton = null;
-            this.KillTarget = null;
-            this.HackTarget = null;
-            this.MimicList = null;
-            this.IsUsingMimic = false;
-            this.RoleType = RoleEnum.Glitch;
-            this.ImpostorText = () => "foreach PlayerControl Glitch.MurderPlayer";
-            this.TaskText = () => "foreach PlayerControl Glitch.MurderPlayer\nFake Tasks:";
-            this.Faction = Faction.Neutral;
+            Name = "The Glitch";
+            HackTimer = CustomGameOptions.HackCooldown;
+            MimicTimer = CustomGameOptions.MimicCooldown;
+            KillTimer = 10f;
+            HackButton = null;
+            MimicButton = null;
+            KillTarget = null;
+            HackTarget = null;
+            MimicList = null;
+            IsUsingMimic = false;
+            RoleType = RoleEnum.Glitch;
+            ImpostorText = () => "foreach PlayerControl Glitch.MurderPlayer";
+            TaskText = () => "foreach PlayerControl Glitch.MurderPlayer\nFake Tasks:";
+            Faction = Faction.Neutral;
         }
 
 
@@ -121,8 +122,7 @@ namespace TownOfUs.Roles
                 {
                     hackText = new GameObject("_Player").AddComponent<ImportantTextTask>();
                     hackText.transform.SetParent(PlayerControl.LocalPlayer.transform, false);
-                    hackText.Text =
-                        $"{__instance.ColorString}Hacked {hackPlayer.Data.PlayerName} ({CustomGameOptions.HackDuration}s)\n";
+                    hackText.Text = Utils.ColorText(__instance.Color, $"Hacked {hackPlayer.name} ({CustomGameOptions.HackDuration}s)\n");
                     hackText.Index = hackPlayer.PlayerId;
                     tickDictionary.Add(hackPlayer.PlayerId, DateTime.UtcNow);
                     PlayerControl.LocalPlayer.myTasks.Insert(0, hackText);
@@ -223,8 +223,10 @@ namespace TownOfUs.Roles
 
                     var totalHacktime = (DateTime.UtcNow - tickDictionary[hackPlayer.PlayerId]).TotalMilliseconds /
                                         1000;
-                    hackText.Text =
-                        $"{__instance.ColorString}Hacked {hackPlayer.Data.PlayerName} ({CustomGameOptions.HackDuration - Math.Round(totalHacktime)}s)\n";
+                    hackText.Text = Utils.ColorText(
+                        __instance.Color,
+                        $"Hacked {hackPlayer.name} ({CustomGameOptions.HackDuration - Math.Round(totalHacktime)}s)\n"
+                    );
                     if (MeetingHud.Instance || totalHacktime > CustomGameOptions.HackDuration || hackPlayer == null ||
                         hackPlayer.Data.IsDead)
                     {
@@ -278,8 +280,10 @@ namespace TownOfUs.Roles
                 DateTime mimicActivation = DateTime.UtcNow;
                 ImportantTextTask mimicText = new GameObject("_Player").AddComponent<ImportantTextTask>();
                 mimicText.transform.SetParent(PlayerControl.LocalPlayer.transform, false);
-                mimicText.Text =
-                    $"{__instance.ColorString}Mimicking {mimicPlayer.Data.PlayerName} ({CustomGameOptions.MimicDuration}s)\n";
+                mimicText.Text = Utils.ColorText(
+                    __instance.Color,
+                    $"Mimicking {mimicPlayer.name} ({CustomGameOptions.MimicDuration}s)\n"
+                );
                 PlayerControl.LocalPlayer.myTasks.Insert(0, mimicText);
 
                 while (true)
@@ -287,14 +291,16 @@ namespace TownOfUs.Roles
                     __instance.IsUsingMimic = true;
                     __instance.MimicTarget = mimicPlayer;
                     var totalMimickTime = (DateTime.UtcNow - mimicActivation).TotalMilliseconds / 1000;
-                    mimicText.Text =
-                        $"{__instance.ColorString}Mimicking {mimicPlayer.Data.PlayerName} ({CustomGameOptions.MimicDuration - Math.Round(totalMimickTime)}s)\n";
+                    mimicText.Text = Utils.ColorText(
+                        __instance.Color,
+                        $"Mimicking {mimicPlayer.name} ({CustomGameOptions.MimicDuration - Math.Round(totalMimickTime)}s)\n"
+                    );
                     if (MeetingHud.Instance || totalMimickTime > CustomGameOptions.MimicDuration ||
                         PlayerControl.LocalPlayer.Data.IsDead ||
                         AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Ended)
                     {
                         PlayerControl.LocalPlayer.myTasks.Remove(mimicText);
-                        __instance.LastMimic = DateTime.UtcNow;
+                        __instance.MimicTimer = CustomGameOptions.MimicCooldown;
                         __instance.IsUsingMimic = false;
                         __instance.MimicTarget = null;
                         Utils.Unmorph(__instance.Player);
@@ -363,7 +369,7 @@ namespace TownOfUs.Roles
                 {
                     foreach (var bubble in MimicList.chatBubPool.activeChildren)
                     {
-                        if (!this.IsUsingMimic && this.MimicList != null)
+                        if (!IsUsingMimic && MimicList != null)
                         {
                             Vector2 ScreenMin =
                                 Camera.main.WorldToScreenPoint(bubble.Cast<ChatBubble>().Background.bounds.min);
@@ -373,19 +379,19 @@ namespace TownOfUs.Roles
                             {
                                 if (Input.mousePosition.y > ScreenMin.y && Input.mousePosition.y < ScreenMax.y)
                                 {
-                                    if (!Input.GetMouseButtonDown(0) && this.lastMouse)
+                                    if (!Input.GetMouseButtonDown(0) && lastMouse)
                                     {
-                                        this.lastMouse = false;
-                                        this.MimicList.Toggle();
-                                        this.MimicList.SetVisible(false);
-                                        this.MimicList = null;
+                                        lastMouse = false;
+                                        MimicList.Toggle();
+                                        MimicList.SetVisible(false);
+                                        MimicList = null;
                                         RpcSetMimicked(PlayerControl.AllPlayerControls.ToArray().Where(x =>
                                                 x.Data.PlayerName == bubble.Cast<ChatBubble>().NameText.text)
                                             .FirstOrDefault());
                                         break;
                                     }
 
-                                    this.lastMouse = Input.GetMouseButtonDown(0);
+                                    lastMouse = Input.GetMouseButtonDown(0);
                                 }
                             }
                         }
@@ -415,10 +421,11 @@ namespace TownOfUs.Roles
 
                 __instance.KillButton.gameObject.SetActive(__instance.UseButton.isActiveAndEnabled &&
                                                            !__gInstance.Player.Data.IsDead);
-                __instance.KillButton.SetCoolDown(
-                    PlayerControl.GameOptions.KillCooldown -
-                    (float)(DateTime.UtcNow - __gInstance.LastKill).TotalSeconds,
-                    PlayerControl.GameOptions.KillCooldown);
+                if (__gInstance.Player.CanMove)
+                {
+                    __gInstance.KillTimer = Mathf.Clamp(__gInstance.KillTimer - Time.fixedDeltaTime, 0f, 666f);
+                    __instance.KillButton.SetCoolDown(__gInstance.KillTimer, 666f);
+                }
 
                 __instance.KillButton.SetTarget(null);
                 __gInstance.KillTarget = null;
@@ -447,7 +454,7 @@ namespace TownOfUs.Roles
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         if (CustomGameOptions.ShieldBreaks)
                         {
-                            __gInstance.LastKill = DateTime.UtcNow;
+                            __gInstance.KillTimer = PlayerControl.GameOptions.KillCooldown;
                         }
 
                         MedicMod.StopKill.BreakShield(medic, __gInstance.KillTarget.PlayerId,
@@ -457,7 +464,7 @@ namespace TownOfUs.Roles
                         return;
                     }
 
-                    __gInstance.LastKill = DateTime.UtcNow;
+                    __gInstance.KillTimer = PlayerControl.GameOptions.KillCooldown;
                     __gInstance.Player.SetKillTimer(PlayerControl.GameOptions.KillCooldown);
                     Utils.RpcMurderPlayer(__gInstance.Player, __gInstance.KillTarget);
                 }
@@ -482,9 +489,12 @@ namespace TownOfUs.Roles
                                                             !__gInstance.Player.Data.IsDead);
                 __gInstance.HackButton.transform.position = new Vector3(__gInstance.MimicButton.transform.position.x,
                     __instance.ReportButton.transform.position.y, __instance.ReportButton.transform.position.z);
-                __gInstance.HackButton.SetCoolDown(
-                    CustomGameOptions.HackCooldown - (float)(DateTime.UtcNow - __gInstance.LastHack).TotalSeconds,
-                    CustomGameOptions.HackCooldown);
+                if (__gInstance.Player.CanMove)
+                {
+                    var maxCooldown = CustomGameOptions.HackCooldown;
+                    __gInstance.HackTimer = Mathf.Clamp(__gInstance.HackTimer - Time.fixedDeltaTime, 0f, maxCooldown);
+                    __gInstance.HackButton.SetCoolDown(__gInstance.HackTimer, maxCooldown);
+                }
 
                 __gInstance.HackButton.SetTarget(null);
                 __gInstance.HackTarget = null;
@@ -503,26 +513,7 @@ namespace TownOfUs.Roles
             {
                 if (__gInstance.HackTarget != null)
                 {
-                    if (__gInstance.HackTarget.isShielded())
-                    {
-                        var medic = __gInstance.HackTarget.getMedic().Player.PlayerId;
-                        var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                            (byte)CustomRPC.AttemptSound, Hazel.SendOption.Reliable, -1);
-                        writer.Write(medic);
-                        writer.Write(__gInstance.HackTarget.PlayerId);
-                        AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        if (CustomGameOptions.ShieldBreaks)
-                        {
-                            __gInstance.LastHack = DateTime.UtcNow;
-                        }
-
-                        MedicMod.StopKill.BreakShield(medic, __gInstance.HackTarget.PlayerId,
-                            CustomGameOptions.ShieldBreaks);
-
-                        return;
-                    }
-
-                    __gInstance.LastHack = DateTime.UtcNow;
+                    __gInstance.HackTimer = CustomGameOptions.HackCooldown;
                     __gInstance.RpcSetHacked(__gInstance.HackTarget);
                 }
             }
@@ -547,9 +538,12 @@ namespace TownOfUs.Roles
                 __gInstance.MimicButton.transform.position = new Vector3(
                     Camera.main.ScreenToWorldPoint(new Vector3(0, 0)).x + 0.75f,
                     __instance.UseButton.transform.position.y, __instance.UseButton.transform.position.z);
-                __gInstance.MimicButton.SetCoolDown(
-                    CustomGameOptions.MimicCooldown - (float)(DateTime.UtcNow - __gInstance.LastMimic).TotalSeconds,
-                    CustomGameOptions.MimicCooldown);
+                if (__gInstance.Player.CanMove)
+                {
+                    var maxCooldown = CustomGameOptions.MimicCooldown;
+                    __gInstance.MimicTimer = Mathf.Clamp(__gInstance.MimicTimer - Time.fixedDeltaTime, 0f, maxCooldown);
+                    __gInstance.MimicButton.SetCoolDown(__gInstance.MimicTimer, maxCooldown);
+                }
 
                 if (!__gInstance.MimicButton.isCoolingDown && !__gInstance.IsUsingMimic)
                 {
@@ -641,7 +635,7 @@ namespace TownOfUs.Roles
 
         public void SetHacked(PlayerControl hacked)
         {
-            this.LastHack = DateTime.UtcNow;
+            HackTimer = CustomGameOptions.HackCooldown;
             Reactor.Coroutines.Start(AbilityCoroutine.Hack(this, hacked));
         }
 

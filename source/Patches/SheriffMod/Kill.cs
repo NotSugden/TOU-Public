@@ -18,8 +18,7 @@ namespace TownOfUs.SheriffMod
             var role = Roles.Role.GetRole<Roles.Sheriff>(PlayerControl.LocalPlayer);
             if (!PlayerControl.LocalPlayer.CanMove) return false;
             if (PlayerControl.LocalPlayer.Data.IsDead) return false;
-            var flag2 = role.SheriffKillTimer() == 0f;
-            if (!flag2) return false;
+            if (__instance.isCoolingDown) return false;
             if (!__instance.enabled) return false;
             var target = role.ClosestPlayer;
             var distBetweenPlayers = Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, target);
@@ -36,7 +35,7 @@ namespace TownOfUs.SheriffMod
 
                 if (CustomGameOptions.ShieldBreaks)
                 {
-                    role.LastKilled = DateTime.UtcNow;
+                    role.KillTimer = PlayerControl.GameOptions.KillCooldown;
                 }
 
                 MedicMod.StopKill.BreakShield(medic, target.PlayerId, CustomGameOptions.ShieldBreaks);
@@ -58,7 +57,7 @@ namespace TownOfUs.SheriffMod
                 Utils.RpcMurderPlayer(PlayerControl.LocalPlayer, target);
                 role.Kills.Add(target.PlayerId);
             }
-            role.LastKilled = DateTime.UtcNow;
+            role.KillTimer = PlayerControl.GameOptions.KillCooldown;
 
             return false;
         }

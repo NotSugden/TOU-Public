@@ -63,8 +63,10 @@ namespace TownOfUs.ExecutionerMod
                 var jester = new Roles.Jester(player);
                 var task = new GameObject("JesterTask").AddComponent<ImportantTextTask>();
                 task.transform.SetParent(player.transform, false);
-                task.Text =
-                    $"{jester.ColorString}Role: {jester.Name}\nYour target was killed. Now you get voted out!\nFake Tasks:[]";
+                task.Text = Utils.ColorText(
+                    jester.Color,
+                    $"Role: {jester.Name}\nYour target was killed. Now you get voted out!"
+                ) + "\nFake Tasks:";
                 player.myTasks.Insert(0, task);
             }
             else

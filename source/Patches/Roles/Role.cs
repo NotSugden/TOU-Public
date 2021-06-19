@@ -73,7 +73,7 @@ namespace TownOfUs.Roles
                 return Faction switch
                 {
                     Faction.Crewmates => Color.green,
-                    Faction.Impostors => Color.red,
+                    Faction.Impostors => Palette.ImpostorRed,
                     Faction.Neutral => CustomGameOptions.NeutralRed ? Color.red : Color.grey,
                     _ => Color.white
                 };
@@ -86,12 +86,9 @@ namespace TownOfUs.Roles
         public static uint NetId => PlayerControl.LocalPlayer.NetId;
         public string PlayerName { get; set; }
 
-        public string ColorString => "<color=#" + Color.ToHtmlStringRGBA() + ">";
-
-
         //public static T Gen<T>()
 
-        protected virtual bool Criteria()
+        public virtual bool Criteria()
         {
             Player.nameText.transform.localPosition = new Vector3(
                 0f,
@@ -100,7 +97,7 @@ namespace TownOfUs.Roles
             );
             if (PlayerControl.LocalPlayer.Data.IsDead && CustomGameOptions.DeadSeeRoles) return Utils.ShowDeadBodies;
             if (Faction == Faction.Impostors && PlayerControl.LocalPlayer.Data.IsImpostor && CustomGameOptions.ImpostorSeeRoles) return true;
-            return GetRole(PlayerControl.LocalPlayer) == this;
+            return GetRole(PlayerControl.LocalPlayer) == this || AmongUsClient.Instance?.GameMode == GameModes.LocalGame;
         }
 
         protected virtual void IntroPrefix(IntroCutscene __instance, ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourteam)
@@ -148,11 +145,7 @@ namespace TownOfUs.Roles
 
         internal virtual bool CheckEndCriteria(ShipStatus __instance)
         {
-
-
             return true;
-
-
         }
 
         protected virtual string NameText(PlayerVoteArea player = null)
@@ -191,22 +184,25 @@ namespace TownOfUs.Roles
             return !(a == b);
         }
 
-        public static Role Gen(Type T, List<PlayerControl> crewmates, CustomRPC rpc)
+        public static Role Gen(Type T, PlayerControl player, CustomRPC rpc)
         {
-
-            if (crewmates.Count <= 0) return null;
-            var rand = UnityEngine.Random.RandomRangeInt(0, crewmates.Count); //TODO - change
-            var pc = crewmates[rand];
-
-            var role = Activator.CreateInstance(T, new object[] { pc });
-            var playerId = pc.PlayerId;
-            crewmates.Remove(pc);
-
+            var role = (Role) Activator.CreateInstance(T, new object[] { player });
             var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)rpc,
                 SendOption.Reliable, -1);
-            writer.Write(playerId);
+            writer.Write(player.PlayerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            return role as Role;
+            System.Console.WriteLine($"{player.name} is {role.Name}");
+            return role;
+        }
+
+        public static Role Gen(Type T, List<PlayerControl> crewmates, CustomRPC rpc)
+        {
+            if (crewmates.Count <= 0) return null;
+            var rand = UnityEngine.Random.RandomRangeInt(0, crewmates.Count);
+            var pc = crewmates[rand];
+            crewmates.Remove(pc);
+
+            return Gen(T, pc, rpc);
         }
 
         protected Role(PlayerControl player)
@@ -242,6 +238,7 @@ namespace TownOfUs.Roles
                 RoleEnum.Morphling => Palette.ImpostorRed,
                 RoleEnum.Camouflager => Palette.ImpostorRed,
                 RoleEnum.Janitor => Palette.ImpostorRed,
+                RoleEnum.Undertaker => Palette.ImpostorRed,
                 RoleEnum.Glitch => Color.green,
                 RoleEnum.Impostor => Palette.ImpostorRed,
                 _ => Color.white,
@@ -274,13 +271,14 @@ namespace TownOfUs.Roles
                 RoleEnum.Morphling => "Morphling",
                 RoleEnum.Camouflager => "Camouflager",
                 RoleEnum.Janitor => "Janitor",
+                RoleEnum.Undertaker => "Undertaker",
                 RoleEnum.Glitch => "The Glitch",
                 RoleEnum.Impostor => "Impostor",
                 _ => "Crewmate",
             };
 
             return includeColor
-                ? $"<color=#{GetRoleColor(roleId).ToHtmlStringRGBA()}>{roleName}</color>"
+                ? Utils.ColorText(GetRoleColor(roleId), roleName)
                 : roleName;
         }
 
@@ -483,22 +481,12 @@ namespace TownOfUs.Roles
                 }
 
                 var result = true;
-                var jester = AllRoles.FirstOrDefault(role => role.RoleType == RoleEnum.Jester);
-                bool jesterWins = jester == null ? false : ((Jester)jester).VotedOut;
-                var exec = AllRoles.FirstOrDefault(role => role.RoleType == RoleEnum.Executioner);
-                bool execWins = exec == null ? false : ((Executioner)exec).TargetVotedOut;
-                if (jesterWins || execWins)
-                {
-                    Utils.EndGame();
-                    return true;
-                }
                 foreach (var role in AllRoles)
                 {
                     var isend = role.CheckEndCriteria(__instance);
                     if (!isend)
                     {
                         result = false;
-                        break;
                     }
                 }
 
@@ -574,15 +562,6 @@ namespace TownOfUs.Roles
                 }
                 roleNameTextList.Clear();
             }
-            private static bool FindIn<T>(List<T> list, System.Func<T, bool> predicate, System.Func<T, bool> callback)
-            {
-                if (list.Any(predicate))
-                {
-                    var elem = list.Find(elem => predicate(elem));
-                    return callback(elem);
-                }
-                return false;
-            }
             public static void Update(MeetingHud __instance)
             {
                 Hide();
@@ -593,11 +572,18 @@ namespace TownOfUs.Roles
                 foreach (var player in __instance.playerStates)
                 {
                     var role = GetRole(player);
+                    var originalPos = player.NameText.transform.position;
+                    player.NameText.transform.position = new Vector3(
+                        originalPos.x - 0.27f,
+                        originalPos.y + 0.07f,
+                        originalPos.z
+                    );
                     if (role == null) continue;
                     var modifier = Modifier.GetModifier(player);
 
                     var isSnitch = modifier != null && modifier?.ModifierType == ModifierEnum.Snitch;
                     var isDead = localPlayer.Data.IsDead && CustomGameOptions.DeadSeeRoles && Utils.ShowDeadBodies;
+                    
 
                     if (role.Criteria() || (completedTasks && (
                         role.Faction == Faction.Impostors || (

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using Hazel;
+using UnityEngine;
 
 namespace TownOfUs.Roles
 {
@@ -9,7 +9,7 @@ namespace TownOfUs.Roles
     {
 
         public PlayerControl ClosestPlayer { get; set; }
-        public DateTime LastKilled { get; set; }
+        public float KillTimer = 10f;
         public List<byte> Kills = new List<byte>();
 
         public Sheriff(PlayerControl player) : base(player)
@@ -54,17 +54,7 @@ namespace TownOfUs.Roles
             return true;
         }
 
-        public float SheriffKillTimer()
-        {
-            var utcNow = DateTime.UtcNow;
-            var timeSpan = utcNow - LastKilled;
-            var num = PlayerControl.GameOptions.KillCooldown * 1000f;
-            var flag2 = num - (float)timeSpan.TotalMilliseconds < 0f;
-            if (flag2) return 0;
-            return (num - (float)timeSpan.TotalMilliseconds) / 1000f;
-        }
-
-        protected override bool Criteria()
+        public override bool Criteria()
         {
             return CustomGameOptions.ShowSheriff || base.Criteria();
         }

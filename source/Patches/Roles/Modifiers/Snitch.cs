@@ -32,5 +32,25 @@ namespace TownOfUs.Roles.Modifiers
             Hidden = !CustomGameOptions.SnitchOnLaunch;
         }
 
+        public void AddSnitchArrow(PlayerControl player)
+        {
+            AddArrow(SnitchArrows);
+            SnitchTargets.Add(player);
+        }
+        public void AddImpArrow()
+        {
+            AddArrow(ImpArrows);
+        }
+        private void AddArrow(List<ArrowBehaviour> arrowList)
+        {
+            var gameObj = new GameObject();
+            var arrow = gameObj.AddComponent<ArrowBehaviour>();
+            gameObj.transform.parent = PlayerControl.LocalPlayer.gameObject.transform;
+            var renderer = gameObj.AddComponent<SpriteRenderer>();
+            renderer.sprite = TownOfUs.Arrow;
+            arrow.image = renderer;
+            gameObj.layer = 5;
+            arrowList.Add(arrow);
+        }
     }
 }

@@ -30,7 +30,10 @@ namespace TownOfUs.SwapperMod
 
                 SwapPositions(Swap1.PlayerIcon.transform, Swap2.PlayerIcon.transform);
                 SwapPositions(Swap1.NameText.transform, Swap2.NameText.transform);
-                SwapPositions(Swap1.transform.GetChild(4).GetChild(0), Swap2.transform.GetChild(4).GetChild(0));
+                SwapPositions(
+                    Swap1.transform.FindChild("MaskArea"),
+                    Swap2.transform.FindChild("MaskArea")
+                );
             }
         }
 
