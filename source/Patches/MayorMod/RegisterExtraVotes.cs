@@ -40,12 +40,10 @@ namespace TownOfUs.MayorMod
 
         [HarmonyPrefix()]
         [HarmonyPatch(nameof(MeetingHud.Confirm))]
-        public static bool ConfirmPrefix(MeetingHud __instance)
+        public static void ConfirmPrefix(MeetingHud __instance)
         {
-            if (!IsMayor) return true;
-            if (__instance.state != MeetingHud.VoteStates.Voted) return true;
+            if (!IsMayor || __instance.state != MeetingHud.VoteStates.Voted) return;
             __instance.state = MeetingHud.VoteStates.NotVoted;
-            return true;
         }
 
         [HarmonyPostfix()]
@@ -64,9 +62,11 @@ namespace TownOfUs.MayorMod
         [HarmonyPatch(nameof(MeetingHud.Update))]
         public static void UpdateVoteText(MeetingHud __instance)
         {
-            if (!PlayerControl.LocalPlayer.Is(RoleEnum.Mayor)) return;
-            if (PlayerControl.LocalPlayer.Data.IsDead) return;
-            if (__instance.TimerText.text.Contains("Can Vote")) return;
+            if (
+                !PlayerControl.LocalPlayer.Is(RoleEnum.Mayor) ||
+                PlayerControl.LocalPlayer.Data.IsDead ||
+                __instance.TimerText.text.Contains("Can Vote")
+            ) return;
             var role = Role.GetRole<Mayor>(PlayerControl.LocalPlayer);
             __instance.TimerText.text = "Can Vote: " + role.VoteBank + " time(s) | " + __instance.TimerText.text;
         }
@@ -80,8 +80,11 @@ namespace TownOfUs.MayorMod
 
             byte GetTargetId(byte targetId)
             {
-                if (targetId == s1) return s2;
-                else if (targetId == s2) return s1;
+                if (s1 != byte.MaxValue && s2 != byte.MaxValue)
+                {
+                    if (targetId == s1) return s2;
+                    else if (targetId == s2) return s1;
+                }
                 return targetId;
             };
 
@@ -230,7 +233,7 @@ namespace TownOfUs.MayorMod
                 writer.Write(role.Player.PlayerId);
                 writer.WriteBytesAndSize(((Mayor)role).ExtraVotes.ToArray());
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-            } 
+            }
         }
 
         [HarmonyPrefix()]
