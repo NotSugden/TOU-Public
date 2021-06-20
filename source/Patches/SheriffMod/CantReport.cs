@@ -10,16 +10,14 @@ namespace TownOfUs.SheriffMod
     {
         public static void Postfix(PlayerControl __instance)
         {
-            if (!__instance.AmOwner) return;
-            if (!__instance.CanMove) return;
-            if (!__instance.Is(RoleEnum.Sheriff)) return;
+            if (!__instance.AmOwner || !__instance.CanMove || !__instance.Is(RoleEnum.Sheriff)) return;
             if (CustomGameOptions.SheriffBodyReport) return;
             var truePosition = __instance.GetTruePosition();
 
             var data = __instance.Data;
             var stuff = Physics2D.OverlapCircleAll(truePosition, __instance.MaxReportDistance, Constants.Usables);
             var flag = (PlayerControl.GameOptions.GhostsDoTasks || !data.IsDead) &&
-                       (!AmongUsClient.Instance || !AmongUsClient.Instance.IsGameOver) && __instance.CanMove;
+                       (!AmongUsClient.Instance || !AmongUsClient.Instance.IsGameOver);
             var flag2 = false;
 
             foreach (var collider2D in stuff)

@@ -421,11 +421,6 @@ namespace TownOfUs.Roles
 
                 __instance.KillButton.gameObject.SetActive(__instance.UseButton.isActiveAndEnabled &&
                                                            !__gInstance.Player.Data.IsDead);
-                if (__gInstance.Player.CanMove)
-                {
-                    __gInstance.KillTimer = Mathf.Clamp(__gInstance.KillTimer - Time.fixedDeltaTime, 0f, 666f);
-                    __instance.KillButton.SetCoolDown(__gInstance.KillTimer, 666f);
-                }
 
                 __instance.KillButton.SetTarget(null);
                 __gInstance.KillTarget = null;
@@ -489,12 +484,6 @@ namespace TownOfUs.Roles
                                                             !__gInstance.Player.Data.IsDead);
                 __gInstance.HackButton.transform.position = new Vector3(__gInstance.MimicButton.transform.position.x,
                     __instance.ReportButton.transform.position.y, __instance.ReportButton.transform.position.z);
-                if (__gInstance.Player.CanMove)
-                {
-                    var maxCooldown = CustomGameOptions.HackCooldown;
-                    __gInstance.HackTimer = Mathf.Clamp(__gInstance.HackTimer - Time.fixedDeltaTime, 0f, maxCooldown);
-                    __gInstance.HackButton.SetCoolDown(__gInstance.HackTimer, maxCooldown);
-                }
 
                 __gInstance.HackButton.SetTarget(null);
                 __gInstance.HackTarget = null;
@@ -538,12 +527,6 @@ namespace TownOfUs.Roles
                 __gInstance.MimicButton.transform.position = new Vector3(
                     Camera.main.ScreenToWorldPoint(new Vector3(0, 0)).x + 0.75f,
                     __instance.UseButton.transform.position.y, __instance.UseButton.transform.position.z);
-                if (__gInstance.Player.CanMove)
-                {
-                    var maxCooldown = CustomGameOptions.MimicCooldown;
-                    __gInstance.MimicTimer = Mathf.Clamp(__gInstance.MimicTimer - Time.fixedDeltaTime, 0f, maxCooldown);
-                    __gInstance.MimicButton.SetCoolDown(__gInstance.MimicTimer, maxCooldown);
-                }
 
                 if (!__gInstance.MimicButton.isCoolingDown && !__gInstance.IsUsingMimic)
                 {

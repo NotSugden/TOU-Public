@@ -36,12 +36,7 @@ namespace TownOfUs.SheriffMod
                 {
                     KillButton.gameObject.SetActive(!MeetingHud.Instance);
                     KillButton.isActive = !MeetingHud.Instance;
-                    if (PlayerControl.LocalPlayer.CanMove)
-                    {
-                        var maxCooldown = PlayerControl.GameOptions.KillCooldown;
-                        role.KillTimer = Mathf.Clamp(role.KillTimer - Time.fixedDeltaTime, 0f, maxCooldown);
-                        KillButton.SetCoolDown(role.KillTimer, maxCooldown);
-                    }
+                    
                     var closestPlayer = role.ClosestPlayer = Utils.getClosestPlayer(PlayerControl.LocalPlayer);
                     if (
                         closestPlayer == null || (

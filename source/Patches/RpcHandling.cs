@@ -666,7 +666,7 @@ namespace TownOfUs
         {
             if (TutorialManager.InstanceExists)
             {
-                Role.Gen(typeof(Swapper), PlayerControl.LocalPlayer, CustomRPC.SetSwapper);
+                Role.Gen(typeof(Glitch), PlayerControl.LocalPlayer, CustomRPC.SetGlitch);
                 return;
             }
             ShuffleAndSort(CrewmateRoles);
