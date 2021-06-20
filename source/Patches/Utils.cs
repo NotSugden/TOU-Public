@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +23,6 @@ namespace TownOfUs
 
 
         public static Dictionary<PlayerControl, Color> oldColors = new Dictionary<PlayerControl, Color>();
-
-        public static List<WinningPlayerData> potentialWinners = new List<WinningPlayerData>();
 
         public static void SetSkin(PlayerControl Player, uint skin)
         {

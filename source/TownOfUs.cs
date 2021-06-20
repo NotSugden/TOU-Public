@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -18,9 +18,11 @@ using UnityEngine.SceneManagement;
 
 namespace TownOfUs
 {
-    [BepInPlugin("com.slushiegoose.townofus", "Town Of Us", "2.1.3")]
+    [BepInPlugin("com.slushiegoose.townofus", "Town Of Us", Version)]
     public class TownOfUs : BasePlugin
     {
+        public const string Version = "2.1.3";
+
         public static Sprite JanitorClean;
         public static Sprite EngineerFix;
         public static Sprite SwapperSwitch;
