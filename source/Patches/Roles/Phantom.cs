@@ -27,7 +27,7 @@ namespace TownOfUs.Roles
 			var localPlayer = PlayerControl.LocalPlayer;
 			if (localPlayer.Collider == null) {
 				if (localPlayer.gameObject == null) {
-					System.Console.WriteLine("localplayer has no gameObject");
+					TownOfUs.LogMessage("localplayer has no gameObject");
 					return;
 				}
 				var collider = localPlayer.Collider = localPlayer.gameObject.AddComponent<Collider2D>();
@@ -36,7 +36,7 @@ namespace TownOfUs.Roles
             if (Player.Collider == null)
             {
 				if (Player.gameObject == null) {
-					System.Console.WriteLine("role player has no gameObject");
+                    TownOfUs.LogMessage("role player has no gameObject");
 					return;
 				}
                 PhantomMod.SetPhantom.AddCollider(this);
@@ -49,7 +49,7 @@ namespace TownOfUs.Roles
             var magnitude2 = Player.gameObject.GetComponent<Rigidbody2D>().velocity.magnitude;
             color.a = 0.07f + magnitude2 / Player.MyPhysics.TrueGhostSpeed * 0.13f;
             color.a = Mathf.Lerp(color.a, 0f, num);
-            Player.GetComponent<SpriteRenderer>().color = color;
+            Player.MyRend.color = color;
             Player.HatRenderer.SetHat(0U, 0);
             Player.nameText.text = "";
             if (Player.MyPhysics.Skin.skin.ProdId != DestroyableSingleton<HatManager>.Instance.AllSkins.ToArray()[0].ProdId)
@@ -58,7 +58,7 @@ namespace TownOfUs.Roles
             if (Player.CurrentPet != null)
                 UnityEngine.Object.Destroy(Player.CurrentPet.gameObject);
 
-            Player.CurrentPet = UnityEngine.Object.Instantiate<PetBehaviour>(DestroyableSingleton<HatManager>.Instance.AllPets.ToArray()[0]);
+            Player.CurrentPet = UnityEngine.Object.Instantiate(DestroyableSingleton<HatManager>.Instance.AllPets.ToArray()[0]);
             Player.CurrentPet.transform.position = Player.transform.position;
             Player.CurrentPet.Source = Player;
             Player.CurrentPet.Visible = Player.Visible;
