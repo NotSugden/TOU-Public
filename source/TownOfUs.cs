@@ -6,7 +6,6 @@ using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using Reactor;
-//using Reactor.Extensions;
 using TownOfUs.RainbowMod;
 using UnhollowerBaseLib;
 using UnhollowerRuntimeLib;
@@ -19,7 +18,7 @@ namespace TownOfUs
     [BepInDependency(ReactorPlugin.Id)]
     public class TownOfUs : BasePlugin
     {
-        public const string Version = "4.0.0-dev21";
+        public const string Version = "4.0.0-dev22";
         public ConfigEntry<string> Ip { get; set; }
         public ConfigEntry<ushort> Port { get; set; }
 
