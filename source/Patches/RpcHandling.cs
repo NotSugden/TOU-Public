@@ -278,7 +278,7 @@ namespace TownOfUs
                         PlayerControl target = Utils.PlayerById(reader.ReadByte());
                         bool showBody = reader.ReadBoolean();
                         Utils.MurderPlayer(killer, target, showBody);
-                        if (MeetingHud.Instance?.isActiveAndEnabled == true)
+                        if (MeetingHud.Instance != null)
                         {
                             foreach (PlayerVoteArea _voteArea in MeetingHud.Instance.playerStates)
                             {

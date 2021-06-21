@@ -53,7 +53,7 @@ namespace TownOfUs.Roles
             }
 
 
-            Player.GetComponent<SpriteRenderer>().color = color;
+            Player.MyRend.color = color;
 
             Player.HatRenderer.SetHat(0, 0);
             Player.nameText.text = "";
@@ -80,7 +80,7 @@ namespace TownOfUs.Roles
             Enabled = false;
             LastSwooped = DateTime.UtcNow;
             Utils.Unmorph(Player);
-            Player.GetComponent<SpriteRenderer>().color = Color.white;
+            Player.myRend.color = Color.white;
         }
     }
 }

@@ -89,15 +89,11 @@ namespace TownOfUs.MayorMod
             };
 
             foreach (var voteArea in __instance.playerStates)
-            {
                 states.Add(new MeetingHud.VoterState()
                 {
                     VotedForId = GetTargetId(voteArea.VotedFor),
                     VoterId = voteArea.TargetPlayerId
                 });
-            }
-
-            
 
             foreach (var role in Role.GetRoles(RoleEnum.Mayor))
                 foreach (var targetId in ((Mayor)role).ExtraVotes)
@@ -108,7 +104,15 @@ namespace TownOfUs.MayorMod
                         VoterId = byte.MaxValue
                     });
                 }
-            return states.ToArray();
+
+            return states.ToArray().Where(state =>
+            {
+                var voter = Utils.PlayerById(state.VoterId);
+                if (voter?.Data == null || voter.Data.IsDead) return false;
+                var target = Utils.PlayerById(state.VotedForId);
+                if (target?.Data == null || voter.Data.IsDead) return false;
+                return true;
+            }).ToArray();
 
         }
 
@@ -118,6 +122,11 @@ namespace TownOfUs.MayorMod
             foreach (var state in states)
             {
                 var targetId = state.VotedForId;
+                if (
+                    targetId == PlayerVoteArea.HasNotVoted ||
+                    targetId == PlayerVoteArea.DeadVote ||
+                    targetId == PlayerVoteArea.MissedVote
+                ) continue;
                 if (votes.TryGetValue(targetId, out var totalVotes))
                 {
                     votes[targetId] = totalVotes + 1;
