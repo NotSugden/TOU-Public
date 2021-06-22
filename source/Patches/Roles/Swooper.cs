@@ -47,7 +47,7 @@ namespace TownOfUs.Roles
             Enabled = true;
             TimeRemaining -= Time.deltaTime;
             var color = Color.clear;
-            if (PlayerControl.LocalPlayer.Data.IsImpostor || PlayerControl.LocalPlayer.Data.IsDead)
+            if (Criteria() || PlayerControl.LocalPlayer.Data.IsDead)
             {
                 color.a = 0.1f;
             }

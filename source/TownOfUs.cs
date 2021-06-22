@@ -18,7 +18,7 @@ namespace TownOfUs
     [BepInDependency(ReactorPlugin.Id)]
     public class TownOfUs : BasePlugin
     {
-        public const string Version = "4.0.0-dev27";
+        public const string Version = "4.0.0-dev28";
         public ConfigEntry<string> Ip { get; set; }
         public ConfigEntry<ushort> Port { get; set; }
 
