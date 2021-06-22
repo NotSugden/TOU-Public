@@ -467,7 +467,20 @@ namespace TownOfUs
                                 ((Phantom)role).Loses();
                             }
                         }
-
+                        break;
+                    case CustomRPC.SoloImpWin:
+                        var impId = reader.ReadByte();
+                        var impRole = Role.GetRole<Impostor>(Utils.PlayerById(impId));
+                        impRole.Wins();
+                        break;
+                    case CustomRPC.SoloImpLose:
+                        var impIds = reader.ReadBytesAndSize().ToList();
+                        foreach (var impId1 in impIds)
+                        {
+                            Role.GetRole<Impostor>(
+                                Utils.PlayerById(impId1)
+                            ).Loses();
+                        }
                         break;
                     case CustomRPC.SetImpostor:
                         new Impostor(Utils.PlayerById(reader.ReadByte()));

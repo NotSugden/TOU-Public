@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace TownOfUs.Roles
 {
-    public class Camouflager : Role
+    public class Camouflager : Impostor
 
     {
         public KillButtonManager _camouflageButton;

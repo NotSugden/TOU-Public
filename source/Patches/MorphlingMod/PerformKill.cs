@@ -33,7 +33,6 @@ namespace TownOfUs.MorphlingMod
                     role.SampledPlayer = target;
                     role.MorphButton.renderer.sprite = MorphSprite;
                     role.MorphButton.SetTarget(null);
-                    DestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(null);
                     if (role.MorphTimer() < 5f)
                     {
                         role.LastMorphed = DateTime.UtcNow.AddSeconds(5 - CustomGameOptions.MorphlingCd);

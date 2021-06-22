@@ -27,6 +27,20 @@ namespace TownOfUs
             if (On(ExecutionerOn)) enabledRoles.Add(RoleEnum.Executioner);
             if (On(ArsonistOn)) enabledRoles.Add(RoleEnum.Arsonist);
 
+            if (
+                AnonImpostors &&
+                    PlayerControl.GameOptions.GetAdjustedNumImpostors(
+                        GameData.Instance.PlayerCount
+                    ) > 1
+            ) {
+                if (On(JanitorOn)) enabledRoles.Add(RoleEnum.Janitor);
+                if (On(MorphlingOn)) enabledRoles.Add(RoleEnum.Morphling);
+                if (On(CamouflagerOn)) enabledRoles.Add(RoleEnum.Camouflager);
+                if (On(MinerOn)) enabledRoles.Add(RoleEnum.Miner);
+                if (On(SwooperOn)) enabledRoles.Add(RoleEnum.Swooper);
+                if (On(UndertakerOn)) enabledRoles.Add(RoleEnum.Undertaker);
+            }
+
             return enabledRoles;
         }
         public static int MayorOn => (int)Generate.MayorOn.Get();
@@ -63,6 +77,7 @@ namespace TownOfUs
         public static int DrunkOn => (int)Generate.DrunkOn.Get();
         public static int BigBoiOn => (int)Generate.BigBoiOn.Get();
 
+        public static bool AnonImpostors => Generate.AnonImpostors.Get();
         public static int VanillaGame => (int)Generate.VanillaGame.Get();
         public static bool VentAnimations => Generate.VentAnimations.Get();
         public static bool BothLoversDie => Generate.BothLoversDie.Get();

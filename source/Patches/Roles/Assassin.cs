@@ -4,7 +4,7 @@ using TMPro;
 
 namespace TownOfUs.Roles
 {
-    public class Assassin : Role
+    public class Assassin : Impostor
     {
         public int TimesKilled = 0;
         public int KilledThisMeeting = 0;

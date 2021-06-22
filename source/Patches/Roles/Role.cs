@@ -90,13 +90,7 @@ namespace TownOfUs.Roles
 
         public virtual bool Criteria()
         {
-            Player.nameText.transform.localPosition = new Vector3(
-                0f,
-                Player.Data.HatId == 0U ? 0.7f : 1.1f,
-                -0.5f
-            );
             if (PlayerControl.LocalPlayer.Data.IsDead && CustomGameOptions.DeadSeeRoles) return Utils.ShowDeadBodies;
-            if (Faction == Faction.Impostors && PlayerControl.LocalPlayer.Data.IsImpostor && CustomGameOptions.ImpostorSeeRoles) return true;
             return GetRole(PlayerControl.LocalPlayer) == this || AmongUsClient.Instance?.GameMode == GameModes.LocalGame;
         }
 
@@ -344,7 +338,6 @@ namespace TownOfUs.Roles
                     __instance.ImpostorText.text = role.ImpostorText();
                     __instance.ImpostorText.gameObject.SetActive(true);
                     __instance.BackgroundBar.material.color = role.Color;
-
                 }
                 else if (role.RoleType == RoleEnum.Crewmate || role.Hidden)
                 {
@@ -575,6 +568,11 @@ namespace TownOfUs.Roles
                         roleNameText.color = role.Color;
                         roleNameTextList.Add(roleNameText.gameObject);
                     }
+                    else
+                    {
+                        player.NameText.text = role.Player.name;
+                        player.NameText.color = Color.white;
+                    }
                     if (
                         isSnitch && (isDead || (
                             localRole.Faction == Faction.Impostors
@@ -585,10 +583,7 @@ namespace TownOfUs.Roles
                         player.NameText.text = $"{role.Player.name} {Utils.ColorText(modifier.Color, "(Snitch)")}";
                         if (!isDead) player.NameText.color = modifier.Color;
                     }
-                    else
-                    {
-                        player.NameText.text = role.Player.name;
-                    }
+                    
                 }
             }
             [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
@@ -616,21 +611,16 @@ namespace TownOfUs.Roles
 
                 foreach (var player in PlayerControl.AllPlayerControls)
                 {
-                    if (!(player.Data.IsImpostor && PlayerControl.LocalPlayer.Data.IsImpostor))
-                    {
-                        player.nameText.text = player.name;
-                        player.nameText.color = Color.white;
-                    }
-
                     var role = GetRole(player);
                     if (role != null && role.Criteria())
                     {
                         player.nameText.color = role.Color;
                         player.nameText.text = role.NameText();
-                        continue;
+                    } else
+                    {
+                        player.nameText.color = Color.white;
                     }
                 }
-
             }
         }
     }

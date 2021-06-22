@@ -4,7 +4,7 @@ using Object = System.Object;
 
 namespace TownOfUs.Roles
 {
-    public class Swooper : Role
+    public class Swooper : Impostor
     {
         public KillButtonManager _swoopButton;
         public DateTime LastSwooped;

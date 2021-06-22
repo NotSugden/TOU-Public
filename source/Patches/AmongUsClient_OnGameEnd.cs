@@ -90,6 +90,26 @@ namespace TownOfUs
                 foreach (var win in winners) TempData.winners.Add(win);
                 return;
             }
+
+            if (CustomGameOptions.AnonImpostors)
+            {
+                PlayerControl winner = null;
+                foreach (var imp in Role.AllRoles.Where(role => role.Faction == Faction.Impostors))
+                {
+                    if (((Impostor)imp).ImpWins)
+                    {
+                        winner = imp.Player;
+                        break;
+                    }
+                }
+                if (winner != null)
+                {
+                    var winners = new List<WinningPlayerData>();
+                    winners.Add(new WinningPlayerData(winner.Data));
+                    TempData.winners = winners;
+                    return;
+                }
+            }
         }
     }
 }

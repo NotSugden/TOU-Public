@@ -52,6 +52,7 @@ namespace TownOfUs.CustomOption
         public static CustomNumberOption BigBoiOn;
 
         public static CustomHeaderOption CustomGameSettings;
+        public static CustomToggleOption AnonImpostors;
         public static CustomToggleOption ColourblindComms;
         public static CustomToggleOption MeetingColourblind;
         public static CustomToggleOption ImpostorSeeRoles;
@@ -225,6 +226,7 @@ namespace TownOfUs.CustomOption
             ButtonBarryOn = PercentageOption("E600FFFF", "Button Barry");
 
             CustomGameSettings = new CustomHeaderOption(num++, "Custom Game Settings");
+            AnonImpostors = ToggleOption("Anonymous Impostors", false);
             ColourblindComms = ToggleOption("Camouflaged Comms", false);
             MeetingColourblind = ToggleOption("Camouflaged Meetings", false);
             ImpostorSeeRoles = ToggleOption("Impostors can see the roles of their team", false);

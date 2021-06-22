@@ -80,7 +80,6 @@ namespace TownOfUs.Roles
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 Utils.EndGame();
                 return false;
-
             }
 
             return false;

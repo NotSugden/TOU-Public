@@ -40,11 +40,12 @@
         SetImpostor,
 
 
-
+        SoloImpWin,
         LoveWin,
         GlitchWin,
         ArsonistWin,
         PhantomWin,
+        SoloImpLose,
         JesterLose,
         ExecutionerLose,
         ShifterLose,

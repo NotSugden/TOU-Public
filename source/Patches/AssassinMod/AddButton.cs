@@ -25,13 +25,12 @@ namespace TownOfUs.AssassinMod
             var player = Utils.PlayerById(voteArea.TargetPlayerId);
             if (IsExempt(player)) return true;
             var role = Role.GetRole(player);
-            var flag = IsExempt(role);
-            return flag;
+            return IsExempt(role);
         }
         private static bool IsExempt(PlayerControl player) {
             if (player == null) return true;
             var data = player.Data;
-            return data.IsImpostor || data.IsDead || data.Disconnected;
+            return data.IsDead || data.Disconnected;
         }
         private static bool IsExempt(Role role) => role != null && role.Criteria();
 

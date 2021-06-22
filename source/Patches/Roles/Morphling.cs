@@ -4,7 +4,7 @@ using Object = UnityEngine.Object;
 
 namespace TownOfUs.Roles
 {
-    public class Morphling : Role
+    public class Morphling : Impostor
 
     {
 

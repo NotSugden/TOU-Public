@@ -51,7 +51,6 @@ namespace TownOfUs.MorphlingMod
                 else if (role.MorphButton.isActiveAndEnabled)
                 {
                     role.MorphButton.SetTarget(closestPlayer);
-                    __instance.KillButton.SetTarget(closestPlayer);
                 }
             }
             else

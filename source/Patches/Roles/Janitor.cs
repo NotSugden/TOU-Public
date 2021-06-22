@@ -2,7 +2,7 @@
 
 namespace TownOfUs.Roles
 {
-    public class Janitor : Role
+    public class Janitor : Impostor
     {
         public DateTime LastCleaned { get; set; }
         public DeadBody CurrentTarget { get; set; }

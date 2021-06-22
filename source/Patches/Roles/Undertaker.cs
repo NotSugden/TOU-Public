@@ -2,7 +2,7 @@
 
 namespace TownOfUs.Roles
 {
-    public class Undertaker : Role
+    public class Undertaker : Impostor
     {
         public DateTime LastDragged { get; set; }
 
