@@ -419,29 +419,6 @@ namespace TownOfUs.Roles
             }
         }
 
-        /*[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
-        public static class ButtonsFix
-        {
-            public static void Postfix(PlayerControl __instance)
-            {
-                if (__instance != PlayerControl.LocalPlayer) return;
-
-                var role = GetRole(PlayerControl.LocalPlayer);
-                if (role == null) return;
-                var instance = DestroyableSingleton<HudManager>.Instance;
-                var position = instance.KillButton.transform.position;
-                foreach (var button in role.ExtraButtons)
-                {
-                    button.transform.position = new Vector3(position.x,
-                        instance.ReportButton.transform.position.y, position.z);
-                }
-
-            }
-        }*/
-
-
-
-
         [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CheckEndCriteria))]
         public static class ShipStatus_KMPKPPGPNIH
         {
