@@ -70,6 +70,11 @@ namespace TownOfUs.MayorMod
             var role = Role.GetRole<Mayor>(PlayerControl.LocalPlayer);
             __instance.TimerText.text = "Can Vote: " + role.VoteBank + " time(s) | " + __instance.TimerText.text;
         }
+		
+		private static bool IsRealVote(byte targetId) =>
+			targetId != PlayerVoteArea.DeadVote &&
+			targetId != PlayerVoteArea.MissedVote &&
+			targetId != PlayerVoteArea.HasNotVoted;
 
         private static MeetingHud.VoterState[] CalculateVotes(MeetingHud __instance)
         {
@@ -108,12 +113,11 @@ namespace TownOfUs.MayorMod
             return states.ToArray().Where(state =>
             {
                 var voter = Utils.PlayerById(state.VoterId);
-                if (voter?.Data == null || voter.Data.IsDead) return false;
+                if (voter != null && voter.Data.IsDead) return false;
                 var target = Utils.PlayerById(state.VotedForId);
-                if (target?.Data == null || voter.Data.IsDead) return false;
+                if (target != null && target.Data.IsDead) return false;
                 return true;
             }).ToArray();
-
         }
 
         private static (bool, GameData.PlayerInfo) CalculateVoteResults(MeetingHud.VoterState[] states)
@@ -122,11 +126,7 @@ namespace TownOfUs.MayorMod
             foreach (var state in states)
             {
                 var targetId = state.VotedForId;
-                if (
-                    targetId == PlayerVoteArea.HasNotVoted ||
-                    targetId == PlayerVoteArea.DeadVote ||
-                    targetId == PlayerVoteArea.MissedVote
-                ) continue;
+                if (!IsRealVote(targetId)) continue;
                 if (votes.TryGetValue(targetId, out var totalVotes))
                 {
                     votes[targetId] = totalVotes + 1;
