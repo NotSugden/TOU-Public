@@ -120,6 +120,7 @@ namespace TownOfUs.CustomOption
 
         public static CustomHeaderOption Assassin;
         public static CustomNumberOption AssassinMaxKills;
+        public static CustomNumberOption AssassinMaxPerMeeting;
         public static CustomToggleOption AssassinCanGuessCrewmate;
 
         public static CustomHeaderOption Morphling;
@@ -309,6 +310,7 @@ namespace TownOfUs.CustomOption
 
             Assassin = new CustomHeaderOption(num++, "<color=#FF0000FF>Assassin</color>");
             AssassinMaxKills = NumberOption("Max Role Guess Kills", 2, 9, 1);
+            AssassinMaxPerMeeting = NumberOption("Max Kills Per Meeting", 1, 9, 1);
             AssassinCanGuessCrewmate = ToggleOption("Can Guess 'Crewmate'", false);
 
             Morphling = new CustomHeaderOption(num++, "<color=#FF0000FF>Morphling</color>");

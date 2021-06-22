@@ -1,41 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using HarmonyLib;
-using Hazel;
-using UnhollowerBaseLib;
+﻿using HarmonyLib;
 using UnityEngine;
 using UnityEngine.UI;
-using Reactor.Extensions;
+using TMPro;
 
 namespace TownOfUs.AssassinMod
 {
+    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Confirm))]
     public class ShowHideButtons
     {
-        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Confirm))]
-        public static class Confirm
+        public static bool Prefix(MeetingHud __instance)
         {
-            public static bool Prefix(MeetingHud __instance)
+            if (!PlayerControl.LocalPlayer.Is(RoleEnum.Assassin)) return true;
+
+            Hide();
+
+            return true;
+        }
+
+        private static void HideButton(GameObject cycle, GameObject guess, TextMeshPro text)
+        {
+            cycle.SetActive(false);
+            guess.SetActive(false);
+            text.gameObject.SetActive(false);
+
+            cycle.GetComponent<PassiveButton>().OnClick = new Button.ButtonClickedEvent();
+            guess.GetComponent<PassiveButton>().OnClick = new Button.ButtonClickedEvent();
+        }
+
+        public static void Hide(PlayerControl player = null)
+        {
+            var assassin = Roles.Role.GetRole<Roles.Assassin>(PlayerControl.LocalPlayer);
+
+            if (player != null && assassin.KilledThisMeeting < CustomGameOptions.AssassinMaxPerMeeting)
             {
-                if (!PlayerControl.LocalPlayer.Is(RoleEnum.Assassin)) return true;
+                var (cycle, guess, text) = assassin.Buttons[player.PlayerId];
+                HideButton(cycle, guess, text);
+                return;
+            }
 
-                var assassin = Roles.Role.GetRole<Roles.Assassin>(PlayerControl.LocalPlayer);
-                foreach (var button in assassin.GameObjects)
-                {
-                    if (button == null) continue;
-                    button.SetActive(false);
-
-                    var comp = button.GetComponent<PassiveButton>();
-                    if (comp == null)
-                    {
-                        continue;
-                    }
-                    comp.OnClick = new Button.ButtonClickedEvent();
-                }
-
-                return true;
-
+            foreach (var (cycle, guess, text) in assassin.Buttons.Values)
+            {
+                HideButton(cycle, guess, text);
             }
         }
     }

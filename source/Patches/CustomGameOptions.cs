@@ -114,6 +114,7 @@ namespace TownOfUs
         public static float CamouflagerCd => Generate.CamouflagerCooldown.Get();
         public static float CamouflagerDuration => Generate.CamouflagerDuration.Get();
         public static int AssassinMaxKills => (int)Generate.AssassinMaxKills.Get();
+        public static int AssassinMaxPerMeeting => (int)Generate.AssassinMaxPerMeeting.Get();
         public static bool AssassinCanGuessCrewmate => Generate.AssassinCanGuessCrewmate.Get();
         public static bool ColourblindComms => Generate.ColourblindComms.Get();
         public static bool MeetingColourblind => Generate.MeetingColourblind.Get();

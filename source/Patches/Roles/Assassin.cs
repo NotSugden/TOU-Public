@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace TownOfUs.Roles
 {
     public class Assassin : Role
     {
-        public readonly List<GameObject> GameObjects = new List<GameObject>();
-        public int timesKilled = 0;
+        public int TimesKilled = 0;
+        public int KilledThisMeeting = 0;
+        public Dictionary<byte, (GameObject, GameObject, TextMeshPro)> Buttons =
+            new Dictionary<byte, (GameObject, GameObject, TextMeshPro)>();
+        public Dictionary<byte, int> Guesses = new Dictionary<byte, int>();
 
         public Assassin(PlayerControl player) : base(player)
         {

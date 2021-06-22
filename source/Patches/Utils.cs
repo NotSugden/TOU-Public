@@ -9,6 +9,7 @@ using TownOfUs.MedicMod;
 using TownOfUs.Roles;
 using TownOfUs.Roles.Modifiers;
 using UnityEngine;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace TownOfUs
@@ -357,18 +358,25 @@ namespace TownOfUs
             AmongUsClient.Instance.FinishRpcImmediately(writer);
         }
 
-        public static void KillDuringMeeting(PlayerControl player)
+        public static void KillDuringMeeting(PlayerControl player, bool checkLover = true)
         {
             PlayerVoteArea voteArea = MeetingHud.Instance.playerStates.First(
                 x => x.TargetPlayerId == player.PlayerId
             );
-            KillDuringMeeting(voteArea, player);
+            KillDuringMeeting(voteArea, player, checkLover);
         }
-        public static void KillDuringMeeting(PlayerVoteArea voteArea, PlayerControl player)
+        public static void KillDuringMeeting(
+            PlayerVoteArea voteArea,
+            PlayerControl player,
+            bool checkLover = true
+        )
         {
-            SoundManager.Instance.PlaySound(player.KillSfx, false, 0.8f);
             var hudManager = DestroyableSingleton<HudManager>.Instance;
-            hudManager.KillOverlay.ShowKillAnimation(player.Data, player.Data);
+            if (checkLover)
+            {
+                SoundManager.Instance.PlaySound(player.KillSfx, false, 0.8f);
+                hudManager.KillOverlay.ShowKillAnimation(player.Data, player.Data);
+            }
             var amOwner = player.AmOwner;
             if (amOwner)
             {
@@ -383,7 +391,7 @@ namespace TownOfUs
                     {
                         PlayerTask playerTask = player.myTasks.ToArray()[i];
                         playerTask.OnRemove();
-                        UnityEngine.Object.Destroy(playerTask.gameObject);
+                        Object.Destroy(playerTask.gameObject);
                     }
 
                     player.myTasks.Clear();
@@ -407,25 +415,27 @@ namespace TownOfUs
                     foreach (var button in buttons)
                     {
                         button.SetActive(false);
-                        button.GetComponent<PassiveButton>().OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+                        button.GetComponent<PassiveButton>().OnClick = new Button.ButtonClickedEvent();
                     }
                 }
             }
             player.Die(DeathReason.Kill);
+            if (checkLover && player.isLover() && CustomGameOptions.BothLoversDie)
+                KillDuringMeeting(Role.GetRole<Lover>(player).OtherLover.Player, false);
+
             var meetingHud = MeetingHud.Instance;
             if (amOwner)
             {
                 meetingHud.SetForegroundForDead();
-                ShowRoleNamePatch.Patch(true);
             }
-            var deadBody = new DeadPlayer
+            var deadPlayer = new DeadPlayer
             {
                 PlayerId = player.PlayerId,
                 KillerId = player.PlayerId,
                 KillTime = DateTime.UtcNow,
             };
 
-            Murder.KilledPlayers.Add(deadBody);
+            Murder.KilledPlayers.Add(deadPlayer);
             if (voteArea == null) return;
             if (voteArea.DidVote) voteArea.UnsetVote();
             voteArea.AmDead = true;
@@ -436,24 +446,11 @@ namespace TownOfUs
             var amHost = AmongUsClient.Instance.AmHost;
             foreach (var playerVoteArea in meetingHud.playerStates)
             {
-                if (!playerVoteArea.DidVote || playerVoteArea.VotedFor != player.PlayerId) return;
-                if (amHost)
-                {
-                    meetingHud.RpcClearVote(playerVoteArea.TargetPlayerId);
-                }
+                if (playerVoteArea.VotedFor != player.PlayerId) continue;
                 playerVoteArea.UnsetVote();
                 var voteAreaPlayer = PlayerById(playerVoteArea.TargetPlayerId);
                 if (!voteAreaPlayer.AmOwner) continue;
-                var skipButton = meetingHud.SkipVoteButton;
-                skipButton.gameObject.SetActive(true);
-                skipButton.SetEnabled();
-                skipButton.voteComplete = false;
-                foreach (var playerVoteArea2 in meetingHud.playerStates)
-                {
-                    playerVoteArea2.SetEnabled();
-                    playerVoteArea2.voteComplete = false;
-                }
-                meetingHud.state = MeetingHud.VoteStates.NotVoted;
+                meetingHud.ClearVote();
             }
             if (!amHost) return;
             meetingHud.CheckForEndVoting();
@@ -463,7 +460,7 @@ namespace TownOfUs
         {
             MurderPlayer(killer, target, showBody);
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                (byte)CustomRPC.BypassKill, Hazel.SendOption.Reliable, -1);
+                (byte)CustomRPC.BypassKill, SendOption.Reliable, -1);
             writer.Write(killer.PlayerId);
             writer.Write(target.PlayerId);
             writer.Write(showBody);
