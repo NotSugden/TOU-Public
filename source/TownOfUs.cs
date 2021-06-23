@@ -18,7 +18,7 @@ namespace TownOfUs
     [BepInDependency(ReactorPlugin.Id)]
     public class TownOfUs : BasePlugin
     {
-        public const string Version = "4.0.0-dev28";
+        public const string Version = "4.0.0-dev30";
         public ConfigEntry<string> Ip { get; set; }
         public ConfigEntry<ushort> Port { get; set; }
 
@@ -94,6 +94,7 @@ namespace TownOfUs
 
             this._harmony.PatchAll();
 
+/*
             var customServer = new ServerInfo("CustomServer-1", "among-us.sugden.cf", 22023);
             var customRegion = new DnsRegionInfo(customServer.Ip, "Custom Servers", StringNames.NoTranslation, new ServerInfo[] {
                 customServer
@@ -105,7 +106,7 @@ namespace TownOfUs
             serverManager.AvailableRegions = ServerManager.DefaultRegions;
             serverManager.CurrentRegion = customRegion;
             serverManager.CurrentServer = customServer;
-            serverManager.SaveServers();
+            serverManager.SaveServers();*/
 
             SceneManager.add_sceneLoaded(
                 (UnityEngine.Events.UnityAction<Scene, LoadSceneMode>)delegate (Scene scene, LoadSceneMode loadSceneMode)
