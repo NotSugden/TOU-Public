@@ -481,8 +481,11 @@ namespace TownOfUs.Roles
 
                 __gInstance.HackButton.gameObject.SetActive(__instance.UseButton.isActiveAndEnabled &&
                                                             !__gInstance.Player.Data.IsDead);
-                __gInstance.HackButton.transform.position = new Vector3(__gInstance.MimicButton.transform.position.x,
-                    __instance.ReportButton.transform.position.y, __instance.ReportButton.transform.position.z);
+                __gInstance.HackButton.transform.position = new Vector3(
+                    __gInstance.MimicButton.transform.position.x,
+                    __instance.ReportButton.transform.position.y,
+                    __instance.ReportButton.transform.position.z
+                );
 
                 __gInstance.HackButton.SetTarget(null);
                 __gInstance.HackTarget = null;
@@ -524,8 +527,11 @@ namespace TownOfUs.Roles
                 __gInstance.MimicButton.gameObject.SetActive(__instance.UseButton.isActiveAndEnabled &&
                                                              !__gInstance.Player.Data.IsDead);
                 __gInstance.MimicButton.transform.position = new Vector3(
-                    Camera.main.ScreenToWorldPoint(new Vector3(0, 0)).x + 0.75f,
-                    __instance.UseButton.transform.position.y, __instance.UseButton.transform.position.z);
+                    Camera.main.ScreenToWorldPoint(
+                        new Vector3(0, 0)).x + 0.75f,
+                    __instance.UseButton.transform.position.y,
+                    __instance.UseButton.transform.position.z
+                );
 
                 if (!__gInstance.MimicButton.isCoolingDown && !__gInstance.IsUsingMimic)
                 {

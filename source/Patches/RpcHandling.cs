@@ -679,7 +679,7 @@ namespace TownOfUs
         {
             if (TutorialManager.InstanceExists)
             {
-                Role.Gen(typeof(Spy), PlayerControl.LocalPlayer, CustomRPC.SetSpy);
+                Role.Gen(typeof(Glitch), PlayerControl.LocalPlayer, CustomRPC.SetGlitch);
                 return;
             }
             ShuffleAndSort(CrewmateRoles);
