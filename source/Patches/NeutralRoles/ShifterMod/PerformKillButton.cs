@@ -42,9 +42,9 @@ namespace TownOfUs.NeutralRoles.ShifterMod
                 PlayerControl.LocalPlayer.GetTruePosition()) > maxDistance) return false;
             if (role.ClosestPlayer == null) return false;
             var playerId = role.ClosestPlayer.PlayerId;
-            if (role.ClosestPlayer.isShielded())
+            if (role.ClosestPlayer.IsShielded())
             {
-                var medic = role.ClosestPlayer.getMedic().Player.PlayerId;
+                var medic = role.ClosestPlayer.GetMedic().Player.PlayerId;
 
                 var writer1 = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
                     (byte) CustomRPC.AttemptSound, SendOption.Reliable, -1);

@@ -1,32 +1,34 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using UnityEngine;
+using TownOfUs.Roles;
 
 namespace TownOfUs
 {
-    internal static class TaskPatches
+    public static class TaskPatches
     {
         [HarmonyPatch(typeof(GameData), nameof(GameData.RecomputeTaskCounts))]
-        private class GameData_RecomputeTaskCounts
+        public static class GameData_RecomputeTaskCounts
         {
-            private static bool Prefix(GameData __instance)
+            public static bool Prefix(GameData __instance)
             {
                 __instance.TotalTasks = 0;
                 __instance.CompletedTasks = 0;
-                for (var i = 0; i < __instance.AllPlayers.Count; i++)
+                foreach (var playerData in __instance.AllPlayers)
                 {
-                    var playerInfo = __instance.AllPlayers.ToArray()[i];
-                    if (!playerInfo.Disconnected && playerInfo.Tasks != null && playerInfo.Object &&
-                        (PlayerControl.GameOptions.GhostsDoTasks || !playerInfo.IsDead) && !playerInfo.IsImpostor &&
-                        !(
-                            playerInfo._object.Is(RoleEnum.Jester) || playerInfo._object.Is(RoleEnum.Shifter) ||
-                            playerInfo._object.Is(RoleEnum.Glitch) || playerInfo._object.Is(RoleEnum.Executioner) ||
-                            playerInfo._object.Is(RoleEnum.Arsonist)
-                        ))
-                        for (var j = 0; j < playerInfo.Tasks.Count; j++)
-                        {
-                            __instance.TotalTasks++;
-                            if (playerInfo.Tasks.ToArray()[j].Complete) __instance.CompletedTasks++;
-                        }
+                    if (
+                        playerData.IsImpostor ||
+                        playerData.Disconnected ||
+                        playerData.Tasks == null ||
+                        (playerData.IsDead && !PlayerControl.GameOptions.GhostsDoTasks)
+                    ) continue;
+                    var player = playerData.Object;
+                    if (player == null || !player.Is(Faction.Crewmates)) continue;
+
+                    foreach (var task in playerData.Tasks)
+                    {
+                        __instance.TotalTasks++;
+                        if (task.Complete) __instance.CompletedTasks++;
+                    }
                 }
 
                 return false;
@@ -34,67 +36,45 @@ namespace TownOfUs
         }
 
         [HarmonyPatch(typeof(Console), nameof(Console.CanUse))]
-        private class Console_CanUse
+        public class Console_CanUse
         {
-            private static bool Prefix(Console __instance, GameData.PlayerInfo __0, out bool __1, out bool __2)
+            public static bool Prefix(
+                Console __instance,
+                [HarmonyArgument(0)] GameData.PlayerInfo playerData,
+                [HarmonyArgument(1)] out bool couldUse,
+                [HarmonyArgument(2)] out bool canUse
+            )
             {
-                var num = float.MaxValue;
-                var @object = __0.Object;
+                var player = playerData.Object;
 
-                var flag = @object.Is(RoleEnum.Glitch) || @object.Is(RoleEnum.Jester) ||
-                           @object.Is(RoleEnum.Shifter) || @object.Is(RoleEnum.Executioner) ||
-                           @object.Is(RoleEnum.Arsonist);
+                var hasTasks = player.Is(Faction.Crewmates);
+                var playerPosition = player.GetTruePosition();
+                var consolePosition = __instance.transform.position;
 
-                var truePosition = @object.GetTruePosition();
-                var position = __instance.transform.position;
-                __2 = (!__0.IsDead || PlayerControl.GameOptions.GhostsDoTasks && !__instance.GhostsIgnored) &&
-                      @object.CanMove &&
-                      (__instance.AllowImpostor || !flag && !__0.IsImpostor) &&
-                      (!__instance.onlySameRoom || MethodRewrites.InRoom(__instance, truePosition)) &&
-                      (!__instance.onlyFromBelow || truePosition.y < position.y) &&
-                      MethodRewrites.FindTask(__instance, @object);
-                __1 = __2;
-                if (__1)
+                couldUse = canUse = (
+                    !playerData.IsDead ||
+                    PlayerControl.GameOptions.GhostsDoTasks &&
+                    !__instance.GhostsIgnored
+                ) && player.CanMove && (
+                    __instance.AllowImpostor || hasTasks
+                ) && (
+                    !__instance.onlySameRoom || __instance.InRoom(playerPosition)
+                ) && (
+                    !__instance.onlyFromBelow || playerPosition.y < consolePosition.y
+                ) && __instance.FindTask(player);
+
+                if (couldUse)
                 {
-                    num = Vector2.Distance(truePosition, __instance.transform.position);
-                    __1 &= num <= __instance.UsableDistance;
+                    var num = Vector2.Distance(playerPosition, __instance.transform.position);
+                    couldUse &= num <= __instance.UsableDistance;
                     if (__instance.checkWalls)
-                        __1 &= !PhysicsHelpers.AnythingBetween(truePosition, position, Constants.ShadowMask, false);
+                        couldUse &= !PhysicsHelpers.AnythingBetween(
+                            playerPosition, consolePosition,
+                            Constants.ShadowMask, false
+                        );
                 }
 
                 return false;
-            }
-        }
-
-        private class MethodRewrites
-        {
-            public static bool InRoom(Console __instance, Vector2 truePos)
-            {
-                var plainShipRoom = ShipStatus.Instance.FastRooms[__instance.Room];
-                if (!plainShipRoom || !plainShipRoom.roomArea) return false;
-
-                bool result;
-                try
-                {
-                    result = plainShipRoom.roomArea.OverlapPoint(truePos);
-                }
-                catch
-                {
-                    result = false;
-                }
-
-                return result;
-            }
-
-            public static PlayerTask FindTask(Console __instance, PlayerControl pc)
-            {
-                for (var i = 0; i < pc.myTasks.Count; i++)
-                {
-                    var playerTask = pc.myTasks.ToArray()[i];
-                    if (!playerTask.IsComplete && playerTask.ValidConsole(__instance)) return playerTask;
-                }
-
-                return null;
             }
         }
     }

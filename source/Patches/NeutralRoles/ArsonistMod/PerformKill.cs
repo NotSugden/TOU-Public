@@ -33,7 +33,7 @@ namespace TownOfUs.NeutralRoles.ArsonistMod
             if (role.ClosestPlayer == null) return false;
             if (role.DouseTimer() != 0) return false;
             if (role.DousedPlayers.Contains(role.ClosestPlayer.PlayerId)) return false;
-            var distBetweenPlayers = Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer);
+            var distBetweenPlayers = Utils.GetDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer);
             var flag3 = distBetweenPlayers <
                         GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance];
             if (!flag3) return false;

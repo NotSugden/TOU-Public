@@ -45,13 +45,13 @@ namespace TownOfUs.CrewmateRoles.MedicMod
             if (!PlayerControl.LocalPlayer.Data.IsImpostor) return true;
             var target = __instance.CurrentTarget;
             if (target == null) return true;
-            if (target.isShielded())
+            if (target.IsShielded())
             {
                 if (__instance.isActiveAndEnabled && !__instance.isCoolingDown)
                 {
                     var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
                         (byte) CustomRPC.AttemptSound, SendOption.Reliable, -1);
-                    writer.Write(target.getMedic().Player.PlayerId);
+                    writer.Write(target.GetMedic().Player.PlayerId);
                     writer.Write(target.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
 
@@ -59,7 +59,7 @@ namespace TownOfUs.CrewmateRoles.MedicMod
                     if (CustomGameOptions.ShieldBreaks)
                         PlayerControl.LocalPlayer.SetKillTimer(PlayerControl.GameOptions.KillCooldown);
 
-                    BreakShield(target.getMedic().Player.PlayerId, target.PlayerId, CustomGameOptions.ShieldBreaks);
+                    BreakShield(target.GetMedic().Player.PlayerId, target.PlayerId, CustomGameOptions.ShieldBreaks);
                 }
 
 

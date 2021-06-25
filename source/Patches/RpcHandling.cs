@@ -46,7 +46,7 @@ namespace TownOfUs
         private static void GenExe(List<GameData.PlayerInfo> infected, List<PlayerControl> crewmates)
         {
             PlayerControl pc;
-            var targets = Utils.getCrewmates(infected).Where(x =>
+            var targets = Utils.GetCrewmates(infected).Where(x =>
             {
                 var role = Role.GetRole(x);
                 if (role == null) return true;
@@ -109,8 +109,8 @@ namespace TownOfUs
                 crewAndNeutRoles.Clear();
             }
 
-            var crewmates = Utils.getCrewmates(infected);
-            var impostors = Utils.getImpostors(infected);
+            var crewmates = Utils.GetCrewmates(infected);
+            var impostors = Utils.GetImpostors(infected);
             var impRoles = ImpostorRoles.Take(CustomGameOptions.MaxImpostorRoles);
 
 
@@ -145,7 +145,7 @@ namespace TownOfUs
                 //System.Console.WriteLine(rpc);
                 Role.Gen(role, impostors, rpc);
 
-            var crewmates2 = Utils.getCrewmates(infected).Where(x => !x.Is(RoleEnum.Glitch)).ToList();
+            var crewmates2 = Utils.GetCrewmates(infected).Where(x => !x.Is(RoleEnum.Glitch)).ToList();
             foreach (var (modifier, rpc, _perc) in CrewmateModifiers)
                 //System.Console.WriteLine(modifier);
                 //System.Console.WriteLine(rpc);

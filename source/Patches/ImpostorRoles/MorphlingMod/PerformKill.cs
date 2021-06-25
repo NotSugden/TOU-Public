@@ -45,7 +45,7 @@ namespace TownOfUs.ImpostorRoles.MorphlingMod
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     role.TimeRemaining = CustomGameOptions.MorphlingDuration;
                     role.MorphedPlayer = role.SampledPlayer;
-                    Utils.Morph(role.Player, role.SampledPlayer, true);
+                    Utils.Morph(role.Player, role.SampledPlayer);
                 }
 
                 return false;

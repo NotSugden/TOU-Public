@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
@@ -254,6 +254,15 @@ namespace TownOfUs.Roles
             var player = PlayerControl.AllPlayerControls.ToArray()
                 .FirstOrDefault(x => x.PlayerId == area.TargetPlayerId);
             return player == null ? null : GetRole(player);
+        }
+
+        public static T GetRole<T>() where T : Role
+        {
+            foreach (var (_, role) in RoleDictionary)
+            {
+                if (role is T t) return t;
+            }
+            return null;
         }
 
         public static IEnumerable<Role> GetRoles(RoleEnum roletype)
@@ -559,15 +568,11 @@ namespace TownOfUs.Roles
                     }
 
                     var role = GetRole(player);
-                    if (role != null)
-                        if (role.Criteria())
-                        {
-                            player.nameText.color = role.Color;
-                            player.nameText.text = role.NameText();
-                            continue;
-                        }
-
-                    if (PlayerControl.LocalPlayer.Data.IsImpostor && player.Data.IsImpostor) continue;
+                    if (role != null && role.Criteria())
+                    {
+                        player.nameText.color = role.Color;
+                        player.nameText.text = role.NameText();
+                    }
                 }
             }
         }

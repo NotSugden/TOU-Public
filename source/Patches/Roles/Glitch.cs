@@ -379,7 +379,7 @@ namespace TownOfUs.Roles
                 writer.Write(mimicPlayer.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
 
-                Utils.Morph(__instance.Player, mimicPlayer, true);
+                Utils.Morph(__instance.Player, mimicPlayer);
 
                 var mimicActivation = DateTime.UtcNow;
                 var mimicText = new GameObject("_Player").AddComponent<ImportantTextTask>();
@@ -456,9 +456,9 @@ namespace TownOfUs.Roles
             {
                 if (__gInstance.KillTarget != null)
                 {
-                    if (__gInstance.KillTarget.isShielded())
+                    if (__gInstance.KillTarget.IsShielded())
                     {
-                        var medic = __gInstance.HackTarget.getMedic().Player.PlayerId;
+                        var medic = __gInstance.HackTarget.GetMedic().Player.PlayerId;
                         var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
                             (byte) CustomRPC.AttemptSound, SendOption.Reliable, -1);
                         writer.Write(medic);
@@ -524,9 +524,9 @@ namespace TownOfUs.Roles
             {
                 if (__gInstance.HackTarget != null)
                 {
-                    if (__gInstance.HackTarget.isShielded())
+                    if (__gInstance.HackTarget.IsShielded())
                     {
-                        var medic = __gInstance.HackTarget.getMedic().Player.PlayerId;
+                        var medic = __gInstance.HackTarget.GetMedic().Player.PlayerId;
                         var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
                             (byte) CustomRPC.AttemptSound, SendOption.Reliable, -1);
                         writer.Write(medic);

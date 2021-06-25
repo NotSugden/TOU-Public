@@ -21,12 +21,12 @@ namespace TownOfUs.CrewmateRoles.SheriffMod
             var flag2 = role.SheriffKillTimer() == 0f;
             if (!flag2) return false;
             if (!__instance.enabled || role.ClosestPlayer == null) return false;
-            var distBetweenPlayers = Utils.getDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer);
+            var distBetweenPlayers = Utils.GetDistBetweenPlayers(PlayerControl.LocalPlayer, role.ClosestPlayer);
             var flag3 = distBetweenPlayers < GameOptionsData.KillDistances[PlayerControl.GameOptions.KillDistance];
             if (!flag3) return false;
-            if (role.ClosestPlayer.isShielded())
+            if (role.ClosestPlayer.IsShielded())
             {
-                var medic = role.ClosestPlayer.getMedic().Player.PlayerId;
+                var medic = role.ClosestPlayer.GetMedic().Player.PlayerId;
                 var writer1 = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
                     (byte) CustomRPC.AttemptSound, SendOption.Reliable, -1);
                 writer1.Write(medic);
