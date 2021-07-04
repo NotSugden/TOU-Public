@@ -75,7 +75,7 @@ namespace TownOfUs.ImpostorRoles.AssassinMod
             guess.transform.GetChild(0).gameObject.Destroy();
 
 
-            role.Guesses.Add(targetId, "None");
+            role.Guesses.Add(targetId, -1);
             role.Buttons[targetId] = (cycle, guess);
         }
 
@@ -84,14 +84,13 @@ namespace TownOfUs.ImpostorRoles.AssassinMod
             void Listener()
             {
                 if (MeetingHud.Instance.state == MeetingHud.VoteStates.Discussion) return;
-                var currentGuess = role.Guesses[voteArea.TargetPlayerId];
-                var guessIndex = currentGuess == "None"
-                    ? -1
-                    : role.PossibleGuesses.IndexOf(currentGuess);
-                if (++guessIndex == role.PossibleGuesses.Count)
-                    guessIndex = 0;
 
-                role.Guesses[voteArea.TargetPlayerId] = role.PossibleGuesses[guessIndex];
+                var currentGuessIdx = role.Guesses[voteArea.TargetPlayerId];
+                if (++currentGuessIdx == role.PossibleGuesses.Count)
+                    currentGuessIdx = 0;
+                PluginSingleton<TownOfUs>.Instance.Log.LogMessage($"Guess Index: {currentGuessIdx}");
+
+                role.Guesses[voteArea.TargetPlayerId] = currentGuessIdx;
             }
 
             return Listener;
@@ -106,12 +105,13 @@ namespace TownOfUs.ImpostorRoles.AssassinMod
                     IsExempt(voteArea)
                 ) return;
                 var targetId = voteArea.TargetPlayerId;
-                var currentGuess = role.Guesses[targetId];
-                if (currentGuess == "None") return;
+                var currentGuessIdx = role.Guesses[targetId];
+                if (currentGuessIdx == -1) return;
 
+                var currentGuess = role.PossibleGuesses[currentGuessIdx];
                 var playerRole = Role.GetRole(voteArea);
 
-                var toDie = playerRole.Name == currentGuess ? playerRole.Player : role.Player;
+                var toDie = playerRole.RoleType == currentGuess ? playerRole.Player : role.Player;
 
                 AssassinKill.RpcMurderPlayer(toDie);
                 role.RemainingKills--;
