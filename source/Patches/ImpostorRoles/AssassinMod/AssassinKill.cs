@@ -88,7 +88,7 @@ namespace TownOfUs.ImpostorRoles.AssassinMod
                 }
             }
             player.Die(DeathReason.Kill);
-            if (checkLover && player.isLover() && CustomGameOptions.BothLoversDie)
+            if (checkLover && player.IsLover() && CustomGameOptions.BothLoversDie)
                 MurderPlayer(Role.GetRole<Lover>(player).OtherLover.Player, false);
 
             var meetingHud = MeetingHud.Instance;
@@ -101,6 +101,7 @@ namespace TownOfUs.ImpostorRoles.AssassinMod
                 PlayerId = player.PlayerId,
                 KillerId = player.PlayerId,
                 KillTime = System.DateTime.UtcNow,
+                DeathPosition = player.GetTruePosition()
             };
 
             Murder.KilledPlayers.Add(deadPlayer);
@@ -111,6 +112,8 @@ namespace TownOfUs.ImpostorRoles.AssassinMod
             voteArea.Overlay.color = Color.white;
             voteArea.XMark.gameObject.SetActive(true);
             voteArea.XMark.transform.localScale = Vector3.one;
+            voteArea.Buttons.SetActive(false);
+            var amHost = AmongUsClient.Instance.AmHost;
             foreach (var playerVoteArea in meetingHud.playerStates)
             {
                 if (playerVoteArea.VotedFor != player.PlayerId) continue;
@@ -119,34 +122,15 @@ namespace TownOfUs.ImpostorRoles.AssassinMod
                 if (!voteAreaPlayer.AmOwner) continue;
                 meetingHud.ClearVote();
             }
-
-            if (AmongUsClient.Instance.AmHost)
+            var mayor = Role.GetRole<Mayor>();
+            if (mayor != null)
             {
-                foreach (var role in Role.GetRoles(RoleEnum.Mayor))
-                {
-                    if (role is Mayor mayor)
-                    {
-                        if (role.Player == player)
-                        {
-                            mayor.ExtraVotes.Clear();
-                        }
-                        else
-                        {
-                            var votesRegained = mayor.ExtraVotes.RemoveAll(x => x == player.PlayerId);
-
-                            if (mayor.Player == PlayerControl.LocalPlayer)
-                                mayor.VoteBank += votesRegained;
-
-                            var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                                (byte) CustomRPC.AddMayorVoteBank, SendOption.Reliable, -1);
-                            writer.Write(mayor.Player.PlayerId);
-                            writer.Write(votesRegained);
-                            AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        }
-                    }
-                }
-                meetingHud.CheckForEndVoting();
+                var votes = mayor.ExtraVotes.Where(targetId => targetId == player.PlayerId).Count();
+                mayor.ExtraVotes.RemoveAll(targetId => targetId == player.PlayerId);
+                mayor.VoteBank += votes;
             }
+            if (!amHost) return;
+            meetingHud.CheckForEndVoting();
         }
     }
 }

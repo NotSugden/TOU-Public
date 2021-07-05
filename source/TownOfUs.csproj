@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>2.2.1</Version>
+    <Version>5.0.0-dev8</Version>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
   
@@ -19,4 +19,8 @@
     <EmbeddedResource Include="Resources\*" />
     <EmbeddedResource Include="Resources\Hats\**" />
   </ItemGroup>
+  
+  <Target Name="Copy" AfterTargets="Build">
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="../AmongUs/BepInEx/plugins/" />
+  </Target>
 </Project>

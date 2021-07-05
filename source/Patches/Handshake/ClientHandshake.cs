@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +12,9 @@ namespace TownOfUs.Handshake
 {
     public static class ClientHandshake
     {
-        private const byte TOU_ROOT_HANDSHAKE_TAG = 69;
+        private const byte TOU_ROOT_HANDSHAKE_TAG = 127;
         
-        // TODO: super sus but whatever - "2.2.0"
-        private const int TOU_VERSION = 220;
+        private const int TOU_VERSION = 50010;
 
         [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameJoined))]
         public static class AmongUsClient_OnGameJoined
@@ -58,7 +57,6 @@ namespace TownOfUs.Handshake
                         var clientId = handshakeReader.ReadInt32();
                         var touVersion = handshakeReader.ReadInt32();
                         
-                        // List<int> HandshakedClients - exists to disconnect legacy clients that don't send handshake
                         PluginSingleton<TownOfUs>.Instance.Log.LogMessage($"InnerNetClient.HandleMessage.Prefix - Adding {clientId} with TOU version {touVersion} to List<int>HandshakedClients");
                         HandshakedClients.Add(clientId);
 

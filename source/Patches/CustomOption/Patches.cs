@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using Reactor.Extensions;
@@ -10,8 +10,8 @@ namespace TownOfUs.CustomOption
 {
     public static class Patches
     {
-        public static Export ExportButton;
-        public static Import ImportButton;
+        public static ImportExport ExportButton;
+        public static ImportExport ImportButton;
         public static List<OptionBehaviour> DefaultOptions;
         public static float LobbyTextRowHeight { get; set; } = 0.081F;
 
@@ -348,7 +348,7 @@ namespace TownOfUs.CustomOption
         private class HudManagerUpdate
         {
             private const float
-                MinX = -5.233334F /*-5.3F*/,
+                MinX = -4.75F,
                 OriginalY = 2.9F,
                 MinY = 3F; // Differs to cause excess options to appear cut off to encourage scrolling
 

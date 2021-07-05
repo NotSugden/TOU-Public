@@ -1,51 +1,91 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using TownOfUs.Roles;
 using UnityEngine;
+using System.Linq;
 
 namespace TownOfUs
 {
-    [HarmonyPatch(typeof(Vent), nameof(Vent.CanUse))]
+    [HarmonyPatch(typeof(Vent))]
     public static class PlayerVentTimeExtension
     {
         private static bool CheckUndertaker(PlayerControl player)
         {
-            var role = Role.GetRole<Undertaker>(player);
-            return player.Data.IsDead || role.CurrentlyDragging != null;
+            var role = Role.GetRole(player);
+            return
+                role.RoleType != RoleEnum.Undertaker ||
+                ((Undertaker)role).CurrentlyDragging == null;
         }
-        public static bool Prefix(Vent __instance,
+
+        [HarmonyPrefix]
+        [HarmonyPatch(nameof(Vent.CanUse))]
+        public static bool CanUse(Vent __instance,
             [HarmonyArgument(0)] GameData.PlayerInfo playerInfo,
             [HarmonyArgument(1)] ref bool canUse,
             [HarmonyArgument(2)] ref bool couldUse,
             ref float __result)
         {
             __result = float.MaxValue;
-            canUse = couldUse = false;
-
             var player = playerInfo.Object;
+            var center = player.Collider.bounds.center;
+            var position = __instance.transform.position;
             if (player.inVent)
             {
-                __result = Vector2.Distance(player.Collider.bounds.center, __instance.transform.position);
-                canUse = couldUse = true;
+                couldUse = canUse = true;
+                __result = Vector2.Distance(center, position);
                 return false;
             }
-                
 
-            if (player.Is(RoleEnum.Morphling)
-                || player.Is(RoleEnum.Swooper)
-                || (player.Is(RoleEnum.Undertaker) && Role.GetRole<Undertaker>(player).CurrentlyDragging != null))
-                return false;
+            var isImpostor = player.Data.IsImpostor;
 
+            if (player.AmOwner && !isImpostor)
+            {
+                var task = player.myTasks.ToArray().FirstOrDefault(
+                    tsk => tsk.TaskType == TaskTypes.VentCleaning
+                );
+                if (task?.FindConsoles()[0].ConsoleId == __instance.Id)
+                {
+                    return couldUse = canUse = false;
+                }
+            }
 
-            if (player.Is(RoleEnum.Engineer))
-                playerInfo.IsImpostor = true;
-            
-            return true;
+            couldUse = canUse = !playerInfo.IsDead && player.CanMove;
+            if (!canUse) return false;
+            if (isImpostor)
+            {
+                couldUse = canUse = !player.IsAny(new RoleEnum[] {
+                    RoleEnum.Swooper, RoleEnum.Morphling
+                }) && CheckUndertaker(player);
+            }
+            else
+            {
+                couldUse = canUse = player.Is(RoleEnum.Engineer);
+            }
+
+            if (canUse)
+            {
+                __result = Vector2.Distance(center, position);
+                canUse &= __result <= __instance.UsableDistance &&
+                    !PhysicsHelpers.AnythingBetween(
+                        player.Collider, center, position, Constants.ShipOnlyMask, false
+                     );
+            }
+
+            return false;
         }
 
-        public static void Postfix(Vent __instance, [HarmonyArgument(0)] GameData.PlayerInfo playerInfo)
+        [HarmonyPrefix]
+        [HarmonyPatch(nameof(Vent.SetOutline))]
+        public static bool SetOutline(
+            Vent __instance,
+            [HarmonyArgument(0)] bool on,
+            [HarmonyArgument(1)] bool mainTarget)
         {
-            if (playerInfo.Object.Is(RoleEnum.Engineer))
-                playerInfo.IsImpostor = false;
+            var material = __instance.myRend.material;
+            var color = Role.GetRole(PlayerControl.LocalPlayer)?.Color ?? Color.red;
+            material.SetFloat("_Outline", on ? 1f : 0f);
+            material.SetColor("_OutlineColor", color);
+            material.SetColor("_AddColor", mainTarget ? color : Color.clear);
+            return false;
         }
     }
 }

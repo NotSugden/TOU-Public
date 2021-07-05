@@ -27,5 +27,12 @@ namespace TownOfUs
             list.RemoveAt(0);
             return item;
         }
+
+        public static void RemoveSingle<T>(this List<T> list, System.Predicate<T> predicate)
+        {
+            var idx = list.FindIndex(predicate);
+            if (idx != -1)
+                list.RemoveAt(idx);
+        }
     }
 }

@@ -1,4 +1,4 @@
-namespace TownOfUs
+﻿namespace TownOfUs
 {
     public enum RoleEnum
     {
@@ -9,22 +9,16 @@ namespace TownOfUs
         Lover,
         Mayor,
         Swapper,
-        Investigator,
-        TimeLord,
-        Shifter,
         Medic,
-        Seer,
         Executioner,
-        Spy,
-        Snitch,
         Arsonist,
         Altruist,
         Phantom,
+        Eraser,
 
         Miner,
         Swooper,
         Morphling,
-        Camouflager,
         Janitor,
         Undertaker,
         Assassin,
@@ -42,10 +36,7 @@ namespace TownOfUs
     {
         Torch,
         Diseased,
-        Flash,
-        Tiebreaker,
-        Drunk,
-        BigBoi,
-        ButtonBarry
+        ButtonBarry,
+        Snitch
     }
 }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -10,7 +10,6 @@ using HarmonyLib;
 using Reactor;
 using Reactor.Extensions;
 using TownOfUs.CustomOption;
-using TownOfUs.Patches.CustomHats;
 using TownOfUs.RainbowMod;
 using UnhollowerBaseLib;
 using UnhollowerRuntimeLib;
@@ -19,12 +18,12 @@ using UnityEngine.SceneManagement;
 
 namespace TownOfUs
 {
-    [BepInPlugin(Id, "Town Of Us", "2.2.1")]
-    [BepInDependency(ReactorPlugin.Id)]
+    [BepInPlugin(Id, "Town Of Us", Version)]
     public class TownOfUs : BasePlugin
     {
+        public const string Version = "5.0.0-dev10";
         public const string Id = "com.slushiegoose.townofus";
-        
+
         public static Sprite JanitorClean;
         public static Sprite EngineerFix;
         public static Sprite SwapperSwitch;
@@ -47,6 +46,7 @@ namespace TownOfUs
         public static Sprite IgniteSprite;
         public static Sprite ReviveSprite;
         public static Sprite ButtonSprite;
+        public static Sprite EraseSprite;
         public static Sprite PolusSprite;
 
         public static Sprite CycleSprite;
@@ -58,14 +58,16 @@ namespace TownOfUs
 
         private static DLoadImage _iCallLoadImage;
 
-
         private Harmony _harmony;
-
-        public ConfigEntry<string> Ip { get; set; }
-
-        public ConfigEntry<ushort> Port { get; set; }
-
-
+        public static void LogMessage(object[] messages, bool requireKey = false)
+        {
+            foreach (var message in messages)
+                LogMessage(message, requireKey);
+        }
+        public static void LogMessage(object message, bool requireKey = false) {
+            if (!requireKey || Input.GetKeyInt(KeyCode.T))
+                PluginSingleton<TownOfUs>.Instance.Log.LogMessage(message);
+        }
         public override void Load()
         {
             System.Console.WriteLine("000.000.000.000/000000000000000000");
@@ -98,6 +100,7 @@ namespace TownOfUs
             ButtonSprite = CreateSprite("TownOfUs.Resources.Button.png");
             DragSprite = CreateSprite("TownOfUs.Resources.Drag.png");
             DropSprite = CreateSprite("TownOfUs.Resources.Drop.png");
+            EraseSprite = CreateSprite("TownOfUs.Resources.Erase.png");
             PolusSprite = CreateSprite("TownOfUs.Resources.polus.gg.png");
             CycleSprite = CreateSprite("TownOfUs.Resources.Cycle.png");
             GuessSprite = CreateSprite("TownOfUs.Resources.Guess.png");
@@ -106,21 +109,16 @@ namespace TownOfUs
             ClassInjector.RegisterTypeInIl2Cpp<RainbowBehaviour>();
 
             // RegisterInIl2CppAttribute.Register();
-
-            Ip = Config.Bind("Custom", "Ipv4 or Hostname", "127.0.0.1");
-            Port = Config.Bind("Custom", "Port", (ushort) 22023);
-            var defaultRegions = ServerManager.DefaultRegions.ToList();
-            var ip = Ip.Value;
-            if (Uri.CheckHostName(Ip.Value).ToString() == "Dns")
-                foreach (var address in Dns.GetHostAddresses(Ip.Value))
-                {
-                    if (address.AddressFamily != AddressFamily.InterNetwork)
-                        continue;
-                    ip = address.ToString();
-                    break;
-                }
-
-            ServerManager.DefaultRegions = defaultRegions.ToArray();
+            var customServer = new ServerInfo("CustomServer-1", "among-us.sugden.cf", 22023);
+            var customRegion = new DnsRegionInfo(customServer.Ip, "Custom Servers", StringNames.NoTranslation, new ServerInfo[] {
+                customServer
+            }).Cast<IRegionInfo>();
+            var newRegions = new IRegionInfo[] { customRegion };
+            ServerManager.DefaultRegions = ServerManager.DefaultRegions.Concat(newRegions).ToArray();
+            var serverManager = ServerManager.Instance;
+            serverManager.AvailableRegions = ServerManager.DefaultRegions;
+            serverManager.CurrentRegion = customRegion;
+            serverManager.CurrentServer = customServer;
 
             SceneManager.add_sceneLoaded((Action<Scene, LoadSceneMode>) ((scene, loadSceneMode) =>
             {

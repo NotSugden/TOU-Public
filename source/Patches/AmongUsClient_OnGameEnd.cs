@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 using Il2CppSystem.Collections.Generic;
 using TownOfUs.Roles;
@@ -40,7 +40,6 @@ namespace TownOfUs
                     win.IsDead = false;
                     TempData.winners.Add(win);
                 }
-
                 return;
             }
 
@@ -90,6 +89,15 @@ namespace TownOfUs
             if (phantom != null)
             {
                 var winners = Utils.potentialWinners.Where(x => x.Name == phantom.PlayerName).ToList();
+                TempData.winners = new List<WinningPlayerData>();
+                foreach (var win in winners) TempData.winners.Add(win);
+                return;
+            }
+
+            var eraser = Role.GetRole<Eraser>();
+            if (eraser != null && eraser.ErasedAll)
+            {
+                var winners = Utils.potentialWinners.Where(x => x.Name == eraser.PlayerName).ToList();
                 TempData.winners = new List<WinningPlayerData>();
                 foreach (var win in winners) TempData.winners.Add(win);
             }

@@ -1,4 +1,4 @@
-namespace TownOfUs
+﻿namespace TownOfUs
 {
     public enum CustomRPC
     {
@@ -8,16 +8,10 @@ namespace TownOfUs
         SetSheriff,
         SetEngineer,
         SetSwapper,
-        SetShifter,
-        SetInvestigator,
-        SetTimeLord,
         SetMedic,
-        SetSeer,
         SetMorphling,
-        SetCamouflager,
         SetExecutioner,
         SetTarget,
-        SetSpy,
         SetSnitch,
         SetMiner,
         SetSwooper,
@@ -27,13 +21,10 @@ namespace TownOfUs
         SetUndertaker,
         SetAssassin,
         SetUnderdog,
+        SetEraser,
 
         SetTorch,
         SetDiseased,
-        SetFlash,
-        SetTiebreaker,
-        SetDrunk,
-        SetBigBoi,
         SetButtonBarry,
 
         SetPhantom,
@@ -50,27 +41,23 @@ namespace TownOfUs
         PhantomWin,
         JesterLose,
         ExecutionerLose,
-        ShifterLose,
         GlitchLose,
         ArsonistLose,
         NobodyWins,
         PhantomLose,
+        EraserLose,
+        EraserWin,
 
         JanitorClean,
-        FixLights,
         EngineerFix,
         SetExtraVotes,
         SetSwaps,
-        Shift,
         Protect,
         AttemptSound,
-        Investigate,
-        Rewind,
-        RewindRevive,
         Morph,
-        Camouflage,
         Mine,
         Swoop,
+        UnSwoop,
         Douse,
         Ignite,
         AltruistRevive,
@@ -78,15 +65,13 @@ namespace TownOfUs
         Drag,
         Drop,
         AssassinKill,
+        Erase,
 
         SetGlitch,
         BypassKill,
         SetMimic,
-        RpcResetAnim,
+        ResetAnim,
         SetHacked,
-
-        ExecutionerToJester,
-
 
         Start,
         SyncCustomSettings,
