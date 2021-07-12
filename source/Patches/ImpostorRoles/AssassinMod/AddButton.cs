@@ -88,7 +88,6 @@ namespace TownOfUs.ImpostorRoles.AssassinMod
                 var currentGuessIdx = role.Guesses[voteArea.TargetPlayerId];
                 if (++currentGuessIdx == role.PossibleGuesses.Count)
                     currentGuessIdx = 0;
-                PluginSingleton<TownOfUs>.Instance.Log.LogMessage($"Guess Index: {currentGuessIdx}");
 
                 role.Guesses[voteArea.TargetPlayerId] = currentGuessIdx;
             }
