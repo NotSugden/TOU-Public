@@ -82,19 +82,14 @@ namespace TownOfUs.ImpostorRoles.AssassinMod
             role.Buttons[targetId] = (cycle, guess);
         }
 
-        private static Action Cycle(Assassin role, PlayerVoteArea voteArea, bool backwards = false)
+        private static Action Cycle(Assassin role, PlayerVoteArea voteArea)
         {
             void Listener()
             {
                 if (MeetingHud.Instance.state == MeetingHud.VoteStates.Discussion) return;
                 
                 var currentGuessIdx = role.Guesses[voteArea.TargetPlayerId];
-                if (backwards)
-                {
-                    if (--currentGuessIdx == -1)
-                        currentGuessIdx = role.PossibleGuesses.Count - 1;
-                }
-                else if (++currentGuessIdx == role.PossibleGuesses.Count)
+                if (++currentGuessIdx == role.PossibleGuesses.Count)
                     currentGuessIdx = 0;
 
                 role.Guesses[voteArea.TargetPlayerId] = currentGuessIdx;
