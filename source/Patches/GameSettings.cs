@@ -21,22 +21,44 @@ namespace TownOfUs
                 return typeof(GameOptionsData).GetMethods(typeof(string), typeof(int));
             }
 
-            private static void Postfix(ref string __result)
+            public static void Postfix(ref string __result)
             {
                 var builder = new StringBuilder(__result);
+
+                var showLater = new List<CustomOption.CustomOption>();
 
                 foreach (var option in CustomOption.CustomOption.AllOptions)
                 {
                     if (option.Type == CustomOptionType.Button) continue;
-                    if (option.Type == CustomOptionType.Header) builder.AppendLine($"\n{option.Name}");
-                    else if (option.Indent) builder.AppendLine($"     {option.Name}: {option}");
-                    else builder.AppendLine($"{option.Name}: {option}");
+                    if (option.Type == CustomOptionType.Header) 
+                        builder.AppendLine($"\n{option.Name}");
+                    else if (option.Parent != null)
+                        showLater.Add(option);
+                    else
+                    {
+                        var prefix = option.Indent ? "     " : "";
+                        builder.AppendLine($"{prefix}{option.Name}: {option}");
+                    }
                 }
 
-                __result = builder.ToString();
+                var parentId = -1;
 
-                if (CustomOption.CustomOption.LobbyTextScroller && __result.Count(c => c == '\n') > 38)
-                    __result = $"(Scroll for more)\n{__result}";
+                foreach (var option in showLater)
+                {
+                    var parent = option.Parent;
+                    if (parentId != parent.ID)
+                    {
+                        builder.AppendLine($"\n{parent.Name}");
+                        parentId = parent.ID;
+                    }
+                    builder.AppendLine($"{option.Name}: {option}");
+                }
+
+                if (CustomOption.CustomOption.LobbyTextScroller)
+                    builder.Insert(0, "(Scroll for more)\n");
+
+
+                __result = $"<size=1.25>{builder}</size>";
             }
         }
 
@@ -45,7 +67,8 @@ namespace TownOfUs
         {
             public static void Postfix(ref GameOptionsMenu __instance)
             {
-                __instance.GetComponentInParent<Scroller>().YBounds.max = 70f;
+                var scroller = __instance.GetComponentInParent<Scroller>();
+                scroller.YBounds.max = 70f;
             }
         }
     }
