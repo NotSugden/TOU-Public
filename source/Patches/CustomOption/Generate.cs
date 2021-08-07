@@ -71,11 +71,6 @@ namespace TownOfUs.CustomOption
         public static CustomToggleOption SheriffKeepsGameAlive;
         #endregion
 
-        #region Shifter
-        public static CustomNumberOption ShifterCd;
-        public static CustomStringOption WhoShifts;
-        #endregion
-
         #region Engineer
         public static CustomStringOption EngineerPer;
         #endregion
