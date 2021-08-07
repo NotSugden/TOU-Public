@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>5.0.0-dev8</Version>
+    <Version>5.0.0-dev10</Version>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
   
