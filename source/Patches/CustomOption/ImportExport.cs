@@ -19,7 +19,9 @@ namespace TownOfUs.CustomOption
     public class ImportExport : CustomButtonOption
     {
         public bool IsImport;
-        public static string DataPath = Path.Combine(Application.persistentDataPath, "TownOfUs Settings");
+        public static string DataPath = Path.Combine(
+            Application.persistentDataPath, $"{nameof(TownOfUs)}-Custom Settings"
+        );
         public List<CustomButtonOption> SlotButtons = new List<CustomButtonOption>();
         public List<OptionBehaviour> OldButtons;
 
@@ -69,12 +71,11 @@ namespace TownOfUs.CustomOption
 
             loadingButton.gameObject.Destroy();
 
-            foreach (var option in OldButtons)
-            {
-                option.gameObject.SetActive(true);
-            }
-
             __instance.Children = OldButtons.ToArray();
+
+            Patches.DontRefresh = false;
+
+            Patches.GameOptionsMenuPatch.RefreshOptions();
 
             yield return flashCoro();
         }
